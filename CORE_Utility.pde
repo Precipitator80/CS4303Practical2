@@ -47,6 +47,10 @@ class Utility{
         return constrain(previousX + (int) random( -maxOffset * width, maxOffset * width), 0, width);
     }
     
+    public boolean outOfBounds(GameObject gameObject, float size) {
+        return gameObject.position.x < - size / 2 || gameObject.position.x > width + size / 2 || gameObject.position.y < - size / 2 || gameObject.position.y > height + size / 2;
+    }
+    
     public void destroyIfOutOfBounds(GameObject gameObject, float size) {
         if (gameObject.position.x < 0 - size / 2) {
             gameObject.destroy();

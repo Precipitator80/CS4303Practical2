@@ -5,6 +5,7 @@ public abstract class Scene {
     public final ButtonManager BUTTON_MANAGER;
     
     public Scene(color defaultStrokeColour, color defaultFillColour) {
+        currentScene = this; // Set this as the current scene to allow for initialisation.
         BUTTON_MANAGER = new ButtonManager(defaultStrokeColour, defaultFillColour);
     }
     
@@ -21,6 +22,8 @@ public abstract class Scene {
     }
     
     abstract void keyPressed();
+    
+    abstract void keyReleased();
 }
 
 class ObjectManager {
@@ -55,7 +58,7 @@ class ObjectManager {
 abstract class GameObject {
     public PVector position;
     private boolean destroyed = false;
-    protected boolean enabled;
+    protected boolean enabled = true;
     public GameObject(int x, int y) {
         this.position = new PVector(x,y);
         gameObjects().add(this);

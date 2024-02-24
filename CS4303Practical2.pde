@@ -67,6 +67,10 @@ void keyPressed() {
     currentScene.keyPressed();
 }
 
+void keyReleased() {
+    currentScene.keyReleased();
+}
+
 LinkedTransferQueue<GameObject> gameObjects() {
     return currentScene.OBJECT_MANAGER.gameObjects;
 }
