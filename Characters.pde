@@ -1,11 +1,13 @@
 class Player extends Character {
+    color playerColour = color(0,0,255);
+    
     public Player(int x, int y) {
         super(x,y);
     }
     
     void render() {
         strokeWeight(0);
-        fill(0,0,255);
+        fill(playerColour);
         circle(position.x, position.y, size);
     }
     
@@ -14,7 +16,7 @@ class Player extends Character {
         shotVelocity.normalize();
         shotVelocity.mult(0.02f * height);
         
-        new Laser((int)position.x,(int)position.y, shotVelocity, true);
+        new Laser((int)position.x,(int)position.y, shotVelocity, true, playerColour);
     }
     
     void checkMovementKeys(boolean pressed) {
@@ -41,13 +43,15 @@ class Laser extends GameObject {
     PVector renderOffset;
     boolean friendly;
     int damage;
+    color laserColour;
     
-    public Laser(int x, int y, PVector velocity, boolean friendly) {
+    public Laser(int x, int y, PVector velocity, boolean friendly, color laserColour) {
         super(x,y);
         this.velocity = velocity;
         this.renderOffset = velocity.copy().normalize().mult(0.01f * height);
         this.friendly = friendly;
         this.damage = 25;
+        this.laserColour = laserColour;
     }
     
     void update() {
@@ -81,15 +85,36 @@ class Laser extends GameObject {
     
     void render() {
         strokeWeight(height / 150f);
-        stroke(0,0,255);
+        stroke(laserColour);
         line(position.x - renderOffset.x, position.y - renderOffset.y, position.x + renderOffset.x, position.y + renderOffset.y);
     }
 }
 
 class Enemy extends Character {
+    double lastShotTime;
+    double shotPeriod = 3000.0;
+    color enemyColour = color(255,0,0);
+    
     public Enemy(int x, int y) {
         super(x,y);
        ((Robotron)currentScene).ENEMIES.add(this);
+    }
+    
+    void shoot() {
+        Player player = ((Robotron)currentScene).player;
+        float offsetRange = new PVector(player.position.x - position.x, player.position.y - position.y).mag() / 10;
+        PVector target = new PVector(random(player.position.x - offsetRange, player.position.x + offsetRange), random(player.position.y - offsetRange, player.position.y + offsetRange));
+        
+        PVector shotVelocity = new PVector(target.x, target.y).sub(position.x, position.y);
+        shotVelocity.normalize();
+        shotVelocity.mult(0.015f * height);
+        
+        new Laser((int)position.x,(int)position.y, shotVelocity, false, enemyColour);
+        lastShotTime = millis();
+    }
+    
+    boolean canSeePlayer() {
+        return true; // Nothing special for now.
     }
     
     void destroy() {
@@ -97,9 +122,20 @@ class Enemy extends Character {
        ((Robotron)currentScene).ENEMIES.remove(this);
     }
     
+    void update() {
+        super.update();
+        
+        if (canSeePlayer()) {
+            double elapsed = millis() - lastShotTime;
+            if (elapsed > shotPeriod) {
+                shoot();
+            }
+        }
+    }
+    
     void render() {
         strokeWeight(0);
-        fill(255,0,0);
+        fill(enemyColour);
         circle(position.x, position.y, size);
     }
 }
