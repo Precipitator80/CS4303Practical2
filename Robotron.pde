@@ -19,7 +19,7 @@ public class Robotron extends Scene {
         fill(255);
         textSize(height / 25);
         textAlign(CENTER);
-        text("Welcome to Robotron!\nPress enter to start the game.", width / 2, height / 2);
+        text("Welcome to Robotron: 4303!\nPress enter to start the game.", width / 2, height / 2);
     }
     
     void mouseReleased() {
