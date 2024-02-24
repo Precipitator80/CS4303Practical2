@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        // Comment out to use pde extension again.
+        //"*.pde": "java",
+    }
+}
