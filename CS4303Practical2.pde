@@ -44,7 +44,7 @@ void setup() {
     Graphics = new Graphics();
     
     // Load the first scene.
-    currentScene = new RobotronScene();
+    currentScene = new Robotron();
 }
 
 void draw() {

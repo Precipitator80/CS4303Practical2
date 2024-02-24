@@ -1,9 +1,11 @@
-public class RobotronScene extends Scene {
+public class Robotron extends Scene {
     Player player;
+    public final LinkedTransferQueue<Enemy> ENEMIES = new LinkedTransferQueue<Enemy>();
     
-    public RobotronScene() {
+    public Robotron() {
         super(color(255), color(128));
         player = new Player(width / 2, height / 2);
+        new Enemy(width / 4, height / 2);
     }
     
     void render() {

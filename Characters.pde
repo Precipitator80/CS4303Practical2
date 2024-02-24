@@ -4,10 +4,9 @@ class Player extends Character {
     }
     
     void render() {
-        // Rendering player!
         strokeWeight(0);
         fill(0,0,255);
-        circle(position.x, position.y, height / 25);
+        circle(position.x, position.y, size);
     }
     
     void shoot() {
@@ -15,7 +14,7 @@ class Player extends Character {
         shotVelocity.normalize();
         shotVelocity.mult(0.02f * height);
         
-        new Laser((int)position.x,(int)position.y, shotVelocity);
+        new Laser((int)position.x,(int)position.y, shotVelocity, true);
     }
     
     void checkMovementKeys(boolean pressed) {
@@ -40,11 +39,15 @@ class Player extends Character {
 class Laser extends GameObject {
     PVector velocity;
     PVector renderOffset;
+    boolean friendly;
+    int damage;
     
-    public Laser(int x, int y, PVector velocity) {
+    public Laser(int x, int y, PVector velocity, boolean friendly) {
         super(x,y);
         this.velocity = velocity;
         this.renderOffset = velocity.copy().normalize().mult(0.01f * height);
+        this.friendly = friendly;
+        this.damage = 25;
     }
     
     void update() {
@@ -52,6 +55,28 @@ class Laser extends GameObject {
         if (Utility.outOfBounds(this, renderOffset.mag() * 2)) {
             destroy();
         }
+        else if (friendly) {
+            Iterator<Enemy> iterator = ((Robotron)currentScene).ENEMIES.iterator();
+            while(iterator.hasNext()) {
+                Enemy enemy = iterator.next();
+                if (touchingTarget(enemy)) {
+                    enemy.damage(damage);
+                    this.destroy();
+                }
+            }
+        }
+        else {
+            Player player = ((Robotron)currentScene).player;
+            if (touchingTarget(player)) {
+                player.damage(damage);
+                this.destroy();
+            }
+        }
+    }
+    
+    boolean touchingTarget(Character target) {
+        float radius = target.size / 2;
+        return abs(target.position.x - position.x) < radius && abs(target.position.y - position.y) < radius;
     }
     
     void render() {
@@ -61,6 +86,23 @@ class Laser extends GameObject {
     }
 }
 
+class Enemy extends Character {
+    public Enemy(int x, int y) {
+        super(x,y);
+       ((Robotron)currentScene).ENEMIES.add(this);
+    }
+    
+    void destroy() {
+        super.destroy();
+       ((Robotron)currentScene).ENEMIES.remove(this);
+    }
+    
+    void render() {
+        strokeWeight(0);
+        fill(255,0,0);
+        circle(position.x, position.y, size);
+    }
+}
 
 abstract class Character extends GameObject {
     PVector velocity;
@@ -70,12 +112,20 @@ abstract class Character extends GameObject {
     boolean moveRight;
     int hp = 100;
     float movementSpeed = 0.004f;
+    float size;
     
     public Character(int x, int y) {
         super(x,y);
         velocity = new PVector();
+        this.size = height / 25;
     }
     
+    void damage(int damage) {
+        hp -= damage;
+        if (hp <= 0) {
+            destroy();
+        }
+    }
     
     void update() {
         moveCharacter();
