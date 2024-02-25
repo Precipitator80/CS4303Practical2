@@ -45,6 +45,7 @@ void setup() {
     
     // Load the first scene.
     currentScene = new Robotron();
+    noSmooth(); // Decide whether or not to use anti-aliasing.
 }
 
 void draw() {

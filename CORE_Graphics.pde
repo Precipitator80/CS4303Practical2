@@ -1,6 +1,10 @@
 public class Graphics {
     String graphicsFolder = "Graphics/";
+    
     PImage background;
+    PImage wall;
+    PImage floor;
+    
     PFont robotronFont;
     
     public Graphics() {
@@ -8,8 +12,11 @@ public class Graphics {
     }
     
     void load() {
-        background = loadImageWithFolder("Background.png");
+        background = loadImageWithFolder("background.png");
         background.resize(width, height);
+        
+        wall = loadImageWithFolder("wall.png");
+        floor = loadImageWithFolder("floor.png");
         
         robotronFont = createFont(graphicsFolder + "robotron-2084.otf", 128);
         textFont(robotronFont);

@@ -7,6 +7,7 @@ class Player extends Character {
     
     void render() {
         strokeWeight(0);
+        stroke(playerColour);
         fill(playerColour);
         circle(position.x, position.y, size);
     }
@@ -135,6 +136,7 @@ class Enemy extends Character {
     
     void render() {
         strokeWeight(0);
+        stroke(enemyColour);
         fill(enemyColour);
         circle(position.x, position.y, size);
     }
