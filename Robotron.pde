@@ -5,8 +5,8 @@ public class Robotron extends Scene {
     
     public Robotron() {
         super(color(255), color(128));
-        player = new Player(width / 2, height / 2);
-        new Enemy(width / 4, height / 2);
+        player = new Player(width / 6, height / 4);
+        new Enemy(5 * width / 6, 3 * height / 4);
         
         // 16 by 9 times 2
         levelManager = new LevelManager(32, 18);
@@ -220,6 +220,29 @@ class LevelManager {
     
     public int gridToScreenY(int gridY) {
         return gridY * (height / ySize) + cellSize / 2;
+    }
+    
+    public int screenToGridX(int screenX) {
+        return constrain(screenX / cellSize, 0, xSize - 1);
+    }
+    
+    public int screenToGridY(int screenY) {
+        return constrain(screenY / cellSize, 0, ySize - 1);
+    }
+    
+    boolean insideOfWall(int screenX, int screenY) {
+        return collisionCheck(screenX, screenY, true);
+    }
+    
+    boolean inaccessible(int screenX, int screenY) {
+        return collisionCheck(screenX, screenY, false);
+    }
+    
+    boolean collisionCheck(int screenX, int screenY, boolean onlyCheckWalls) {
+        int gridX = screenToGridX(screenX);
+        int gridY = screenToGridY(screenY);
+        CellType cellType = workingGrid[gridY][gridX];
+        return cellType != null && (cellType == CellType.WALL || !onlyCheckWalls && cellType == CellType.PIT);
     }
 }
 

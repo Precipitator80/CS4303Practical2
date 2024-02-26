@@ -57,7 +57,7 @@ class Laser extends GameObject {
     
     void update() {
         position.add(velocity);
-        if (Utility.outOfBounds(this, renderOffset.mag() * 2)) {
+        if (((Robotron)currentScene).levelManager.insideOfWall((int)position.x,(int)position.y) || Utility.outOfBounds(this, renderOffset.mag() * 2)) {
             destroy();
         }
         else if (friendly) {
@@ -188,6 +188,37 @@ abstract class Character extends GameObject {
     }
     
     void moveCharacter() {
-        position.add(velocity);
+        // Check whether the character would end up inside of a wall with the position change.
+        // Check both x and y separately, nullifying each component if required.
+        LevelManager levelManager = ((Robotron)currentScene).levelManager;
+        
+        boolean followX = true;
+        int screenX = (int)(position.x + velocity.x + Math.signum(velocity.x) * size / 2);
+        if (levelManager.inaccessible(screenX,(int)(position.y - size / 2)) || levelManager.inaccessible(screenX,(int)(position.y + size / 2))) {
+            followX = false;
+        }
+        
+        boolean followY = true;
+        int screenY = (int)(position.y + velocity.y + Math.signum(velocity.y) * size / 2); 
+        if (levelManager.inaccessible((int)(position.x - size / 2), screenY) || levelManager.inaccessible((int)(position.x + size / 2), screenY)) {
+            followY = false;
+        }
+        
+        position.set(position.x + (followX ? velocity.x : 0), position.y + (followY ? velocity.y : 0));
+        
+        // Check whether the character is inside of a wall.
+        // LevelManager levelManager = ((Robotron)currentScene).levelManager;
+        // if (levelManager.insideOfWall((int)position.x,(int)position.y)) {
+        //     // Try to correct the y position.
+        //     position.set(position.x, position.y - velocity.y);
+        //     if (levelManager.insideOfWall((int)position.x,(int)position.y)) {
+        //         // Still inside of the wall with y correction. Undo and try x instead.
+        //         position.set(position.x - velocity.x, position.y + velocity.y);
+        //         if (levelManager.insideOfWall((int)position.x,(int)position.y)) {
+        //             // Still inside of the wall with both correcitons. Undo both, keeping the character stationary.
+        //             position.set(position.x, position.y - velocity.y);
+        //         }
+        //     }
+    // }
     }
 }
