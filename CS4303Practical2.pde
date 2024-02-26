@@ -60,6 +60,10 @@ void draw() {
     currentScene.render();
 }
 
+void mousePressed() {
+    currentScene.mousePressed();
+}
+
 void mouseReleased() {
     currentScene.mouseReleased();
 }

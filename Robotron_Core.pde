@@ -13,6 +13,13 @@ public class Robotron extends Scene {
         levelManager.spawnLevel();
     }
     
+    void update() {
+        super.update();
+        if (BUTTON_MANAGER.mouseDown && player.currentWeapon.automatic) {
+            player.currentWeapon.tryToFire(mouseX, mouseY);
+        }
+    }
+    
     void render() {
         // Background
         background(Graphics.background);
@@ -30,9 +37,9 @@ public class Robotron extends Scene {
         text("Welcome to Robotron: 4303!\nPress enter to start the game.", width / 2, height / 2);
     }
     
-    void mouseReleased() {
-        super.mouseReleased();
-        player.shoot();
+    void mousePressed() {
+        super.mousePressed();
+        player.currentWeapon.tryToFire(mouseX, mouseY);
     }
     
     void keyPressed() {

@@ -3,13 +3,19 @@ class ButtonManager {
     color defaultStrokeColour;
     color defaultFillColour;
     boolean pressedButton;
+    boolean mouseDown;
     
     public ButtonManager(color defaultStrokeColour, color defaultFillColour) {
         this.defaultStrokeColour = defaultStrokeColour;
         this.defaultFillColour = defaultFillColour;
     }
     
+    void mousePressed() {
+        mouseDown = true;
+    }
+    
     void mouseReleased() {
+        mouseDown = false;
         Iterator<Button> iterator = buttons.iterator();
         while(iterator.hasNext()) {
             Button button = iterator.next();

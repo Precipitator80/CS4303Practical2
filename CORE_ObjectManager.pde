@@ -17,6 +17,10 @@ public abstract class Scene {
         OBJECT_MANAGER.render();
     }
     
+    void mousePressed() {
+        BUTTON_MANAGER.mousePressed();
+    }
+    
     void mouseReleased() {
         BUTTON_MANAGER.mouseReleased();
     }
