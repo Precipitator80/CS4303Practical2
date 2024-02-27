@@ -80,6 +80,9 @@ abstract class Weapon extends GameObject {
         double elapsedSinceFired = current - lastFired;
         if (elapsedSinceFired > fireDelay && (currentShots > 0 || maxShots == 0)) {
             fire(targetX, targetY);
+            if (maxShots > 0) {
+                currentShots--;
+            }
             lastFired = current;
         }
     }
@@ -87,9 +90,15 @@ abstract class Weapon extends GameObject {
     void update() {
         if (maxShots > 0) {
             double current = millis();
-            double elapsedSinceRecharge = current - lastRecharged;
-            if (elapsedSinceRecharge > rechargeDelay) {
+            if (currentShots == maxShots) {
                 lastRecharged = current;
+            }
+            else{
+                double elapsedSinceRecharge = current - lastRecharged;
+                if (elapsedSinceRecharge > rechargeDelay) {
+                    currentShots++;
+                    lastRecharged = current;
+                }
             }
         }
     }
