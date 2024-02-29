@@ -3,6 +3,8 @@ public class Robotron extends Scene {
     public final LinkedTransferQueue<Enemy> ENEMIES = new LinkedTransferQueue<Enemy>();
     LevelManager levelManager;
     
+    AStarTester aStarTester;
+    
     public Robotron() {
         super(color(255), color(128));
         player = new Player(width / 6, height / 4);
@@ -30,6 +32,8 @@ public class Robotron extends Scene {
         // Foreground
         super.render();
         
+        aStarTester.render();
+        
         // Show a message on the game's state to the player.
         fill(255);
         textSize(height / 25);
@@ -42,6 +46,11 @@ public class Robotron extends Scene {
         player.currentWeapon.tryToFire(mouseX, mouseY);
     }
     
+    void mouseReleased() {
+        super.mouseReleased();
+        aStarTester.mouseReleased();
+    }
+    
     void keyPressed() {
         player.checkMovementKeys(true);
     }
@@ -51,6 +60,7 @@ public class Robotron extends Scene {
         if (key == ' ') {
             levelManager.spawnLevel();
         }
+        aStarTester.keyReleased();
     }
 }
 
@@ -68,6 +78,7 @@ class LevelManager {
     private int ySize;
     private int cellSize;
     private boolean spawnedLevel;
+    AStarSearch pathFinder;
     
     public LevelManager(int xSize, int ySize) {
         this.xSize = xSize;
@@ -207,7 +218,8 @@ class LevelManager {
             }
         }
         
-        
+        pathFinder = new AStarSearch(grid);
+       ((Robotron)currentScene).aStarTester = new AStarTester();
         spawnedLevel = true;
     }
     

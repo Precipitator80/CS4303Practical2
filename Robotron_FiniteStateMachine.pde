@@ -4,6 +4,14 @@ class FSM extends GameObject {
         super((int) parent.x,(int) parent.y);
         position = parent;
     }
+    
+    void update() {
+        
+    }
+    
+    void render() {
+        
+    }
 }
 
 abstract class State {
