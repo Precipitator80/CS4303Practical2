@@ -1,7 +1,6 @@
 public class Graphics {
     String graphicsFolder = "Graphics/";
     
-    PImage background;
     PImage wall;
     PImage floor;
     
@@ -11,10 +10,7 @@ public class Graphics {
         load();
     }
     
-    void load() {
-        background = loadImageWithFolder("background.png");
-        background.resize(width, height);
-        
+    void load() {        
         wall = loadImageWithFolder("wall.png");
         floor = loadImageWithFolder("floor.png");
         

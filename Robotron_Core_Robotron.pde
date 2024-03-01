@@ -24,7 +24,7 @@ public class Robotron extends Scene {
     
     void render() {
         // Background
-        background(Graphics.background);
+        background(0);
         
         // Render cells.
         levelManager.render();

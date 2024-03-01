@@ -23,11 +23,12 @@ class Pit extends Cell {
     
     void render() {
         // Pits are just black squares.
-        rectMode(CENTER);
-        strokeWeight(0);
-        stroke(0);
-        fill(0);
-        rect(screenX, screenY, width, width);
+        // If background(0) is used, then rendering anything here is not required.
+        // rectMode(CENTER);
+        // strokeWeight(0);
+        // stroke(0);
+        // fill(0);
+        // rect(screenX, screenY, width, width);
     }
 }
 
