@@ -122,12 +122,14 @@ public class AStarSearch {
         // initialise the open list
         open = new ArrayList<AStarNode>();
         visited = new ArrayList<AStarNode>();
-        open.add(graph[sourceRow][sourceCol]);
-        graph[sourceRow][sourceCol].setCost(0);
-        // Continue until the open list is empty (which may indicate failure), or the goal is the first thing on open
-        while(!open.isEmpty()) {
-            if (searchIteration(goalRow, goalCol)) {
-                return extractPath(sourceRow, sourceCol, goalRow, goalCol);
+        if (graph[sourceRow][sourceCol] != null) {
+            open.add(graph[sourceRow][sourceCol]);
+            graph[sourceRow][sourceCol].setCost(0);
+            // Continue until the open list is empty (which may indicate failure), or the goal is the first thing on open
+            while(!open.isEmpty()) {
+                if (searchIteration(goalRow, goalCol)) {
+                    return extractPath(sourceRow, sourceCol, goalRow, goalCol);
+                }
             }
         }
         return null;

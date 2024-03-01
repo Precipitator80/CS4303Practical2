@@ -190,4 +190,20 @@ class LevelManager {
         CellType cellType = workingGrid[gridY][gridX];
         return cellType != null && (cellType == CellType.WALL || !onlyCheckWalls && cellType == CellType.PIT);
     }
+    
+    boolean visionCheck(int screenX, int screenY, int targetScreenX, int targetScreenY, boolean mustBeReachableDirectly) {
+        PVector origin = new PVector(screenX, screenY);
+        PVector differenceVector = new PVector(targetScreenX, targetScreenY).sub(origin);
+        PVector normalisedDifferenceVector = differenceVector.copy().normalize().mult(cellSize);
+        int numberOfIterations = (int)(differenceVector.mag() / cellSize);
+        for (int i = 0; i < numberOfIterations; i++) {
+            PVector positionToCheck = origin.copy().add(differenceVector);
+            Cell cellToCheck = grid[screenToGridY((int)positionToCheck.y)][screenToGridX((int)positionToCheck.x)];
+            if (cellToCheck.blocksVision || (mustBeReachableDirectly && cellToCheck.impassable)) {
+                return false;
+            }
+            differenceVector.sub(normalisedDifferenceVector);
+        }
+        return true;
+    }
 }

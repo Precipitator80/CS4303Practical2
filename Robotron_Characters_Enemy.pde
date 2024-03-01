@@ -28,14 +28,13 @@ class Enemy extends Character {
     }
     
     boolean canSeePlayer() {
-        return true; // Nothing special for now.
+        Player player = ((Robotron)currentScene).player;
+        return((Robotron)currentScene).levelManager.visionCheck((int)position.x,(int)position.y,(int)player.position.x,(int)player.position.y, false);
     }
     
     boolean canGoDirectlyToPlayer() {
-        if (!canSeePlayer()) {
-            return false;
-        }
-        return true;
+        Player player = ((Robotron)currentScene).player;
+        return((Robotron)currentScene).levelManager.visionCheck((int)position.x,(int)position.y,(int)player.position.x,(int)player.position.y, true);
     }
     
     void destroy() {
@@ -97,13 +96,14 @@ class Enemy extends Character {
                 velocity.sub(position);
                 velocity.normalize();
                 velocity.mult(movementSpeed * height);
-                print("Enemy velocity: " + velocity);
-                
                 
                 // If within a sufficient distance to the node, remove it from the list.
                 float distanceToNext = new PVector(levelManager.gridToScreenX(nextNode.getCol()),levelManager.gridToScreenY(nextNode.getRow())).sub(position).mag();
-                if (distanceToNext < levelManager.cellSize / 2) {
+                if (distanceToNext < levelManager.cellSize / 5) {
                     thePath.remove(thePath.size() - 1);
+                    if (thePath.isEmpty()) {
+                        velocity.set(0,0);
+                    }
                 }
             }
         }
