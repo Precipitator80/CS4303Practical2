@@ -116,11 +116,11 @@ class Enemy extends Character {
         circle(position.x, position.y, size);
         
         // Paint path
-        LevelManager levelManager = ((Robotron)currentScene).levelManager;
-        strokeWeight(0);
-        rectMode(CENTER);
-        float opacity = 150;
         if (!thePath.isEmpty()) {
+            LevelManager levelManager = ((Robotron)currentScene).levelManager;
+            float opacity = 150;
+            strokeWeight(0);
+            rectMode(CENTER);
             stroke(0,0,255,opacity);
             fill(0,0,255,opacity);
             for (AStarNode node : thePath)
