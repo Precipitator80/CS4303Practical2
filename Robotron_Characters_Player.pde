@@ -3,7 +3,6 @@ class Player extends Character {
     Weapon currentWeapon;
     List<Weapon> weapons;
     
-    
     public Player(int x, int y) {
         super(x,y,0.008f);
         currentWeapon = new Pistol(position, playerColour);
@@ -15,10 +14,19 @@ class Player extends Character {
         
     }
     
+    void despawn() {
+    }
+    
     void render() {
+        if (alive()) {
+            stroke(playerColour);
+            fill(playerColour);
+        }
+        else{
+            stroke(playerColour, 100);
+            fill(playerColour, 100);
+        }
         strokeWeight(0);
-        stroke(playerColour);
-        fill(playerColour);
         circle(position.x, position.y, size);
     }
     

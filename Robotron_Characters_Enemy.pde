@@ -12,11 +12,23 @@ class Enemy extends Character {
     
     public Enemy(int x, int y) {
         super(x,y,0.004f);
-       ((Robotron)currentScene).ENEMIES.add(this);
+        Robotron robotron = ((Robotron)currentScene);
+        if (robotron != null) {
+            LevelManager levelManager = robotron.levelManager;
+            if (levelManager != null) {
+                levelManager.ENEMIES.add(this);
+            }
+            else{
+                print("LGM is null!\n");
+            }
+        }
+        else{
+            print("Robotron is null!\n");
+        }
     }
     
     void shoot() {
-        Player player = ((Robotron)currentScene).player;
+        Player player = ((Robotron)currentScene).levelManager.player;
         float offsetRange = new PVector(player.position.x - position.x, player.position.y - position.y).mag() / 10;
         PVector target = new PVector(random(player.position.x - offsetRange, player.position.x + offsetRange), random(player.position.y - offsetRange, player.position.y + offsetRange));
         
@@ -29,18 +41,30 @@ class Enemy extends Character {
     }
     
     boolean canSeePlayer() {
-        Player player = ((Robotron)currentScene).player;
-        return((Robotron)currentScene).levelManager.visionCheck((int)position.x,(int)position.y,(int)player.position.x,(int)player.position.y, false);
+        LevelManager levelManager = ((Robotron)currentScene).levelManager;
+        Player player = levelManager.player;
+        if (!player.alive()) {
+            return false;
+        }
+        return levelManager.visionCheck((int)position.x,(int)position.y,(int)player.position.x,(int)player.position.y, false);
     }
     
     boolean canGoDirectlyToPlayer() {
-        Player player = ((Robotron)currentScene).player;
-        return((Robotron)currentScene).levelManager.visionCheck((int)position.x,(int)position.y,(int)player.position.x,(int)player.position.y, true);
+        LevelManager levelManager = ((Robotron)currentScene).levelManager;
+        Player player = levelManager.player;
+        if (!player.alive()) {
+            return false;
+        }
+        return levelManager.visionCheck((int)position.x,(int)position.y,(int)player.position.x,(int)player.position.y, true);
     }
     
     void destroy() {
         super.destroy();
-       ((Robotron)currentScene).ENEMIES.remove(this);
+       ((Robotron)currentScene).levelManager.ENEMIES.remove(this);
+    }
+    
+    void despawn() {
+        destroy();
     }
     
     void update() {
@@ -52,12 +76,7 @@ class Enemy extends Character {
         // If the player can be seen and reached directly, go to them directly. No timing required.
         // If the player can be seen but not reached directly, go to them via A*. Timing required, but refresh immediately if path is empty.
         // If the player cannot be seen but has just been seen, go to them via A*. Timing required, but should be set immediately after losing player.
-        // If the player cannot be seen and has not just been seen, pick a random spot to go to via A*. Timing required.
-        
-        // If can go direct, go direct.
-        // Else, if was just seen and empty or timer, make a new path.
-        // If was just seen, use player as target.
-        
+        // If the player cannot be seen and has not just been seen, pick a random spot to go to via A*. Timing required.       
         
         if (canSeePlayer) {
             justSawPlayer = true;
@@ -68,7 +87,7 @@ class Enemy extends Character {
         
         // Go directly to the player if possible.
         if (canGoDirectlyToPlayer()) {
-            Player player = ((Robotron)currentScene).player;
+            Player player = ((Robotron)currentScene).levelManager.player;
             velocity.set(player.position.x, player.position.y).sub(position).normalize().mult(movementSpeed * height);
             thePath.clear();
         }
@@ -80,23 +99,23 @@ class Enemy extends Character {
                 // Else, only make a new path if the current one has been traversed.
                 ArrayList<AStarNode>result;
                 if (justSawPlayer || thePath.isEmpty()) {
-                    Robotron robotron = ((Robotron)currentScene);
-                    int x = robotron.levelManager.screenToGridX((int)position.x);
-                    int y = robotron.levelManager.screenToGridY((int)position.y);
+                    LevelManager levelManager = ((Robotron)currentScene).levelManager;
+                    int x = levelManager.screenToGridX((int)position.x);
+                    int y = levelManager.screenToGridY((int)position.y);
                     int targetX;
                     int targetY;
                     if (justSawPlayer) {
-                        targetX = robotron.levelManager.screenToGridX((int)robotron.player.position.x);
-                        targetY = robotron.levelManager.screenToGridY((int)robotron.player.position.y);
+                        targetX = levelManager.screenToGridX((int)levelManager.player.position.x);
+                        targetY = levelManager.screenToGridY((int)levelManager.player.position.y);
                         justSawPlayer = false;
                     }
                     else{
-                        targetX = robotron.levelManager.screenToGridX((int)position.x);
+                        targetX = levelManager.screenToGridX((int)position.x);
                         targetX += random( -5,6);
-                        targetY = robotron.levelManager.screenToGridY((int)position.y);
+                        targetY = levelManager.screenToGridY((int)position.y);
                         targetY += random( -5,6);
                     }
-                    result = robotron.levelManager.pathFinder.search(y, x, targetY, targetX);
+                    result = levelManager.pathFinder.search(y, x, targetY, targetX);
                     if (result != null) {
                         thePath = result;
                     }
@@ -133,22 +152,24 @@ class Enemy extends Character {
         fill(enemyColour);
         circle(position.x, position.y, size);
         
-        // Paint path
-        if (!thePath.isEmpty()) {
-            LevelManager levelManager = ((Robotron)currentScene).levelManager;
-            float opacity = 150;
-            strokeWeight(0);
-            rectMode(CENTER);
-            stroke(0,0,255,opacity);
-            fill(0,0,255,opacity);
-            for (AStarNode node : thePath)
-                rect(levelManager.gridToScreenX(node.getCol()), levelManager.gridToScreenY(node.getRow()), levelManager.cellSize, levelManager.cellSize);
-            if (levelManager.pathFinder.visited != null) {
-                for (AStarNode node : levelManager.pathFinder.visited) {
-                    if (!thePath.contains(node)) {
-                        stroke(255,0,0,opacity);
-                        fill(255,0,0,opacity);
-                        rect(levelManager.gridToScreenX(node.getCol()), levelManager.gridToScreenY(node.getRow()), levelManager.cellSize, levelManager.cellSize);
+        if (DEBUG_MODE) {
+            // Paint path
+            if (!thePath.isEmpty()) {
+                LevelManager levelManager = ((Robotron)currentScene).levelManager;
+                float opacity = 150;
+                strokeWeight(0);
+                rectMode(CENTER);
+                stroke(0,0,255,opacity);
+                fill(0,0,255,opacity);
+                for (AStarNode node : thePath)
+                    rect(levelManager.gridToScreenX(node.getCol()), levelManager.gridToScreenY(node.getRow()), levelManager.cellSize, levelManager.cellSize);
+                if (levelManager.pathFinder.visited != null) {
+                    for (AStarNode node : levelManager.pathFinder.visited) {
+                        if (!thePath.contains(node)) {
+                            stroke(255,0,0,opacity);
+                            fill(255,0,0,opacity);
+                            rect(levelManager.gridToScreenX(node.getCol()), levelManager.gridToScreenY(node.getRow()), levelManager.cellSize, levelManager.cellSize);
+                        }
                     }
                 }
             }

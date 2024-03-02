@@ -7,12 +7,17 @@ class LevelManager {
     private boolean spawnedLevel;
     AStarSearch pathFinder;
     
+    Player player;
+    public final LinkedTransferQueue<Enemy> ENEMIES = new LinkedTransferQueue<Enemy>();
+    
     public LevelManager(int xSize, int ySize) {
         this.xSize = xSize;
         this.ySize = ySize;
         this.cellSize = height / ySize;
         grid = new Cell[ySize][xSize];
         workingGrid = new CellType[ySize][xSize];
+        
+        player = new Player(width / 6, height / 4);
     }
     
     boolean fiftyFifty() {
@@ -145,7 +150,13 @@ class LevelManager {
             }
         }
         
+        // Initialise the path finder.
         pathFinder = new AStarSearch(grid);
+        
+        // Spawn in characters.
+        player.respawn(width / 6, height / 4);
+        new Enemy(5 * width / 6, 3 * height / 4);
+        
        ((Robotron)currentScene).aStarTester = new AStarTester();
         spawnedLevel = true;
     }

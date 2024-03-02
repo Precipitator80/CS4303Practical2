@@ -11,6 +11,8 @@ import java.util.concurrent.LinkedTransferQueue;
 // Utility class with additional methods.
 final Utility Utility = new Utility();
 
+final boolean DEBUG_MODE = false;
+
 //// Late initialisation.
 Audio Audio;
 Graphics Graphics;

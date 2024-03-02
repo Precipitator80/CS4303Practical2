@@ -16,11 +16,13 @@ class Laser extends GameObject {
     
     void update() {
         position.add(velocity);
-        if (((Robotron)currentScene).levelManager.insideOfWall((int)position.x,(int)position.y) || Utility.outOfBounds(this, renderOffset.mag() * 2)) {
+        
+        LevelManager levelManager = ((Robotron)currentScene).levelManager;
+        if (levelManager.insideOfWall((int)position.x,(int)position.y) || Utility.outOfBounds(this, renderOffset.mag() * 2)) {
             destroy();
         }
         else if (friendly) {
-            Iterator<Enemy> iterator = ((Robotron)currentScene).ENEMIES.iterator();
+            Iterator<Enemy> iterator = ((Robotron)currentScene).levelManager.ENEMIES.iterator();
             while(iterator.hasNext()) {
                 Enemy enemy = iterator.next();
                 if (touchingTarget(enemy)) {
@@ -30,9 +32,8 @@ class Laser extends GameObject {
             }
         }
         else {
-            Player player = ((Robotron)currentScene).player;
-            if (touchingTarget(player)) {
-                player.damage(damage);
+            if (touchingTarget(levelManager.player)) {
+                levelManager.player.damage(damage);
                 this.destroy();
             }
         }

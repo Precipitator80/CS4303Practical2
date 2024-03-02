@@ -15,15 +15,28 @@ abstract class Character extends GameObject {
         this.size = height / 25;
     }
     
+    boolean alive() {
+        return hp > 0;
+    }
+    
     void damage(int damage) {
         hp -= damage;
-        if (hp <= 0) {
-            destroy();
+        if (!alive()) {
+            despawn();
         }
     }
     
+    abstract void despawn();
+    
+    void respawn(int x, int y) {
+        position.set(x,y);
+        hp = 100;
+    }
+    
     void update() {
-        moveCharacter();
+        if (alive()) {
+            moveCharacter();
+        }
     }
     
     void updateVelocity() {
@@ -62,20 +75,5 @@ abstract class Character extends GameObject {
         }
         
         position.set(position.x + (followX ? velocity.x : 0), position.y + (followY ? velocity.y : 0));
-        
-        // Check whether the character is inside of a wall.
-        // LevelManager levelManager = ((Robotron)currentScene).levelManager;
-        // if (levelManager.insideOfWall((int)position.x,(int)position.y)) {
-        //     // Try to correct the y position.
-        //     position.set(position.x, position.y - velocity.y);
-        //     if (levelManager.insideOfWall((int)position.x,(int)position.y)) {
-        //         // Still inside of the wall with y correction. Undo and try x instead.
-        //         position.set(position.x - velocity.x, position.y + velocity.y);
-        //         if (levelManager.insideOfWall((int)position.x,(int)position.y)) {
-        //             // Still inside of the wall with both correcitons. Undo both, keeping the character stationary.
-        //             position.set(position.x, position.y - velocity.y);
-        //         }
-        //     }
-// }
-}
+    }
 }
