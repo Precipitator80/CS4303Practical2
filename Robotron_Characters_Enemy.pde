@@ -12,19 +12,7 @@ class Enemy extends Character {
     
     public Enemy(int x, int y) {
         super(x,y,0.004f);
-        Robotron robotron = ((Robotron)currentScene);
-        if (robotron != null) {
-            LevelManager levelManager = robotron.levelManager;
-            if (levelManager != null) {
-                levelManager.ENEMIES.add(this);
-            }
-            else{
-                print("LGM is null!\n");
-            }
-        }
-        else{
-            print("Robotron is null!\n");
-        }
+       ((Robotron)currentScene).levelManager.ENEMIES.add(this);
     }
     
     void shoot() {

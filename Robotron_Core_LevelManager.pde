@@ -11,6 +11,7 @@ class LevelManager {
     public final LinkedTransferQueue<Enemy> ENEMIES = new LinkedTransferQueue<Enemy>();
     
     public LevelManager(int xSize, int ySize) {
+       ((Robotron)currentScene).levelManager = this;
         this.xSize = xSize;
         this.ySize = ySize;
         this.cellSize = height / ySize;
