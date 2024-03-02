@@ -8,6 +8,7 @@ class Enemy extends Character {
     double lastPathSearch;
     double pathSearchPeriod = 3000.0;
     ArrayList<AStarNode>thePath = new ArrayList<AStarNode>();
+    boolean justSawPlayer;
     
     public Enemy(int x, int y) {
         super(x,y,0.004f);
@@ -48,31 +49,46 @@ class Enemy extends Character {
         boolean canSeePlayer = canSeePlayer();
         double current = millis();
         
+        // If the player can be seen and reached directly, go to them directly. No timing required.
+        // If the player can be seen but not reached directly, go to them via A*. Timing required, but refresh immediately if path is empty.
+        // If the player cannot be seen but has just been seen, go to them via A*. Timing required, but should be set immediately after losing player.
+        // If the player cannot be seen and has not just been seen, pick a random spot to go to via A*. Timing required.
+        
+        // If can go direct, go direct.
+        // Else, if was just seen and empty or timer, make a new path.
+        // If was just seen, use player as target.
+        
         
         if (canSeePlayer) {
+            justSawPlayer = true;
             if (current - lastShotTime > shotPeriod) {
                 shoot();
             }
         }
         
+        // Go directly to the player if possible.
         if (canGoDirectlyToPlayer()) {
             Player player = ((Robotron)currentScene).player;
             velocity.set(player.position.x, player.position.y).sub(position).normalize().mult(movementSpeed * height);
+            thePath.clear();
         }
         else{
-            if (current - lastPathSearch > pathSearchPeriod) {
-                // If the player can be seen, overwrite the current path.
+            // Else, check for path update if the player was just seen and the path is empty or the timer has elapsed.
+            // This means the AI should always have a path to the player when seen but not update every frame.
+            if ((justSawPlayer && thePath.isEmpty()) || current - lastPathSearch > pathSearchPeriod) {
+                // If the player was just seen, overwrite the current path.
                 // Else, only make a new path if the current one has been traversed.
                 ArrayList<AStarNode>result;
-                if (canSeePlayer || thePath.isEmpty()) {
+                if (justSawPlayer || thePath.isEmpty()) {
                     Robotron robotron = ((Robotron)currentScene);
                     int x = robotron.levelManager.screenToGridX((int)position.x);
                     int y = robotron.levelManager.screenToGridY((int)position.y);
                     int targetX;
                     int targetY;
-                    if (canSeePlayer) {
+                    if (justSawPlayer) {
                         targetX = robotron.levelManager.screenToGridX((int)robotron.player.position.x);
                         targetY = robotron.levelManager.screenToGridY((int)robotron.player.position.y);
+                        justSawPlayer = false;
                     }
                     else{
                         targetX = robotron.levelManager.screenToGridX((int)position.x);
@@ -84,8 +100,10 @@ class Enemy extends Character {
                     if (result != null) {
                         thePath = result;
                     }
-                }   
+                }
                 lastPathSearch = current;
+                // Change the update period depending on whether the player can be seen.
+                pathSearchPeriod = canSeePlayer ? 1500 : random(2000,5000);
             }
             
             if (!thePath.isEmpty()) {
