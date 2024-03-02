@@ -17,8 +17,6 @@ class LevelManager {
         this.cellSize = height / ySize;
         grid = new Cell[ySize][xSize];
         workingGrid = new CellType[ySize][xSize];
-        
-        player = new Player(width / 6, height / 4);
     }
     
     boolean fiftyFifty() {
@@ -151,11 +149,24 @@ class LevelManager {
             }
         }
         
+        // Designate quadrants.
+        // Initial idea:
+        // 1 player quadrant.
+        // 1 enemy quadrant (at least diagonal from player quadrant).
+        // 4 mixed quadrants.
+        
         // Initialise the path finder.
         pathFinder = new AStarSearch(grid);
         
         // Spawn in characters.
-        player.respawn(width / 6, height / 4);
+        int playerX = width / 6;
+        int playerY = height / 4;
+        if (player == null) {
+            player = new Player(playerX, playerY);
+        }
+        else{
+            player.respawn(playerX, playerY);
+        }
         new Enemy(5 * width / 6, 3 * height / 4);
         
        ((Robotron)currentScene).aStarTester = new AStarTester();
