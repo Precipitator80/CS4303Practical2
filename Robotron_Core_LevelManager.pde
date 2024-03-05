@@ -1,11 +1,17 @@
 class LevelManager {
-    private Cell[][] grid;
-    private CellType[][] workingGrid;
-    private int xSize;
-    private int ySize;
-    private int cellSize;
+    private Cell[][] grid; // The grid of cells.
+    private CellType[][] workingGrid; // A working grid of CellType enum for faster customisation.
+    private int xSize; // The number of cells in the x direction.
+    private int ySize; // The number of cells in the y direction.
+    int numberOfChunksX = 3; // The number of chunk divisions in the x direction.
+    int numberOfChunksY = 2; // The number of chunk divisions in the y direction.
+    int chunkXSize; // The grid width of each chunk.
+    int chunkYSize; // The grid height of each chunk.
+    int wallWidth = 3; // The number of grid spaces a wall takes up in width.
+    private int cellSize; // The size of a cell in pixels.
     private boolean spawnedLevel;
     AStarSearch pathFinder;
+    
     
     Player player;
     public final LinkedTransferQueue<Enemy> ENEMIES = new LinkedTransferQueue<Enemy>();
@@ -17,6 +23,8 @@ class LevelManager {
         this.cellSize = height / ySize;
         grid = new Cell[ySize][xSize];
         workingGrid = new CellType[ySize][xSize];
+        chunkXSize = (xSize - 2 - (numberOfChunksX - 1) * wallWidth) / numberOfChunksX;
+        chunkYSize = (ySize - 2 - (numberOfChunksY - 1) * wallWidth) / numberOfChunksY;
     }
     
     boolean fiftyFifty() {
@@ -48,10 +56,10 @@ class LevelManager {
         // Horizontal split 1
         if (fiftyFifty()) {
             // Add corridors / bridges.
-            int x1 = xSize / 3 - 1;
+            int x1 = xSize / numberOfChunksX - 1;
             int x2 = x1 + 2;
-            fillAreaRandomY(CellType.EMPTY, 1, ySize / 2 - 1,(int) random(1, 4), x1, x2);
-            fillAreaRandomY(CellType.EMPTY, ySize / 2 + 2, ySize - 1,(int) random(1, 4), x1, x2);
+            fillAreaRandomY(CellType.EMPTY, 1, ySize / numberOfChunksY - 1,(int) random(1, 4), x1, x2);
+            fillAreaRandomY(CellType.EMPTY, ySize / numberOfChunksY + 2, ySize - 1,(int) random(1, 4), x1, x2);
             
             // Add walls / pits next to the corridors / bridges.
             CellType cellType = fiftyFifty() ? CellType.WALL : CellType.PIT;
@@ -73,11 +81,11 @@ class LevelManager {
         // Vertical split
         if (fiftyFifty()) {
             // Add corridors / bridges.
-            int y1 = ySize / 2 - 1;
+            int y1 = ySize / numberOfChunksY - 1;
             int y2 = y1 + 2;
-            fillAreaRandomX(CellType.EMPTY, 1, xSize / 3 - 1,(int) random(1,4), y1, y2);
-            fillAreaRandomX(CellType.EMPTY, xSize / 3 + 2, 2 * xSize / 3 - 1,(int) random(1,4), y1, y2);
-            fillAreaRandomX(CellType.EMPTY, 2 * xSize / 3 + 2, xSize - 1,(int) random(1,4), y1, y2);
+            fillAreaRandomX(CellType.EMPTY, 1, xSize / numberOfChunksX - 1,(int) random(1,4), y1, y2);
+            fillAreaRandomX(CellType.EMPTY, xSize / numberOfChunksX + 2, 2 * xSize / numberOfChunksX - 1,(int) random(1,4), y1, y2);
+            fillAreaRandomX(CellType.EMPTY, 2 * xSize /  numberOfChunksX + 2, xSize - 1,(int) random(1,4), y1, y2);
             
             // Add walls / pits next to the corridors / bridges.
             CellType cellType = fiftyFifty() ? CellType.WALL : CellType.PIT;
@@ -98,10 +106,10 @@ class LevelManager {
         // Horizontal split 2
         if (fiftyFifty()) {            
             // Add corridors / bridges.
-            int x1 = 2 * xSize / 3 - 1;
+            int x1 = 2 * xSize / numberOfChunksX - 1;
             int x2 = x1 + 2;
-            fillAreaRandomY(CellType.EMPTY, 1, ySize / 2 - 1,(int) random(1, 4), x1, x2);
-            fillAreaRandomY(CellType.EMPTY, ySize / 2 + 2, ySize - 1,(int) random(1, 4), x1, x2);
+            fillAreaRandomY(CellType.EMPTY, 1, ySize / numberOfChunksY - 1,(int) random(1, 4), x1, x2);
+            fillAreaRandomY(CellType.EMPTY, ySize / numberOfChunksY + 2, ySize - 1,(int) random(1, 4), x1, x2);
             
             // Add walls / pits next to the corridors / bridges.
             CellType cellType = fiftyFifty() ? CellType.WALL : CellType.PIT;
@@ -149,27 +157,61 @@ class LevelManager {
             }
         }
         
-        // Designate quadrants.
-        // Initial idea:
-        // 1 player quadrant.
-        // 1 enemy quadrant (at least diagonal from player quadrant).
-        // 4 mixed quadrants.
-        
         // Initialise the path finder.
         pathFinder = new AStarSearch(grid);
         
-        // Spawn in characters.
-        int playerX = width / 6;
-        int playerY = height / 4;
-        if (player == null) {
-            player = new Player(playerX, playerY);
-        }
-        else{
-            player.respawn(playerX, playerY);
-        }
-        new Enemy(5 * width / 6, 3 * height / 4);
-        
        ((Robotron)currentScene).aStarTester = new AStarTester();
+        
+        // Designate chunks.
+        // Initial idea:
+        // 1 player chunk.
+        // 1 enemy chunk (at least diagonal from player chunk).
+        // 4 mixed chunks.
+        Chunk[][] chunks = new Chunk[numberOfChunksY][numberOfChunksX];
+        int randomX = (int)random(numberOfChunksX);
+        int randomY = (int)random(numberOfChunksY);
+        chunks[randomY][randomX] = new PlayerChunk(chunkToGridX(randomX), chunkToGridY(randomY));
+        
+        // Place mixed chunks adjacent to the player chunk.
+        if (randomY - 1 >= 0) {
+            chunks[randomY - 1][randomX] = new MixedChunk(chunkToGridX(randomX), chunkToGridY(randomY - 1));
+        }
+        if (randomY + 1 < numberOfChunksY) {
+            chunks[randomY + 1][randomX] = new MixedChunk(chunkToGridX(randomX), chunkToGridY(randomY + 1));
+        }
+        if (randomX - 1 >= 0) {
+            chunks[randomY][randomX - 1] = new MixedChunk(chunkToGridX(randomX - 1), chunkToGridY(randomY));
+        }
+        if (randomX + 1 < numberOfChunksX) {
+            chunks[randomY][randomX + 1] = new MixedChunk(chunkToGridX(randomX + 1), chunkToGridY(randomY));
+        }
+        
+        // Randomly choose one of the remaining chunks as the enemy chunk.
+        List<PVector> remainingChunks = new ArrayList<>();
+        for (int y = 0; y < numberOfChunksY; y++) {
+            for (int x = 0; x < numberOfChunksX; x++) {
+                if (chunks[y][x] == null) {
+                    remainingChunks.add(new PVector(x, y));
+                }
+            }
+        }
+        int randomRemainingChunk = (int)random(remainingChunks.size());
+        PVector enemyChunk = remainingChunks.get(randomRemainingChunk);
+        chunks[(int)enemyChunk.y][(int)enemyChunk.x] = new EnemyChunk(chunkToGridX((int)enemyChunk.x), chunkToGridY((int)enemyChunk.y));
+        remainingChunks.remove(randomRemainingChunk);
+        
+        // Assign any remaining chunks as mixed chunks.
+        for (int i = 0; i < remainingChunks.size();i++) {
+            PVector remainingChunk = remainingChunks.get(i);
+            chunks[(int)remainingChunk.y][(int)remainingChunk.x] = new MixedChunk(chunkToGridX((int)remainingChunk.x),chunkToGridY((int)remainingChunk.y));
+        }
+        
+        for (int y = 0; y < numberOfChunksY; y++) {
+            for (int x = 0; x < numberOfChunksX; x++) {
+                chunks[y][x].spawn();
+            }
+        }
+        
         spawnedLevel = true;
     }
     
@@ -197,6 +239,14 @@ class LevelManager {
     
     public int screenToGridY(int screenY) {
         return constrain(screenY / cellSize, 0, ySize - 1);
+    }
+    
+    int chunkToGridX(int chunkX) {
+        return 1 + chunkX * (chunkXSize + wallWidth);
+    }
+    
+    int chunkToGridY(int chunkY) {
+        return 1 + chunkY * (chunkYSize + wallWidth);
     }
     
     boolean insideOfWall(int screenX, int screenY) {
