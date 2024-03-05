@@ -12,7 +12,8 @@ class LevelManager {
     private int cellSize; // The size of a cell in pixels.
     private boolean spawnedLevel;
     AStarSearch pathFinder;
-    int screenXOffset; // The amount of screen space not used due to higher aspect ratio.
+    int screenXOffset; // The amount of x screen space not used due to higher aspect ratio.
+    int screenYOffset; // The amount of y screen space not used due to higher aspect ratio.
     
     // Wave parameters.
     int numberOfEnemies = 10;
@@ -26,11 +27,15 @@ class LevelManager {
         this.xSize = xSize;
         this.ySize = ySize;
         this.cellSize = height / ySize;
+        if (width / cellSize < xSize) {
+            cellSize = width / xSize;
+        }
         grid = new Cell[ySize][xSize];
         workingGrid = new CellType[ySize][xSize];
         chunkXSize = (xSize - 2 - (numberOfChunksX - 1) * wallWidth) / numberOfChunksX;
         chunkYSize = (ySize - 2 - (numberOfChunksY - 1) * wallWidth) / numberOfChunksY;
         this.screenXOffset = (width - cellSize * xSize) / 2;
+        this.screenYOffset = (height - cellSize * ySize) / 2;
     }
     
     boolean fiftyFifty() {
@@ -236,7 +241,7 @@ class LevelManager {
     }
     
     public int gridToScreenY(int gridY) {
-        return gridY * (height / ySize) + cellSize / 2;
+        return gridY * ((height - 2 * screenYOffset) / ySize) + screenYOffset + cellSize / 2;
     }
     
     public int screenToGridX(int screenX) {
@@ -244,7 +249,7 @@ class LevelManager {
     }
     
     public int screenToGridY(int screenY) {
-        return constrain(screenY / cellSize, 0, ySize - 1);
+        return constrain((screenY - screenYOffset) / cellSize, 0, ySize - 1);
     }
     
     int chunkToGridX(int chunkX) {
