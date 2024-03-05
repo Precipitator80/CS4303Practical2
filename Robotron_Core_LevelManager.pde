@@ -1,4 +1,5 @@
 class LevelManager {
+    // World parameters.
     private Cell[][] grid; // The grid of cells.
     private CellType[][] workingGrid; // A working grid of CellType enum for faster customisation.
     private int xSize; // The number of cells in the x direction.
@@ -11,6 +12,10 @@ class LevelManager {
     private int cellSize; // The size of a cell in pixels.
     private boolean spawnedLevel;
     AStarSearch pathFinder;
+    int screenXOffset; // The amount of screen space not used due to higher aspect ratio.
+    
+    // Wave parameters.
+    int numberOfEnemies = 10;
     
     
     Player player;
@@ -25,6 +30,7 @@ class LevelManager {
         workingGrid = new CellType[ySize][xSize];
         chunkXSize = (xSize - 2 - (numberOfChunksX - 1) * wallWidth) / numberOfChunksX;
         chunkYSize = (ySize - 2 - (numberOfChunksY - 1) * wallWidth) / numberOfChunksY;
+        this.screenXOffset = (width - cellSize * xSize) / 2;
     }
     
     boolean fiftyFifty() {
@@ -226,7 +232,7 @@ class LevelManager {
     }
     
     public int gridToScreenX(int gridX) {
-        return gridX * (width / xSize) + cellSize / 2;
+        return gridX * ((width - 2 * screenXOffset) / xSize) + screenXOffset + cellSize / 2;
     }
     
     public int gridToScreenY(int gridY) {
@@ -234,7 +240,7 @@ class LevelManager {
     }
     
     public int screenToGridX(int screenX) {
-        return constrain(screenX / cellSize, 0, xSize - 1);
+        return constrain((screenX - screenXOffset) / cellSize, 0, xSize - 1);
     }
     
     public int screenToGridY(int screenY) {

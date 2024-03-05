@@ -7,7 +7,7 @@ public class Robotron extends Scene {
         super(color(255), color(128));
         
         // 16 by 9 times 2
-        levelManager = new LevelManager(32, 18);
+        levelManager = new LevelManager(32, 19);
         levelManager.spawnLevel();
     }
     

@@ -38,9 +38,11 @@ class EnemyChunk extends Chunk {
         LevelManager levelManager = ((Robotron)currentScene).levelManager;
         
         // Spawn in enemies.
-        int enemyX = levelManager.gridToScreenX(gridStartX + levelManager.chunkXSize / 2);
-        int enemyY = levelManager.gridToScreenY(gridStartY + levelManager.chunkYSize / 2);
-        new Enemy(enemyX, enemyY);
+        for (int i = 0; i < levelManager.numberOfEnemies; i++) {
+            int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
+            int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
+            new Enemy(enemyX, enemyY);
+        }
     }
 }
 
