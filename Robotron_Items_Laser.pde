@@ -27,6 +27,7 @@ class Laser extends GameObject {
                 Enemy enemy = iterator.next();
                 if (touchingTarget(enemy)) {
                     enemy.damage(damage);
+                    levelManager.addPoints(enemy.points);
                     this.destroy();
                 }
             }

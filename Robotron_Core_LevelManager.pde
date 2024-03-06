@@ -21,6 +21,7 @@ class LevelManager {
     AStarSearch pathFinder;
     int screenXOffset; // The amount of x screen space not used due to higher aspect ratio.
     int screenYOffset; // The amount of y screen space not used due to higher aspect ratio.
+    int pointsMultiplier = 100;
     
     // Wave parameters.
     LevelState state = LevelState.WELCOME;
@@ -78,7 +79,7 @@ class LevelManager {
         Iterator<GameObject> iterator = gameObjects().iterator();
         while(iterator.hasNext()) {
             GameObject gameObject = iterator.next();
-            if (gameObject instanceof Laser || gameObject instanceof Enemy) {
+            if (gameObject instanceof Laser || gameObject instanceof NPC) {
                 gameObject.destroy();
             }
         }
@@ -245,6 +246,10 @@ class LevelManager {
         wave++;
         state = LevelState.LEVEL;
         spawnedLevel = true;
+    }
+    
+    public void addPoints(int points) {
+        score += points * pointsMultiplier;
     }
     
     void resetGame() {

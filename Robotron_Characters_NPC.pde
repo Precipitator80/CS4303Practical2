@@ -1,4 +1,5 @@
 public abstract class NPC extends Character {
+    int points;
     
     // Pathfinding
     double lastPathSearch;
@@ -8,13 +9,14 @@ public abstract class NPC extends Character {
     boolean canSeePlayer;
     boolean justSawPlayer;
     
-    public NPC(int x, int y, float movementSpeed, boolean stationary) {
+    public NPC(int x, int y, float movementSpeed, int points, boolean stationary) {
         super(x,y,movementSpeed);
+        this.points = points;
         this.stationary = stationary;
     }
     
-    public NPC(int x, int y, float movementSpeed) {
-        this(x,y,movementSpeed,false);
+    public NPC(int x, int y, float movementSpeed, int points) {
+        this(x,y,movementSpeed,points,false);
     }
     
     boolean canSeePlayer() {

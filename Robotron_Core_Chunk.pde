@@ -26,6 +26,9 @@ class MixedChunk extends Chunk {
     public void spawn() {
         LevelManager levelManager = ((Robotron)currentScene).levelManager;
         
+        int familyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
+        int familyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
+        new FamilyMember(familyX, familyY);
     }
 }
 
