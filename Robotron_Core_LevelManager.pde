@@ -242,6 +242,7 @@ class LevelManager {
             }
         }
         
+        wave++;
         state = LevelState.LEVEL;
         spawnedLevel = true;
     }
@@ -257,6 +258,12 @@ class LevelManager {
         switch(state) {
             case LEVEL:
                 // Check for game over.
+                if (!player.alive()) {
+                    state = LevelState.GAME_OVER;
+                }
+                if (ENEMIES.isEmpty()) {
+                    state = LevelState.POST_LEVEL;
+                }
                 break;
         }
     }

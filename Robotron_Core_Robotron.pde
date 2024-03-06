@@ -40,14 +40,20 @@ public class Robotron extends Scene {
         textAlign(CENTER);
         switch(levelManager.state) {
             case WELCOME : 
-                text("Welcome to Robotron: 4303!\nPress enter to start the game.", width / 2, height / 2);
+                text("Welcome to Robotron: 4303!\nPress enter or space to start the game.", width / 2, height / 2);
                 break;
             case POST_LEVEL : 
-                text("Wave " + levelManager.wave + " completed!\nPress enter to continue.", width / 2, height / 2);
+                text("Wave " + levelManager.wave + " completed!\nPress enter or space to continue.", width / 2, height / 2);
                 break;
             case GAME_OVER:
-                text("Game over!\nPress enter to restart.", width / 2, height / 2);
+                text("Game over!\nPress enter or space to restart.", width / 2, height / 2);
                 break;
+        }
+        
+        // Show the score.
+        if (levelManager.state != LevelState.WELCOME) {
+            textAlign(LEFT);
+            text("Score: " + levelManager.score + "\nWave: " + levelManager.wave, width / 100, height / 25);
         }
     }
     
@@ -69,7 +75,8 @@ public class Robotron extends Scene {
         levelManager.player.checkMovementKeys(true);
         
         switch(key) {
-            case ENTER:
+            case ' ':
+                case ENTER:
                 //if (!OptionsMenu.enabled() && !ShopMenu.enabled()) {
                 switch(levelManager.state) {
                     case GAME_OVER:
@@ -88,9 +95,6 @@ public class Robotron extends Scene {
     
     void keyReleased() {
         levelManager.player.checkMovementKeys(false);
-        if (key == ' ') {
-            levelManager.spawnLevel();
-        }
         if (DEBUG_MODE) {
             aStarTester.keyReleased();
         }
