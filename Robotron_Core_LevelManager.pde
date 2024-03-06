@@ -1,3 +1,10 @@
+enum LevelState {
+    WELCOME,
+    LEVEL,
+    POST_LEVEL,
+    GAME_OVER
+}
+
 class LevelManager {
     // World parameters.
     private Cell[][] grid; // The grid of cells.
@@ -16,7 +23,10 @@ class LevelManager {
     int screenYOffset; // The amount of y screen space not used due to higher aspect ratio.
     
     // Wave parameters.
+    LevelState state = LevelState.WELCOME;
     int numberOfEnemies = 10;
+    int wave = 0;
+    private int score = 0;
     
     
     Player player;
@@ -63,6 +73,15 @@ class LevelManager {
     void spawnLevel() {
         spawnedLevel = false;
         workingGrid = new CellType[ySize][xSize];
+        
+        // Delete all lasers.
+        Iterator<GameObject> iterator = gameObjects().iterator();
+        while(iterator.hasNext()) {
+            GameObject gameObject = iterator.next();
+            if (gameObject instanceof Laser || gameObject instanceof Enemy) {
+                gameObject.destroy();
+            }
+        }
         
         // Horizontal split 1
         if (fiftyFifty()) {
@@ -223,7 +242,23 @@ class LevelManager {
             }
         }
         
+        state = LevelState.LEVEL;
         spawnedLevel = true;
+    }
+    
+    void resetGame() {
+        wave = 0;
+        score = 0;
+        player.reset();
+        //ShopMenu.resetListings();
+    }
+    
+    void update() {
+        switch(state) {
+            case LEVEL:
+                // Check for game over.
+                break;
+        }
     }
     
     void render() {

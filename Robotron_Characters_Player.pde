@@ -5,9 +5,7 @@ class Player extends Character {
     
     public Player(int x, int y) {
         super(x,y,0.008f);
-        currentWeapon = new Pistol(position, playerColour);
-        weapons = new ArrayList<Weapon>();
-        weapons.add(currentWeapon);
+        reset();
     }
     
     void giveItem(Item item) {
@@ -15,6 +13,12 @@ class Player extends Character {
     }
     
     void despawn() {
+    }
+    
+    void reset() {
+        currentWeapon = new Pistol(position, playerColour);
+        weapons = new ArrayList<Weapon>();
+        weapons.add(currentWeapon);
     }
     
     void render() {

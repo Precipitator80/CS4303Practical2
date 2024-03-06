@@ -9,10 +9,12 @@ public class Robotron extends Scene {
         // 16 by 9 times 2
         levelManager = new LevelManager(32, 19);
         levelManager.spawnLevel();
+        levelManager.state = LevelState.WELCOME;
     }
     
     void update() {
         super.update();
+        levelManager.update();
         if (levelManager.player.alive() && BUTTON_MANAGER.mouseDown && levelManager.player.currentWeapon.automatic) {
             levelManager.player.currentWeapon.tryToFire(mouseX, mouseY);
         }
@@ -36,7 +38,17 @@ public class Robotron extends Scene {
         fill(255);
         textSize(height / 25);
         textAlign(CENTER);
-        text("Welcome to Robotron: 4303!\nPress enter to start the game.", width / 2, height / 2);
+        switch(levelManager.state) {
+            case WELCOME : 
+                text("Welcome to Robotron: 4303!\nPress enter to start the game.", width / 2, height / 2);
+                break;
+            case POST_LEVEL : 
+                text("Wave " + levelManager.wave + " completed!\nPress enter to continue.", width / 2, height / 2);
+                break;
+            case GAME_OVER:
+                text("Game over!\nPress enter to restart.", width / 2, height / 2);
+                break;
+        }
     }
     
     void mousePressed() {
@@ -55,6 +67,23 @@ public class Robotron extends Scene {
     
     void keyPressed() {
         levelManager.player.checkMovementKeys(true);
+        
+        switch(key) {
+            case ENTER:
+                //if (!OptionsMenu.enabled() && !ShopMenu.enabled()) {
+                switch(levelManager.state) {
+                    case GAME_OVER:
+                    case WELCOME:
+                    levelManager.resetGame();
+                    case POST_LEVEL:
+                    //OptionsMenu.entryButton.hide();
+                    //ShopMenu.entryButton.hide();
+                    levelManager.spawnLevel();
+                    break;
+            //}
+            }
+            break;
+        }
     }
     
     void keyReleased() {
