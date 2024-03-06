@@ -51,4 +51,22 @@ class Player extends Character {
         }
         updateVelocity();
     }
+    
+    void updateVelocity() {
+        velocity.set(0, 0);
+        if (moveUp) {
+            velocity.add(0, -1);
+        }
+        if (moveLeft) {
+            velocity.add( -1, 0);
+        }
+        if (moveDown) {
+            velocity.add(0, 1);
+        }
+        if (moveRight) {
+            velocity.add(1, 0);
+        }
+        velocity.normalize();
+        velocity.mult(movementSpeed * height);
+    }
 }
