@@ -15,10 +15,6 @@ public abstract class NPC extends Character {
         this.stationary = stationary;
     }
     
-    public NPC(int x, int y, Animator animator, float movementSpeed, int points) {
-        this(x,y,animator,movementSpeed,points,false);
-    }
-    
     boolean canSeePlayer() {
         LevelManager levelManager = ((Robotron)currentScene).levelManager;
         Player player = levelManager.player;

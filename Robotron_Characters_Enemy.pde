@@ -1,12 +1,34 @@
-class Enemy extends NPC {
-    // General Things
+class TurretRobot extends ShootingEnemy {
+    public TurretRobot(int x, int y) {
+        super(x,y,null,0f,1,true);
+    }
+    
+    void render() {
+        super.render();
+        imageMode(CENTER);
+        image(Graphics.turretRobot, this.position.x, this.position.y, size, size);
+    }
+}
+
+class LaserRobot extends ShootingEnemy {
+    public LaserRobot(int x, int y) {
+        super(x,y,Graphics.laserRobotAnimator,0.0025f,2,false);
+    }
+}
+
+class GruntRobot extends Enemy {
+    public GruntRobot(int x, int y) {
+        super(x,y,Graphics.gruntRobotAnimator,0.004f,1,false);
+    }
+}
+
+abstract class ShootingEnemy extends Enemy {
     double lastShotTime;
     double shotPeriod = 3000.0;
-    color enemyColour = color(255,0,0);
+    color laserColour = color(255,36,36);
     
-    public Enemy(int x, int y) {
-        super(x,y,Graphics.gruntAnimator,0.004f,1);
-       ((Robotron)currentScene).levelManager.ENEMIES.add(this);
+    public ShootingEnemy(int x, int y, Animator animator, float movementSpeed, int points, boolean stationary) {
+        super(x,y,animator,movementSpeed,points,stationary);
     }
     
     void shoot() {
@@ -18,13 +40,8 @@ class Enemy extends NPC {
         shotVelocity.normalize();
         shotVelocity.mult(0.015f * height);
         
-        new Laser((int)position.x,(int)position.y, shotVelocity, 25, false, enemyColour);
+        new Laser((int)position.x,(int)position.y, shotVelocity, 25, false, laserColour);
         lastShotTime = millis();
-    }
-    
-    void destroy() {
-        super.destroy();
-       ((Robotron)currentScene).levelManager.ENEMIES.remove(this);
     }
     
     void update() {
@@ -36,5 +53,17 @@ class Enemy extends NPC {
                 shoot();
             }
         }
+    }
+}
+
+abstract class Enemy extends NPC {
+    public Enemy(int x, int y, Animator animator, float movementSpeed, int points, boolean stationary) {
+        super(x,y,animator,movementSpeed,points,stationary);
+       ((Robotron)currentScene).levelManager.ENEMIES.add(this);
+    }
+    
+    void destroy() {
+        super.destroy();
+       ((Robotron)currentScene).levelManager.ENEMIES.remove(this);
     }
 }

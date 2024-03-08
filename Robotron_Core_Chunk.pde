@@ -44,7 +44,13 @@ class EnemyChunk extends Chunk {
         for (int i = 0; i < levelManager.numberOfEnemies; i++) {
             int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
             int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
-            new Enemy(enemyX, enemyY);
+            new GruntRobot(enemyX, enemyY);
+        }
+        
+        for (int i = 0; i < levelManager.numberOfEnemies / 3; i++) {
+            int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
+            int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
+            new LaserRobot(enemyX, enemyY);
         }
     }
 }

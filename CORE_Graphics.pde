@@ -1,12 +1,15 @@
 public class Graphics {    
     PImage wall;
     PImage floor;
+    PImage turretRobot;
+    
+    Animator playerAnimator;
+    Animator gruntRobotAnimator;
+    Animator laserRobotAnimator;
+    Animator familyMember1Animator;
     
     PFont robotronFont;
     
-    Animator playerAnimator;
-    Animator gruntAnimator;
-    Animator familyMember1Animator;
     
     public Graphics() {
         load();
@@ -16,13 +19,15 @@ public class Graphics {
         try{
             wall = loadImage("wall.png");
             floor = loadImage("floor.png");
+            turretRobot = loadImage("turretRobot.png");
+            
+            playerAnimator = new Animator("Player");
+            gruntRobotAnimator = new Animator("GruntRobot");
+            laserRobotAnimator = new Animator("LaserRobot");
+            familyMember1Animator = new Animator("FamilyMember1");
             
             robotronFont = createFont("robotron-2084.otf", 128);
             textFont(robotronFont);
-            
-            playerAnimator = new Animator("Player");
-            gruntAnimator = new Animator("Grunt");
-            familyMember1Animator = new Animator("FamilyMember1");
         }
         catch(Exception e) {
             print(e.toString());
