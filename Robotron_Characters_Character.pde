@@ -7,12 +7,20 @@ abstract class Character extends GameObject {
     int hp = 100;
     float movementSpeed;
     float size;
+    Animator animator;
+    private float currentFrame = 0.0f;
+    PImage currentStill;
     
-    public Character(int x, int y, float movementSpeed) {
+    public Character(int x, int y, Animator animator, float movementSpeed) {
         super(x,y);
         this.movementSpeed = movementSpeed;
         velocity = new PVector();
         this.size = height / 25;
+        
+        this.animator = animator;
+        if (animator != null) {
+            currentStill = animator.downStill;
+        }
     }
     
     boolean alive() {
@@ -36,6 +44,48 @@ abstract class Character extends GameObject {
     void update() {
         if (alive()) {
             moveCharacter();
+        }
+    }
+    
+    void render() {
+        if (animator != null) {
+            // Progress the animation.
+            currentFrame += animator.ANIMATION_SPEED;
+            
+            // Decide which frame to use.
+            PImage frame;
+            if (velocity.mag() == 0) { // The character is still.
+                frame = currentStill;
+            }
+            else if (abs(velocity.x) > abs(velocity.y)) { // The character is moving left or right.
+                if (Math.signum(velocity.x) > 0) { // The character is moving right.
+                    currentFrame %= animator.rightFrames.length;
+                    frame = animator.rightFrames[(int)currentFrame];
+                    currentStill = animator.rightStill;
+                }
+                else{ // The character is moving left.
+                    currentFrame %= animator.leftFrames.length;
+                    frame = animator.leftFrames[(int)currentFrame];
+                    currentStill = animator.leftStill;
+                }
+            }
+            else{ // The character is moving up or down.
+                if (Math.signum(velocity.y) > 0) { // The character is moving down.
+                    currentFrame %= animator.downFrames.length;
+                    frame = animator.downFrames[(int)currentFrame];
+                    currentStill = animator.downStill;
+                }
+                else{ // The character is moving up.
+                    currentFrame %= animator.upFrames.length;
+                    frame = animator.upFrames[(int)currentFrame];
+                    currentStill = animator.upStill;
+                }
+            }
+            
+            // Render the frame.
+            imageMode(CENTER);
+            float scaledSize = size * animator.SCALE;
+            image(frame, this.position.x, this.position.y, scaledSize, scaledSize);
         }
     }
     

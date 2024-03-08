@@ -1,6 +1,5 @@
 public class Audio {
     PApplet mainClass;
-    String audioFolder = "Audio/";
     SoundFile menuBack;
     SoundFile menuSelect;
     SoundFile noAmmo;
@@ -11,13 +10,13 @@ public class Audio {
     }
     
     void load() {
-        menuBack = loadAudioWithFolder("MenuBack.mp3");
-        menuSelect = loadAudioWithFolder("MenuSelect.mp3");
-        noAmmo = loadAudioWithFolder("NoAmmo.wav");
+        menuBack = loadAudio("MenuBack.mp3");
+        menuSelect = loadAudio("MenuSelect.mp3");
+        noAmmo = loadAudio("NoAmmo.wav");
     }
     
-    SoundFile loadAudioWithFolder(String fileName) {
-        return new SoundFile(mainClass, audioFolder + fileName);
+    SoundFile loadAudio(String fileName) {
+        return new SoundFile(mainClass, fileName);
     }
     
     float audioPan(float xPos) {

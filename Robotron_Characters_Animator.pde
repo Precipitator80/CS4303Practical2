@@ -1,9 +1,6 @@
 class Animator {
     private final static float ANIMATION_SPEED = 0.1f;
-    private float currentFrame = 0.0f;
-    
-    PVector position;
-    PVector velocity;
+    private final float SCALE;
     
     private PImage[] upFrames;
     private PImage upStill;
@@ -17,60 +14,60 @@ class Animator {
     private PImage[] leftFrames;
     private PImage leftStill;
     
-    PImage currentStill;
     
-    public Animator(PImage[] upFrames, PImage upStill,
-        PImage[] rightFrames, PImage rightStill,
-        PImage[] downFrames, PImage downStill,
-        PImage[] leftFrames, PImage leftStill) {
-        this.position = new PVector();
-        this.velocity = new PVector();
-        this.upFrames = upFrames;
-        this.upStill = upStill;
-        this.rightFrames = rightFrames;
-        this.rightStill = rightStill;
-        this.downFrames = downFrames;
-        this.downStill = downStill;
-        this.leftFrames = leftFrames;
-        this.leftStill = leftStill;
-        currentStill = downStill;
+    public Animator(String characterName) throws Exception {
+        this(characterName, 1f);
     }
     
-    public void render() {
-        // Progress the animation.
-        currentFrame += ANIMATION_SPEED;
+    public Animator(String characterName, float scale) throws Exception {
+        this.SCALE = scale;
         
-        // Decide which frame to use.
-        PImage frame;
-        if (velocity.mag() == 0) { // The character is still.
-            frame = currentStill;
-        }
-        else if (abs(velocity.x) > abs(velocity.y)) { // The character is moving left or right.
-            if (Math.signum(velocity.x) > 0) { // The character is moving right.
-                frame = rightFrames[(int)currentFrame];
-                currentStill = rightStill;
-                currentFrame %= rightFrames.length;
-            }
-            else{ // The character is moving left.
-                frame = leftFrames[(int)currentFrame];
-                currentStill = leftStill;
-                currentFrame %= leftFrames.length;
-            }
-        }
-        else{ // The character is moving up or down.
-            if (Math.signum(velocity.y) > 0) { // The character is moving down.
-                frame = downFrames[(int)currentFrame];
-                currentStill = downStill;
-                currentFrame %= downFrames.length;
-            }
-            else{ // The character is moving up.
-                frame = upFrames[(int)currentFrame];
-                currentStill = upStill;
-                currentFrame %=  upFrames.length;
-            }
+        downFrames = loadFrames(characterName, "down");
+        downStill = loadImage(characterName + "/downStill.png");
+        
+        if (downFrames == null || downStill == null) {
+            throw new Exception(characterName + " is an invalid animator! Must define at least down animated and still frames!");
         }
         
-        // Render the frame.
-        image(frame, this.position.x, this.position.y);
+        upFrames = loadFrames(characterName, "up");
+        upStill = loadImage(characterName + "/upStill.png");
+        if (upStill == null) {
+            upStill = downStill;
+        }
+        
+        rightFrames = loadFrames(characterName, "right");
+        rightStill = loadImage(characterName + "/rightStill.png");
+        if (rightStill == null) {
+            rightStill = downStill;
+        }
+        
+        leftFrames = loadFrames(characterName, "left");
+        leftStill = loadImage(characterName + "/leftStill.png");
+        if (leftStill == null) {
+            leftStill = downStill;
+        }        
+    }
+    
+    
+    
+    PImage[] loadFrames(String characterName, String frameName) {
+        List<PImage> frames = new ArrayList<PImage>();
+        int frameNumber = 1;
+        String filePath = characterName + "/" + frameName + frameNumber + ".png";
+        while(doesFileExist(filePath)) {
+            frames.add(loadImage(filePath));
+            frameNumber++;
+            print("Loaded: " + filePath + "\n");
+            filePath = characterName + "/" + frameName + frameNumber + ".png";
+        }
+        if (frames.isEmpty()) {
+            return downFrames;
+        }
+        return frames.toArray(new PImage[0]);
+    }
+    
+    // How do I check if a file exists before I used loadStrings() ? - Simplyfire - https://www.reddit.com/r/processing/comments/zf17g6/how_do_i_check_if_a_file_exists_before_i_used/ - Accessed 08.03.2024
+    boolean doesFileExist(String filePath) {
+        return new File(dataPath(filePath)).exists();
     }
 }

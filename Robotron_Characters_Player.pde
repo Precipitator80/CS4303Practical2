@@ -4,7 +4,7 @@ class Player extends Character {
     List<Weapon> weapons;
     
     public Player(int x, int y) {
-        super(x,y,0.008f);
+        super(x,y,Graphics.playerAnimator,0.008f);
         reset();
     }
     
@@ -23,15 +23,8 @@ class Player extends Character {
     
     void render() {
         if (alive()) {
-            stroke(playerColour);
-            fill(playerColour);
+            super.render();
         }
-        else{
-            stroke(playerColour, 100);
-            fill(playerColour, 100);
-        }
-        strokeWeight(0);
-        circle(position.x, position.y, size);
     }
     
     void checkMovementKeys(boolean pressed) {

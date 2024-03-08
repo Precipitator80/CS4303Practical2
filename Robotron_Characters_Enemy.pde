@@ -5,7 +5,7 @@ class Enemy extends NPC {
     color enemyColour = color(255,0,0);
     
     public Enemy(int x, int y) {
-        super(x,y,0.004f,1);
+        super(x,y,Graphics.gruntAnimator,0.004f,1);
        ((Robotron)currentScene).levelManager.ENEMIES.add(this);
     }
     
@@ -36,13 +36,5 @@ class Enemy extends NPC {
                 shoot();
             }
         }
-    }
-    
-    void render() {
-        super.render();
-        strokeWeight(0);
-        stroke(enemyColour);
-        fill(enemyColour);
-        circle(position.x, position.y, size);
     }
 }

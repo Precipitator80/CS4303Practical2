@@ -9,14 +9,14 @@ public abstract class NPC extends Character {
     boolean canSeePlayer;
     boolean justSawPlayer;
     
-    public NPC(int x, int y, float movementSpeed, int points, boolean stationary) {
-        super(x,y,movementSpeed);
+    public NPC(int x, int y, Animator animator, float movementSpeed, int points, boolean stationary) {
+        super(x,y,animator,movementSpeed);
         this.points = points;
         this.stationary = stationary;
     }
     
-    public NPC(int x, int y, float movementSpeed, int points) {
-        this(x,y,movementSpeed,points,false);
+    public NPC(int x, int y, Animator animator, float movementSpeed, int points) {
+        this(x,y,animator,movementSpeed,points,false);
     }
     
     boolean canSeePlayer() {
@@ -119,6 +119,7 @@ public abstract class NPC extends Character {
     }
     
     void render() {
+        super.render();
         if (DEBUG_MODE) {
             // Paint path
             if (!thePath.isEmpty()) {

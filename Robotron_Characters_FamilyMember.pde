@@ -2,7 +2,7 @@ class FamilyMember extends NPC {
     color familyColour = color(0,255,0);
     
     public FamilyMember(int x, int y) {
-        super(x,y,0.005f,5);
+        super(x,y,Graphics.familyMember1Animator,0.005f,5,false);
     }
     
     void update() {
@@ -13,13 +13,5 @@ class FamilyMember extends NPC {
             levelManager.addPoints(points);
             destroy();
         }
-    }
-    
-    void render() {
-        super.render();
-        strokeWeight(0);
-        stroke(familyColour);
-        fill(familyColour);
-        circle(position.x, position.y, size);
     }
 }
