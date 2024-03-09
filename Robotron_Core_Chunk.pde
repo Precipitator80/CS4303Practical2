@@ -41,29 +41,34 @@ class EnemyChunk extends Chunk {
         LevelManager levelManager = ((Robotron)currentScene).levelManager;
         
         // Spawn in enemies.
-        for (int i = 0; i < levelManager.numberOfEnemies; i++) {
-            int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
-            int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
-            new GruntRobot(enemyX, enemyY);
-        }
         
-        for (int i = 0; i < levelManager.numberOfEnemies / 3; i++) {
-            int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
-            int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
-            new LaserRobot(enemyX, enemyY);
-        }
+        int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
+        int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
+        new FlyingRobot(enemyX, enemyY);
         
-        for (int i = 0; i < levelManager.numberOfEnemies / 4; i++) {
-            int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
-            int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
-            new FlyingRobot(enemyX, enemyY);
-        }
+        // for (int i = 0; i < levelManager.numberOfEnemies; i++) {
+        //     int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
+        //     int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
+        //     new GruntRobot(enemyX, enemyY);
+    // }
         
-        for (int i = 0; i < levelManager.numberOfEnemies / 5; i++) {
-            int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
-            int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
-            new TurretRobot(enemyX, enemyY);
-        }
+        // for (int i = 0; i < levelManager.numberOfEnemies / 3; i++) {
+        //     int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
+        //     int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
+        //     new LaserRobot(enemyX, enemyY);
+    // }
+        
+        // for (int i = 0; i < levelManager.numberOfEnemies / 4; i++) {
+        //     int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
+        //     int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
+        //     new FlyingRobot(enemyX, enemyY);
+    // }
+        
+        // for (int i = 0; i < levelManager.numberOfEnemies / 5; i++) {
+        //     int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
+        //     int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
+        //     new TurretRobot(enemyX, enemyY);
+    // }
     }
 }
 

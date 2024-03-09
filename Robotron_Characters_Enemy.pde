@@ -17,8 +17,36 @@ class LaserRobot extends ShootingEnemy {
 }
 
 class FlyingRobot extends ShootingEnemy{
+    boolean altMove;
+    boolean clockwise;
+    
     public FlyingRobot(int x, int y) {
         super(x,y,Graphics.flyingRobotAnimator,75,0.005f,2,false,2000.0,25);
+    }
+    
+    public void moveCharacter() {
+        LevelManager levelManager = ((Robotron)currentScene).levelManager;
+        float difference = position.copy().sub(levelManager.player.position).mag();
+        if (difference < 3 * levelManager.cellSize && !altMove) {
+            altMove = true;
+            clockwise = (int)random(2) == 1 ? true : false;
+        }
+        else if (difference > 4 * levelManager.cellSize) {
+            altMove = false;
+        }
+        
+        if (altMove) {
+            float x = velocity.x;
+            float y = velocity.y;
+            if (clockwise) {
+                velocity.set(y, -x);
+            }
+            else{
+                velocity.set( -y,x);
+            }
+        }
+        
+        super.moveCharacter();
     }
 }
 
