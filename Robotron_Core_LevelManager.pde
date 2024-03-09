@@ -32,6 +32,7 @@ class LevelManager {
     
     Player player;
     public final LinkedTransferQueue<Enemy> ENEMIES = new LinkedTransferQueue<Enemy>();
+    public final LinkedTransferQueue<FamilyMember> FAMILY_MEMBERS = new LinkedTransferQueue<FamilyMember>();
     
     public LevelManager(int xSize, int ySize) {
        ((Robotron)currentScene).levelManager = this;

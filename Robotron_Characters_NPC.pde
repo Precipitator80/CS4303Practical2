@@ -6,83 +6,114 @@ public abstract class NPC extends Character {
     double pathSearchPeriod = 3000.0;
     ArrayList<AStarNode>thePath = new ArrayList<AStarNode>();
     boolean stationary;
-    boolean canSeePlayer;
-    boolean justSawPlayer;
+    boolean attacksFamily;
     
-    public NPC(int x, int y, Animator animator, int hp, float movementSpeed, int points, boolean stationary) {
+    Character currentTarget;
+    boolean canSeeTarget;
+    boolean justSawTarget;
+    
+    public NPC(int x, int y, Animator animator, int hp, float movementSpeed, int points, boolean stationary, boolean attacksFamily) {
         super(x,y,animator,hp,movementSpeed);
         this.points = points;
         this.stationary = stationary;
+        this.attacksFamily = attacksFamily;
     }
     
-    boolean canSeePlayer() {
-        LevelManager levelManager = ((Robotron)currentScene).levelManager;
-        Player player = levelManager.player;
-        if (!player.alive()) {
+    boolean canSeeTarget(Character target) {
+        if (target == null || !target.alive()) {
             return false;
         }
-        return levelManager.visionCheck((int)position.x,(int)position.y,(int)player.position.x,(int)player.position.y, false);
+        LevelManager levelManager = ((Robotron)currentScene).levelManager;
+        return levelManager.visionCheck((int)position.x,(int)position.y,(int)target.position.x,(int)target.position.y, false);
     }
     
-    boolean canGoDirectlyToPlayer() {
-        LevelManager levelManager = ((Robotron)currentScene).levelManager;
-        Player player = levelManager.player;
-        if (!player.alive()) {
+    boolean canGoDirectlyToTarget(Character target) {
+        if (target == null || !target.alive()) {
             return false;
         }
-        return levelManager.visionCheck((int)position.x,(int)position.y,(int)player.position.x,(int)player.position.y, true);
+        LevelManager levelManager = ((Robotron)currentScene).levelManager;
+        return levelManager.visionCheck((int)position.x,(int)position.y,(int)target.position.x,(int)target.position.y, true);
     }
     
     void despawn() {
         destroy();
     }
     
-    // If the player can be seen and reached directly, go to them directly. No timing required.
-    // If the player can be seen but not reached directly, go to them via A*. Timing required, but refresh immediately if path is empty.
-    // If the player cannot be seen but has just been seen, go to them via A*. Timing required, but should be set immediately after losing player.
-    // If the player cannot be seen and has not just been seen, pick a random spot to go to via A*. Timing required.       
+    // If the target can be seen and reached directly, go to them directly. No timing required.
+    // If the target can be seen but not reached directly, go to them via A*. Timing required, but refresh immediately if path is empty.
+    // If the target cannot be seen but has just been seen, go to them via A*. Timing required, but should be set immediately after losing target.
+    // If the target cannot be seen and has not just been seen, pick a random spot to go to via A*. Timing required.       
     void update() {
         super.update();
         
-        canSeePlayer = canSeePlayer();
-        if (canSeePlayer) {
-            justSawPlayer = true;
+        if (currentTarget != null && currentTarget.destroyed()) {
+            currentTarget = null;
+        }
+        
+        if (currentTarget == null) {
+            if (this instanceof Enemy) {
+                print("Current target is null!\n");
+            }
+            if (attacksFamily) {
+                LevelManager levelManager = ((Robotron)currentScene).levelManager;
+                for (FamilyMember familyMember : levelManager.FAMILY_MEMBERS) {
+                    canSeeTarget = canSeeTarget(familyMember);
+                    if (canSeeTarget) {
+                        currentTarget = familyMember;
+                        break;
+                    }
+                }
+            }
+            if (currentTarget == null) {
+                Player player = ((Robotron)currentScene).levelManager.player;
+                canSeeTarget = canSeeTarget(player);
+                if (canSeeTarget) {
+                    currentTarget = player;
+                }
+            }            
+        }
+        else{   
+            canSeeTarget = canSeeTarget(currentTarget);
+        }
+        
+        if (canSeeTarget) {
+            justSawTarget = true;
         }
         
         if (!stationary) {
-            // Go directly to the player if possible.
-            if (canGoDirectlyToPlayer()) {
-                Player player = ((Robotron)currentScene).levelManager.player;
-                velocity.set(player.position.x, player.position.y).sub(position).normalize().mult(movementSpeed * height);
+            // Go directly to the target if possible.
+            if (currentTarget != null && canGoDirectlyToTarget(currentTarget)) {
+                velocity.set(currentTarget.position.x, currentTarget.position.y).sub(position).normalize().mult(movementSpeed * height);
                 thePath.clear();
             }
             else{
-                // Else, check for path update if the player was just seen and the path is empty or the timer has elapsed.
-                // This means the AI should always have ap ath to the player when seen but not update every frame.
+                // Else, check for path update if the target was just seen and the path is empty or the timer has elapsed.
+                // This means the AI should always have ap ath to the target when seen but not update every frame.
                 double current = millis();
-                if ((justSawPlayer && thePath.isEmpty()) || current - lastPathSearch > pathSearchPeriod) {
-                    // Change the update period depending on whether the player was seen.
-                    pathSearchPeriod = justSawPlayer ? 1500 : random(2000,5000);
+                if ((justSawTarget && thePath.isEmpty()) || current - lastPathSearch > pathSearchPeriod) {
+                    // Change the update period depending on whether the target was seen.
+                    pathSearchPeriod = justSawTarget ? 1500 : random(2000,5000);
                     
-                    // If the player was just seen, overwrite the current path.
+                    // If the target was just seen, overwrite the current path.
                     // Else, only make a new path if the current one has been traversed.
                     ArrayList<AStarNode>result;
-                    if (justSawPlayer || thePath.isEmpty()) {
+                    if (justSawTarget || thePath.isEmpty()) {
                         LevelManager levelManager = ((Robotron)currentScene).levelManager;
                         int x = levelManager.screenToGridX((int)position.x);
                         int y = levelManager.screenToGridY((int)position.y);
                         int targetX;
                         int targetY;
-                        if (justSawPlayer) {
-                            targetX = levelManager.screenToGridX((int)levelManager.player.position.x);
-                            targetY = levelManager.screenToGridY((int)levelManager.player.position.y);
-                            justSawPlayer = false;
+                        if (currentTarget != null && justSawTarget) {
+                            targetX = levelManager.screenToGridX((int)currentTarget.position.x);
+                            targetY = levelManager.screenToGridY((int)currentTarget.position.y);
+                            justSawTarget = false;
                         }
                         else{
                             targetX = levelManager.screenToGridX((int)position.x);
                             targetX += random( -5,6);
                             targetY = levelManager.screenToGridY((int)position.y);
                             targetY += random( -5,6);
+                            currentTarget = null;
                         }
                         result = levelManager.pathFinder.search(y, x, targetY, targetX);
                         if (result != null) {
