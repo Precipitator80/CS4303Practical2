@@ -6,6 +6,7 @@ public class Graphics {
     Animator playerAnimator;
     Animator gruntRobotAnimator;
     Animator laserRobotAnimator;
+    Animator flyingRobotAnimator;
     Animator familyMember1Animator;
     
     PFont robotronFont;
@@ -24,6 +25,7 @@ public class Graphics {
             playerAnimator = new Animator("Player");
             gruntRobotAnimator = new Animator("GruntRobot");
             laserRobotAnimator = new Animator("LaserRobot");
+            flyingRobotAnimator = new Animator("FlyingRobot", 0.3f, 1f);
             familyMember1Animator = new Animator("FamilyMember1");
             
             robotronFont = createFont("robotron-2084.otf", 128);

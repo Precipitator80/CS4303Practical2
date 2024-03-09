@@ -52,6 +52,18 @@ class EnemyChunk extends Chunk {
             int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
             new LaserRobot(enemyX, enemyY);
         }
+        
+        for (int i = 0; i < levelManager.numberOfEnemies / 4; i++) {
+            int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
+            int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
+            new FlyingRobot(enemyX, enemyY);
+        }
+        
+        for (int i = 0; i < levelManager.numberOfEnemies / 5; i++) {
+            int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
+            int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
+            new TurretRobot(enemyX, enemyY);
+        }
     }
 }
 

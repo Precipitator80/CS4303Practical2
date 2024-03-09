@@ -1,5 +1,5 @@
 class Animator {
-    private final static float ANIMATION_SPEED = 0.1f;
+    private final float ANIMATION_SPEED;
     private final float SCALE;
     
     private PImage[] upFrames;
@@ -16,10 +16,11 @@ class Animator {
     
     
     public Animator(String characterName) throws Exception {
-        this(characterName, 1f);
+        this(characterName, 0.1f, 1f);
     }
     
-    public Animator(String characterName, float scale) throws Exception {
+    public Animator(String characterName, float animationSpeed, float scale) throws Exception {
+        this.ANIMATION_SPEED = animationSpeed;
         this.SCALE = scale;
         
         downFrames = loadFrames(characterName, "down");

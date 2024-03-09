@@ -1,6 +1,6 @@
 class TurretRobot extends ShootingEnemy {
     public TurretRobot(int x, int y) {
-        super(x,y,null,0f,1,true);
+        super(x,y,null,250,0f,1,true,3000.0,50);
     }
     
     void render() {
@@ -12,23 +12,32 @@ class TurretRobot extends ShootingEnemy {
 
 class LaserRobot extends ShootingEnemy {
     public LaserRobot(int x, int y) {
-        super(x,y,Graphics.laserRobotAnimator,0.0025f,2,false);
+        super(x,y,Graphics.laserRobotAnimator,200,0.0025f,2,false,6000.0,50);
+    }
+}
+
+class FlyingRobot extends ShootingEnemy{
+    public FlyingRobot(int x, int y) {
+        super(x,y,Graphics.flyingRobotAnimator,75,0.005f,2,false,2000.0,25);
     }
 }
 
 class GruntRobot extends Enemy {
     public GruntRobot(int x, int y) {
-        super(x,y,Graphics.gruntRobotAnimator,0.004f,1,false);
+        super(x,y,Graphics.gruntRobotAnimator,100,0.004f,1,false);
     }
 }
 
 abstract class ShootingEnemy extends Enemy {
     double lastShotTime;
-    double shotPeriod = 3000.0;
+    double shotPeriod;
+    int damage;
     color laserColour = color(255,36,36);
     
-    public ShootingEnemy(int x, int y, Animator animator, float movementSpeed, int points, boolean stationary) {
-        super(x,y,animator,movementSpeed,points,stationary);
+    public ShootingEnemy(int x, int y, Animator animator, int hp, float movementSpeed, int points, boolean stationary, double shotPeriod, int damage) {
+        super(x,y,animator,hp,movementSpeed,points,stationary);
+        this.shotPeriod = shotPeriod;
+        this.damage = damage;
     }
     
     void shoot() {
@@ -40,7 +49,7 @@ abstract class ShootingEnemy extends Enemy {
         shotVelocity.normalize();
         shotVelocity.mult(0.015f * height);
         
-        new Laser((int)position.x,(int)position.y, shotVelocity, 25, false, laserColour);
+        new Laser((int)position.x,(int)position.y, shotVelocity, damage, false, laserColour);
         lastShotTime = millis();
     }
     
@@ -57,13 +66,18 @@ abstract class ShootingEnemy extends Enemy {
 }
 
 abstract class Enemy extends NPC {
-    public Enemy(int x, int y, Animator animator, float movementSpeed, int points, boolean stationary) {
-        super(x,y,animator,movementSpeed,points,stationary);
+    public Enemy(int x, int y, Animator animator, int hp, float movementSpeed, int points, boolean stationary) {
+        super(x,y,animator,hp,movementSpeed,points,stationary);
        ((Robotron)currentScene).levelManager.ENEMIES.add(this);
     }
     
     void destroy() {
         super.destroy();
        ((Robotron)currentScene).levelManager.ENEMIES.remove(this);
+    }
+    
+    void despawn() {
+       ((Robotron)currentScene).levelManager.addPoints(points);
+        super.despawn();
     }
 }

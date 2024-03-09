@@ -4,7 +4,7 @@ class Player extends Character {
     List<Weapon> weapons;
     
     public Player(int x, int y) {
-        super(x,y,Graphics.playerAnimator,0.008f);
+        super(x,y,Graphics.playerAnimator,100,0.008f);
         reset();
     }
     

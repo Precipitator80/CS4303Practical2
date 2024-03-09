@@ -4,15 +4,16 @@ abstract class Character extends GameObject {
     boolean moveLeft;
     boolean moveDown;
     boolean moveRight;
-    int hp = 100;
+    int hp;
     float movementSpeed;
     float size;
     Animator animator;
     private float currentFrame = 0.0f;
     PImage currentStill;
     
-    public Character(int x, int y, Animator animator, float movementSpeed) {
+    public Character(int x, int y, Animator animator, int hp, float movementSpeed) {
         super(x,y);
+        this.hp = hp;
         this.movementSpeed = movementSpeed;
         velocity = new PVector();
         this.size = height / 25;

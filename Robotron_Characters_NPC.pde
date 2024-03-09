@@ -9,8 +9,8 @@ public abstract class NPC extends Character {
     boolean canSeePlayer;
     boolean justSawPlayer;
     
-    public NPC(int x, int y, Animator animator, float movementSpeed, int points, boolean stationary) {
-        super(x,y,animator,movementSpeed);
+    public NPC(int x, int y, Animator animator, int hp, float movementSpeed, int points, boolean stationary) {
+        super(x,y,animator,hp,movementSpeed);
         this.points = points;
         this.stationary = stationary;
     }
