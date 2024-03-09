@@ -83,8 +83,14 @@ public abstract class NPC extends Character {
         if (!stationary) {
             // Go directly to the target if possible.
             if (currentTarget != null && canGoDirectlyToTarget(currentTarget)) {
-                velocity.set(currentTarget.position.x, currentTarget.position.y).sub(position).normalize().mult(movementSpeed * height);
-                thePath.clear();
+                PVector distance = currentTarget.position.copy().sub(position);
+                if (distance.mag() >= ((Robotron)currentScene).levelManager.cellSize / 5) {
+                    velocity = distance.normalize().mult(movementSpeed * height);
+                    thePath.clear();
+                }
+                else{
+                    velocity.set(0,0);
+                }
             }
             else{
                 // Else, check for path update if the target was just seen and the path is empty or the timer has elapsed.
