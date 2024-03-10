@@ -45,6 +45,8 @@ abstract class Character extends GameObject {
     void respawn(int x, int y) {
         position.set(x,y);
         hp = 100;
+        locked = false;
+        frozen = false;
     }
     
     void update() {

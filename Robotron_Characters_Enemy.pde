@@ -89,7 +89,6 @@ class WormRobot extends Enemy {
         super.update();
         if (alive() && currentTarget != null && currentTarget.position.copy().sub(position).mag() < size) {
             currentTarget.locked = true;
-            currentTarget.frozen = true;
             lockingTarget = true;
         }
         else {
@@ -105,7 +104,6 @@ class WormRobot extends Enemy {
     void unlockTarget() {
         if (currentTarget != null) {
             currentTarget.locked = false;
-            currentTarget.frozen = false;
             lockingTarget = false;
         }
     }
