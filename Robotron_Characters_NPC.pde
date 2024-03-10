@@ -112,7 +112,6 @@ public abstract class NPC extends Character {
                         if (currentTarget != null && justSawTarget) {
                             targetX = levelManager.screenToGridX((int)currentTarget.position.x);
                             targetY = levelManager.screenToGridY((int)currentTarget.position.y);
-                            justSawTarget = false;
                         }
                         else{
                             targetX = levelManager.screenToGridX((int)position.x);
@@ -121,6 +120,7 @@ public abstract class NPC extends Character {
                             targetY += random( -5,6);
                             currentTarget = null;
                         }
+                        justSawTarget = false;
                         result = levelManager.pathFinder.search(y, x, targetY, targetX);
                         if (result != null) {
                             thePath = result;

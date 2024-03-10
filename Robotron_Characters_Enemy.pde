@@ -1,3 +1,23 @@
+class BrainRobot extends ShootingEnemy {
+    public BrainRobot(int x, int y) {
+        super(x,y,Graphics.brainRobotAnimator,150,0.004f,3,false,true,7500.0,75);
+    }
+    
+    void update() {
+        super.update();
+        if (currentTarget != null && currentTarget instanceof FamilyMember && currentTarget.position.copy().sub(position).mag() < size) {
+            new TransformedHuman((int)currentTarget.position.x,(int)currentTarget.position.y);
+            currentTarget.destroy();
+        }
+    }
+}
+
+class TransformedHuman extends ShootingEnemy {
+    public TransformedHuman(int x, int y) {
+        super(x,y,Graphics.transformedHumanAnimator,100,0.008f,5,false,false,500.0,25);
+    }
+}
+
 class TurretRobot extends ShootingEnemy {
     public TurretRobot(int x, int y) {
         super(x,y,null,250,0f,1,true,false,3000.0,50);
@@ -56,6 +76,12 @@ class GruntRobot extends Enemy {
     public GruntRobot(int x, int y) {
         super(x,y,Graphics.gruntRobotAnimator,100,0.004f,1,false,false);
     }
+}
+
+class WormRobot extends Enemy {
+    public WormRobot(int x, int y) {
+        super(x,y,Graphics.wormRobotAnimator,50,0.006f,2,false,true);
+    }    
 }
 
 abstract class ShootingEnemy extends Enemy {

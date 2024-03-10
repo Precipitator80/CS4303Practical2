@@ -44,7 +44,7 @@ class EnemyChunk extends Chunk {
         
         int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
         int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
-        new FlyingRobot(enemyX, enemyY);
+        new BrainRobot(enemyX, enemyY);
         
         // for (int i = 0; i < levelManager.numberOfEnemies; i++) {
         //     int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
