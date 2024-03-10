@@ -15,7 +15,7 @@ public class Robotron extends Scene {
     void update() {
         super.update();
         levelManager.update();
-        if (levelManager.player.alive() && BUTTON_MANAGER.mouseDown && levelManager.player.currentWeapon.automatic) {
+        if (levelManager.player.alive() && !levelManager.player.frozen && BUTTON_MANAGER.mouseDown && levelManager.player.currentWeapon.automatic) {
             levelManager.player.currentWeapon.tryToFire(mouseX, mouseY);
         }
     }
@@ -59,7 +59,7 @@ public class Robotron extends Scene {
     
     void mousePressed() {
         super.mousePressed();
-        if (levelManager.player.alive()) {
+        if (levelManager.player.alive() && !levelManager.player.frozen) {
             levelManager.player.currentWeapon.tryToFire(mouseX, mouseY);
         }
     }

@@ -79,9 +79,36 @@ class GruntRobot extends Enemy {
 }
 
 class WormRobot extends Enemy {
+    boolean lockingTarget;
+    
     public WormRobot(int x, int y) {
         super(x,y,Graphics.wormRobotAnimator,50,0.006f,2,false,true);
-    }    
+    }
+    
+    void update() {
+        super.update();
+        if (alive() && currentTarget != null && currentTarget.position.copy().sub(position).mag() < size) {
+            currentTarget.locked = true;
+            currentTarget.frozen = true;
+            lockingTarget = true;
+        }
+        else {
+            unlockTarget();
+        }
+    }
+    
+    void despawn() {
+        unlockTarget();
+        super.despawn();
+    }
+    
+    void unlockTarget() {
+        if (currentTarget != null) {
+            currentTarget.locked = false;
+            currentTarget.frozen = false;
+            lockingTarget = false;
+        }
+    }
 }
 
 abstract class ShootingEnemy extends Enemy {
@@ -97,7 +124,7 @@ abstract class ShootingEnemy extends Enemy {
     }
     
     void shoot() {
-        if (currentTarget != null) {
+        if (currentTarget != null && !frozen) {
             float offsetRange = new PVector(currentTarget.position.x - position.x, currentTarget.position.y - position.y).mag() / 10;
             PVector target = new PVector(random(currentTarget.position.x - offsetRange, currentTarget.position.x + offsetRange), random(currentTarget.position.y - offsetRange, currentTarget.position.y + offsetRange));
             
@@ -127,6 +154,9 @@ abstract class Enemy extends NPC {
         super(x,y,animator,hp,movementSpeed,points,stationary,attacksFamily);
        ((Robotron)currentScene).levelManager.ENEMIES.add(this);
     }
+    
+    // Meelee attack
+    // Implement here!
     
     void destroy() {
         super.destroy();

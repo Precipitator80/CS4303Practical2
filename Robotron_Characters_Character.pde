@@ -4,12 +4,17 @@ abstract class Character extends GameObject {
     boolean moveLeft;
     boolean moveDown;
     boolean moveRight;
-    int hp;
     float movementSpeed;
+    
+    int hp;
+    boolean locked; // Whether the character can move or not.
+    boolean frozen; // Whether the character can do any action or not.
+    
     float size;
     Animator animator;
     private float currentFrame = 0.0f;
     PImage currentStill;
+    
     
     public Character(int x, int y, Animator animator, int hp, float movementSpeed) {
         super(x,y);
@@ -86,12 +91,16 @@ abstract class Character extends GameObject {
             // Render the frame.
             imageMode(CENTER);
             float scaledSize = size * animator.SCALE;
+            if (frozen) {
+                tint(0, 153, 204);
+            }
             image(frame, this.position.x, this.position.y, scaledSize, scaledSize);
+            tint(255);
         }
     }
     
     void moveCharacter() {
-        if (velocity.mag() > 0) {
+        if (velocity.mag() > 0 && !frozen && !locked) {
             // Check whether the character would end up inside of a wall with the position change.
             // Check both x and y separately, nullifying each component if required.
             LevelManager levelManager = ((Robotron)currentScene).levelManager;
