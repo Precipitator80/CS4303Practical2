@@ -16,7 +16,7 @@ class Pistol extends Weapon {
         shotVelocity.normalize();
         shotVelocity.mult(0.015f * height);
         
-        new Laser((int)position.x,(int)position.y, shotVelocity, damage, true, shotColour);
+        new Laser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, true, shotColour);
     }
 }
 
@@ -30,7 +30,7 @@ class Rifle extends Weapon {
         shotVelocity.normalize();
         shotVelocity.mult(0.02f * height);
         
-        new Laser((int)position.x,(int)position.y, shotVelocity, damage, true, shotColour);
+        new Laser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, true, shotColour);
     }
 }
 
@@ -48,6 +48,7 @@ abstract class Weapon extends GameObject {
     
     final boolean automatic;
     final int damage;
+    int damageMultiplier = 1;
     
     public Weapon(PVector ownerPosition, color shotColour, int maxShots, double fireDelay, double rechargeDelay, boolean automatic, int damage) {
         super(0,0);

@@ -46,6 +46,15 @@ class EnemyChunk extends Chunk {
         int item2X = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
         int item2Y = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
         new WeaponItem(item2X,item2Y,Pistol.class);
+        int item3X = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
+        int item3Y = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
+        new FreezeItem(item3X,item3Y);
+        int item4X = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
+        int item4Y = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
+        new DamageBoostItem(item4X,item4Y);
+        int item5X = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
+        int item5Y = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
+        new SpeedBoostItem(item5X,item5Y);
         
         // Spawn in enemies.        
         for (int i = 0; i < levelManager.numberOfEnemies / 2; i++) {

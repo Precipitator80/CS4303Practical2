@@ -15,9 +15,6 @@ class Player extends Character {
         }
     }
     
-    void despawn() {
-    }
-    
     void reset() {
         // Initialise the weapons array.
         weapons = new ArrayList<Weapon>();

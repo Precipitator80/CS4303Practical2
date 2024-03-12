@@ -36,6 +36,7 @@ public abstract class NPC extends Character {
     }
     
     void despawn() {
+        super.despawn();
         destroy();
     }
     

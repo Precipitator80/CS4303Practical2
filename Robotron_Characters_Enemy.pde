@@ -5,7 +5,7 @@ class BrainRobot extends ShootingEnemy {
     
     void update() {
         super.update();
-        if (currentTarget != null && currentTarget instanceof FamilyMember && currentTarget.position.copy().sub(position).mag() < size) {
+        if (!frozen && currentTarget != null && currentTarget instanceof FamilyMember && currentTarget.position.copy().sub(position).mag() < size) {
             new TransformedHuman((int)currentTarget.position.x,(int)currentTarget.position.y);
             currentTarget.destroy();
         }
@@ -87,7 +87,7 @@ class WormRobot extends Enemy {
     
     void update() {
         super.update();
-        if (alive() && currentTarget != null && currentTarget.position.copy().sub(position).mag() < size) {
+        if (!frozen && alive() && currentTarget != null && currentTarget.position.copy().sub(position).mag() < size) {
             currentTarget.locked = true;
             lockingTarget = true;
         }
@@ -165,7 +165,7 @@ abstract class Enemy extends NPC {
     }
     
     void meleeCheck() {
-        if (currentTarget != null && currentTarget.position.copy().sub(position).mag() < size) {
+        if (!frozen && currentTarget != null && currentTarget.position.copy().sub(position).mag() < size) {
             double current = millis();
             if (current - lastMeleeTime > meleePeriod) {
                 currentTarget.damage(meleeDamage);

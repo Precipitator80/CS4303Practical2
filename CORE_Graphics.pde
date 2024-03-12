@@ -8,6 +8,12 @@ public class Graphics {
     PImage pistol;
     PImage rifle;
     
+    // Miscellaneous Items
+    PImage statusRing;
+    PImage freeze;
+    PImage speedBoost;
+    PImage damageBoost;
+    
     // Health
     PImage health90;
     PImage health80;
@@ -43,6 +49,11 @@ public class Graphics {
             
             pistol = loadImage("pistol.png");
             rifle = loadImage("rifle.png");
+            
+            statusRing = loadImage("statusRing.png");
+            freeze = loadImage("freeze.png");
+            speedBoost = loadImage("speedBoost.png");
+            damageBoost = loadImage("damageBoost.png");
             
             health90 = loadImage("HealthBar/health90.png");
             health80 = loadImage("HealthBar/health80.png");

@@ -19,6 +19,7 @@ abstract class Character extends GameObject {
     
     double damagedTime;
     
+    LinkedTransferQueue<StatusEffect> statusEffects;
     
     public Character(int x, int y, Animator animator, int hp, float movementSpeed) {
         super(x,y);
@@ -32,6 +33,8 @@ abstract class Character extends GameObject {
         if (animator != null) {
             currentStill = animator.downStill;
         }
+        
+        this.statusEffects = new LinkedTransferQueue<>();
     }
     
     boolean alive() {
@@ -49,20 +52,30 @@ abstract class Character extends GameObject {
         }
     }
     
-    abstract void despawn();
+    void despawn() {
+        removeStatusEffects();
+    }
+    
+    void removeStatusEffects() {
+        Iterator<StatusEffect> iterator = statusEffects.iterator();
+        while(iterator.hasNext()) {
+            iterator.next().destroy();
+        }
+    }
     
     void respawn(int x, int y) {
         position.set(x,y);
         hp = maxHP;
         locked = false;
         frozen = false;
+        removeStatusEffects();
     }
     
     void update() {
         if (alive()) {
             moveCharacter();
         }
-    }
+    }    
     
     void checkDamagedTimer() {
         if (millis() - damagedTime > 100.0) {
@@ -131,7 +144,7 @@ abstract class Character extends GameObject {
             
             // Decide which frame to use.
             PImage frame;
-            if (velocity.mag() == 0) { // The character is still.
+            if (velocity.mag() == 0 || frozen) { // The character is still.
                 frame = currentStill;
             }
             else if (abs(velocity.x) > abs(velocity.y)) { // The character is moving left or right.
