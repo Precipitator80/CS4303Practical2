@@ -12,6 +12,7 @@ class Wall extends Cell {
     
     void render() {
         imageMode(CENTER);
+        tint(255);
         image(Graphics.wall, screenX, screenY, width, width);
     }
 }
@@ -45,6 +46,7 @@ class Empty extends Cell {
     
     void render() {
         imageMode(CENTER);
+        tint(255);
         image(Graphics.floor, screenX, screenY, width, width);
     }
 }

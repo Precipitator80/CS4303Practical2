@@ -9,11 +9,14 @@ abstract class Character extends GameObject {
     int hp;
     boolean locked; // Whether the character can move or not.
     boolean frozen; // Whether the character can do any action or not.
+    boolean damaged; // Whether the character was damaged this frame.
     
     float size;
     Animator animator;
     private float currentFrame = 0.0f;
     PImage currentStill;
+    
+    double damagedTime;
     
     
     public Character(int x, int y, Animator animator, int hp, float movementSpeed) {
@@ -34,9 +37,13 @@ abstract class Character extends GameObject {
     }
     
     void damage(int damage) {
-        hp -= damage;
-        if (!alive()) {
-            despawn();
+        if (damage > 0) {
+            hp -= damage;
+            damaged = true;
+            damagedTime = millis();
+            if (!alive()) {
+                despawn();
+            }
         }
     }
     
@@ -55,7 +62,27 @@ abstract class Character extends GameObject {
         }
     }
     
+    void checkDamagedTimer() {
+        if (millis() - damagedTime > 100.0) {
+            damaged = false;
+        }
+    }
+    
     void render() {
+        if (damaged && frozen) {
+            tint(100, 153, 204);
+            checkDamagedTimer();
+        }
+        else if (damaged) {
+            tint(255,36,36);
+            checkDamagedTimer();   
+        }
+        else if (frozen) {
+            tint(0, 153, 204);
+        } else{
+            tint(255);
+        }
+        
         if (animator != null) {
             // Progress the animation.
             currentFrame += animator.ANIMATION_SPEED;
@@ -93,11 +120,7 @@ abstract class Character extends GameObject {
             // Render the frame.
             imageMode(CENTER);
             float scaledSize = size * animator.SCALE;
-            if (frozen) {
-                tint(0, 153, 204);
-            }
             image(frame, this.position.x, this.position.y, scaledSize, scaledSize);
-            tint(255);
         }
     }
     

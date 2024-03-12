@@ -1,6 +1,6 @@
 class BrainRobot extends ShootingEnemy {
     public BrainRobot(int x, int y) {
-        super(x,y,Graphics.brainRobotAnimator,150,0.004f,3,false,true,7500.0,75);
+        super(x,y,Graphics.brainRobotAnimator,150,0.004f,3,false,true,7500.0,75,2000.0,75);
     }
     
     void update() {
@@ -14,13 +14,13 @@ class BrainRobot extends ShootingEnemy {
 
 class TransformedHuman extends ShootingEnemy {
     public TransformedHuman(int x, int y) {
-        super(x,y,Graphics.transformedHumanAnimator,100,0.008f,5,false,false,500.0,25);
+        super(x,y,Graphics.transformedHumanAnimator,100,0.008f,5,false,false,500.0,25,500.0,10);
     }
 }
 
 class TurretRobot extends ShootingEnemy {
     public TurretRobot(int x, int y) {
-        super(x,y,null,250,0f,1,true,false,3000.0,50);
+        super(x,y,null,250,0f,1,true,false,3000.0,50,0.0,0);
     }
     
     void render() {
@@ -32,7 +32,7 @@ class TurretRobot extends ShootingEnemy {
 
 class LaserRobot extends ShootingEnemy {
     public LaserRobot(int x, int y) {
-        super(x,y,Graphics.laserRobotAnimator,200,0.0025f,2,false,false,6000.0,50);
+        super(x,y,Graphics.laserRobotAnimator,200,0.0025f,2,false,false,6000.0,50,1500.0,50);
     }
 }
 
@@ -41,7 +41,7 @@ class FlyingRobot extends ShootingEnemy{
     boolean clockwise;
     
     public FlyingRobot(int x, int y) {
-        super(x,y,Graphics.flyingRobotAnimator,75,0.005f,2,false,false,2000.0,25);
+        super(x,y,Graphics.flyingRobotAnimator,75,0.005f,2,false,false,2000.0,25,1000.0,5);
     }
     
     public void moveCharacter() {
@@ -74,7 +74,7 @@ class FlyingRobot extends ShootingEnemy{
 
 class GruntRobot extends Enemy {
     public GruntRobot(int x, int y) {
-        super(x,y,Graphics.gruntRobotAnimator,100,0.004f,1,false,false);
+        super(x,y,Graphics.gruntRobotAnimator,100,0.004f,1,false,false,1500.0,25);
     }
 }
 
@@ -82,7 +82,7 @@ class WormRobot extends Enemy {
     boolean lockingTarget;
     
     public WormRobot(int x, int y) {
-        super(x,y,Graphics.wormRobotAnimator,50,0.006f,2,false,true);
+        super(x,y,Graphics.wormRobotAnimator,50,0.006f,2,false,true,500.0,5);
     }
     
     void update() {
@@ -115,8 +115,8 @@ abstract class ShootingEnemy extends Enemy {
     int damage;
     color laserColour = color(255,36,36);
     
-    public ShootingEnemy(int x, int y, Animator animator, int hp, float movementSpeed, int points, boolean stationary, boolean attacksFamily, double shotPeriod, int damage) {
-        super(x,y,animator,hp,movementSpeed,points,stationary,attacksFamily);
+    public ShootingEnemy(int x, int y, Animator animator, int hp, float movementSpeed, int points, boolean stationary, boolean attacksFamily, double shotPeriod, int damage, double meleePeriod, int meleeDamage) {
+        super(x,y,animator,hp,movementSpeed,points,stationary,attacksFamily,meleePeriod,meleeDamage);
         this.shotPeriod = shotPeriod;
         this.damage = damage;
     }
@@ -147,14 +147,32 @@ abstract class ShootingEnemy extends Enemy {
     }
 }
 
-abstract class Enemy extends NPC {    
-    public Enemy(int x, int y, Animator animator, int hp, float movementSpeed, int points, boolean stationary, boolean attacksFamily) {
+abstract class Enemy extends NPC {
+    double lastMeleeTime;
+    double meleePeriod;
+    int meleeDamage;
+    
+    public Enemy(int x, int y, Animator animator, int hp, float movementSpeed, int points, boolean stationary, boolean attacksFamily, double meleePeriod, int meleeDamage) {
         super(x,y,animator,hp,movementSpeed,points,stationary,attacksFamily);
+        this.meleePeriod = meleePeriod;
+        this.meleeDamage = meleeDamage;
        ((Robotron)currentScene).levelManager.ENEMIES.add(this);
     }
     
-    // Meelee attack
-    // Implement here!
+    void update() {
+        super.update();
+        meleeCheck();
+    }
+    
+    void meleeCheck() {
+        if (currentTarget != null && currentTarget.position.copy().sub(position).mag() < size) {
+            double current = millis();
+            if (current - lastMeleeTime > meleePeriod) {
+                currentTarget.damage(meleeDamage);
+                lastMeleeTime = current;
+            }
+        }
+    }
     
     void destroy() {
         super.destroy();
