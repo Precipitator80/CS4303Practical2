@@ -61,6 +61,10 @@ abstract class Weapon extends GameObject {
         this.damage = damage;
     }
     
+    void refill() {
+        this.currentShots = maxShots;
+    }
+    
     void tryToFire(int targetX, int targetY) {
         double current = millis();
         double elapsedSinceFired = current - lastFired;

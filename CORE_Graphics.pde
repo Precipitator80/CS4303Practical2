@@ -1,8 +1,14 @@
 public class Graphics {    
+    // Tiles and still enemies.
     PImage wall;
     PImage floor;
     PImage turretRobot;
     
+    // Weapons
+    PImage pistol;
+    PImage rifle;
+    
+    // Health
     PImage health90;
     PImage health80;
     PImage health70;
@@ -34,6 +40,9 @@ public class Graphics {
             wall = loadImage("wall.png");
             floor = loadImage("floor.png");
             turretRobot = loadImage("turretRobot.png");
+            
+            pistol = loadImage("pistol.png");
+            rifle = loadImage("rifle.png");
             
             health90 = loadImage("HealthBar/health90.png");
             health80 = loadImage("HealthBar/health80.png");

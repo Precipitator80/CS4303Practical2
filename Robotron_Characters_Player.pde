@@ -8,17 +8,51 @@ class Player extends Character {
         reset();
     }
     
-    void giveItem(Item item) {
-        
+    void respawn(int x, int y) {
+        super.respawn(x,y);
+        for (Weapon weapon : weapons) {
+            weapon.refill();
+        }
     }
     
     void despawn() {
     }
     
     void reset() {
-        currentWeapon = new Pistol(position, playerColour);
+        // Initialise the weapons array.
         weapons = new ArrayList<Weapon>();
+        
+        // Give the player their starting weapon.
+        currentWeapon = new Pistol(position, playerColour);
         weapons.add(currentWeapon);
+    }
+    
+    void giveWeapon(Class<? extends Weapon> weaponType) {
+        Weapon weapon = getWeapon(weaponType);
+        if (weapon == null) {
+            if (weaponType.equals(Pistol.class)) {
+                weapon = new Pistol(position, playerColour);
+            }
+            else if (weaponType.equals(Rifle.class)) {
+                weapon = new Rifle(position, playerColour);
+            }
+            if (weapon != null) {
+                weapons.add(weapon);
+                currentWeapon = weapon;
+            }
+        }
+        else{
+            weapon.refill();
+        }
+    }
+    
+    Weapon getWeapon(Class<? extends Weapon> weaponType) {
+        for (Weapon weapon : weapons) {
+            if (weaponType.isInstance(weapon)) {
+                return weapon;
+            }
+        }
+        return null;
     }
     
     void render() {
