@@ -62,4 +62,24 @@ class Player extends Character {
         velocity.normalize();
         velocity.mult(movementSpeed * height);
     }
+    
+    void moveCharacter() {
+        if (velocity.mag() > 0 && !frozen && !locked) {
+            PVector newPosition = position.copy().add(velocity);
+            newPosition.add(velocity.copy().normalize().mult(size / 2));
+            
+            LevelManager levelManager = ((Robotron)currentScene).levelManager;
+            int x = levelManager.screenToGridX((int)newPosition.x);
+            int y = levelManager.screenToGridY((int)newPosition.y);
+            if (levelManager.grid[y][x] instanceof Electrode) {
+               ((Electrode)levelManager.grid[y][x]).collide(this);
+            }
+            
+            //int playerX = levelManager.screenToGridX((int)position.x);
+            //int playerY = levelManager.screenToGridY((int)position.y);
+            //print("Current position: " + position + ". New Position: " + newPosition + "\n");
+            //print("Current position: " + playerX + "," + playerY + ". New Position: " + x + "," + y + "\n");   
+        }
+        super.moveCharacter();
+    }
 }

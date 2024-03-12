@@ -7,7 +7,7 @@ enum CellType{
 
 class Wall extends Cell {
     public Wall(int gridX, int gridY, int screenX, int screenY, int width) {
-        super(gridX, gridY, screenX, screenY, width, true, true);
+        super(gridX, gridY, screenX, screenY, width, true, true, true);
     }
     
     void render() {
@@ -18,7 +18,7 @@ class Wall extends Cell {
 
 class Pit extends Cell {
     public Pit(int gridX, int gridY, int screenX, int screenY, int width) {
-        super(gridX, gridY, screenX, screenY, width, true, false);
+        super(gridX, gridY, screenX, screenY, width, false, true, false);
     }
     
     void render() {
@@ -34,7 +34,13 @@ class Pit extends Cell {
 
 class Empty extends Cell {
     public Empty(int gridX, int gridY, int screenX, int screenY, int width) {
-        super(gridX, gridY, screenX, screenY, width, false, false);
+        super(gridX, gridY, screenX, screenY, width, false, false, false);
+        
+        // Update path finder if required.
+        LevelManager levelManager = ((Robotron)currentScene).levelManager;
+        if (levelManager.pathFinder != null) {
+            levelManager.pathFinder.graph[gridY][gridX] = new AStarNode(gridY, gridX);
+        }
     }
     
     void render() {
@@ -45,7 +51,16 @@ class Empty extends Cell {
 
 class Electrode extends Cell {
     public Electrode(int gridX, int gridY, int screenX, int screenY, int width) {
-        super(gridX, gridY, screenX, screenY, width, true, true);
+        super(gridX, gridY, screenX, screenY, width, true, true, true);
+    }
+    
+    void collide(Character character) {
+        character.damage(50);
+        convert();
+    }
+    
+    void convert() {
+       ((Robotron)currentScene).levelManager.grid[gridY][gridX] = new Empty(gridX, gridY, screenX, screenY,(int)width);
     }
     
     void render() {
@@ -64,15 +79,17 @@ abstract class Cell {
     int screenX;
     int screenY;
     float width;
+    boolean solid;
     boolean impassable;
     boolean blocksVision;
     
-    public Cell(int gridX, int gridY, int screenX, int screenY, int width, boolean impassable, boolean blocksVision) {
+    public Cell(int gridX, int gridY, int screenX, int screenY, int width, boolean solid, boolean impassable, boolean blocksVision) {
         this.gridX = gridX;
         this.gridY = gridY;
         this.screenX = screenX;
         this.screenY = screenY;
         this.width = width;
+        this.solid = solid;
         this.impassable = impassable;
         this.blocksVision = blocksVision;
     }

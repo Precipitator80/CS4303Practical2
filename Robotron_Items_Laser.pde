@@ -18,7 +18,12 @@ class Laser extends GameObject {
         position.add(velocity);
         
         LevelManager levelManager = ((Robotron)currentScene).levelManager;
-        if (levelManager.insideOfWall((int)position.x,(int)position.y) || Utility.outOfBounds(this, renderOffset.mag() * 2)) {
+        if (levelManager.collisionCheck((int)position.x,(int)position.y) || Utility.outOfBounds(this, renderOffset.mag() * 2)) {
+            int gridX = levelManager.screenToGridX((int) position.x);
+            int gridY = levelManager.screenToGridY((int) position.y);
+            if (levelManager.grid[gridY][gridX] instanceof Electrode) {
+               ((Electrode)levelManager.grid[gridY][gridX]).convert();
+            }
             destroy();
         }
         else if (friendly) {

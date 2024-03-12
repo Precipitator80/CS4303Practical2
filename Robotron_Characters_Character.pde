@@ -105,19 +105,41 @@ abstract class Character extends GameObject {
         if (velocity.mag() > 0 && !frozen && !locked) {
             // Check whether the character would end up inside of a wall with the position change.
             // Check both x and y separately, nullifying each component if required.
-            LevelManager levelManager = ((Robotron)currentScene).levelManager;
+            LevelManager levelManager = ((Robotron)currentScene).levelManager;  
             
             boolean followX = true;
             int screenX = (int)(position.x + velocity.x + Math.signum(velocity.x) * size / 2);
-            if (levelManager.inaccessible(screenX,(int)(position.y - size / 2)) || levelManager.inaccessible(screenX,(int)(position.y + size / 2))) {
-                followX = false;
-            }
+            boolean outOfBoundsYMinus = levelManager.impassable(screenX,(int)(position.y - size / 2));
+            boolean outOfBoundsYPlus = levelManager.impassable(screenX,(int)(position.y + size / 2));
             
             boolean followY = true;
             int screenY = (int)(position.y + velocity.y + Math.signum(velocity.y) * size / 2); 
-            if (levelManager.inaccessible((int)(position.x - size / 2), screenY) || levelManager.inaccessible((int)(position.x + size / 2), screenY)) {
-                followY = false;
+            boolean outOfBoundsXMinus = levelManager.impassable((int)(position.x - size / 2), screenY);
+            boolean outOfBoundsXPlus = levelManager.impassable((int)(position.x + size / 2), screenY);
+            
+            if (outOfBoundsYMinus || outOfBoundsYPlus) {
+                followX = false;
+                
+                // XOR Y
+                if (outOfBoundsYMinus && !outOfBoundsYPlus) {
+                    position.add(new PVector(0f, abs(velocity.x)));
+                }
+                else if (!outOfBoundsYMinus && outOfBoundsYPlus) {
+                    position.add(new PVector(0f, -abs(velocity.x)));
+                }
             }
+            
+            if (outOfBoundsXMinus || outOfBoundsXPlus) {
+                followY = false;
+                
+                // XOR X
+                if (outOfBoundsXMinus && !outOfBoundsXPlus) {
+                    position.add(new PVector(abs(velocity.y), 0f));
+                }
+                else if (!outOfBoundsXMinus && outOfBoundsXPlus) {
+                    position.add(new PVector( -abs(velocity.y), 0f));
+                }
+            }            
             
             position.set(position.x + (followX ? velocity.x : 0), position.y + (followY ? velocity.y : 0));
         }

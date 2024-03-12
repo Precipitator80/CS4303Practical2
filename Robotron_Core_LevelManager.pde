@@ -308,19 +308,16 @@ class LevelManager {
         return 1 + chunkY * (chunkYSize + wallWidth);
     }
     
-    boolean insideOfWall(int screenX, int screenY) {
-        return collisionCheck(screenX, screenY, true);
-    }
-    
-    boolean inaccessible(int screenX, int screenY) {
-        return collisionCheck(screenX, screenY, false);
-    }
-    
-    boolean collisionCheck(int screenX, int screenY, boolean onlyCheckWalls) {
+    boolean impassable(int screenX, int screenY) {
         int gridX = screenToGridX(screenX);
         int gridY = screenToGridY(screenY);
-        CellType cellType = workingGrid[gridY][gridX];
-        return cellType != null && (cellType == CellType.WALL || !onlyCheckWalls && cellType == CellType.PIT);
+        return grid[gridY][gridX].impassable; 
+    }
+    
+    boolean collisionCheck(int screenX, int screenY) {
+        int gridX = screenToGridX(screenX);
+        int gridY = screenToGridY(screenY);
+        return grid[gridY][gridX].solid;
     }
     
     boolean visionCheck(int screenX, int screenY, int targetScreenX, int targetScreenY, boolean mustBeReachableDirectly) {
