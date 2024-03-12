@@ -3,6 +3,16 @@ public class Graphics {
     PImage floor;
     PImage turretRobot;
     
+    PImage health90;
+    PImage health80;
+    PImage health70;
+    PImage health60;
+    PImage health50;
+    PImage health40;
+    PImage health30;
+    PImage health20;
+    PImage health10;
+    
     Animator playerAnimator;
     Animator gruntRobotAnimator;
     Animator laserRobotAnimator;
@@ -24,6 +34,16 @@ public class Graphics {
             wall = loadImage("wall.png");
             floor = loadImage("floor.png");
             turretRobot = loadImage("turretRobot.png");
+            
+            health90 = loadImage("HealthBar/health90.png");
+            health80 = loadImage("HealthBar/health80.png");
+            health70 = loadImage("HealthBar/health70.png");
+            health60 = loadImage("HealthBar/health60.png");
+            health50 = loadImage("HealthBar/health50.png");
+            health40 = loadImage("HealthBar/health40.png");
+            health30 = loadImage("HealthBar/health30.png");
+            health20 = loadImage("HealthBar/health20.png");
+            health10 = loadImage("HealthBar/health10.png");
             
             playerAnimator = new Animator("Player");
             gruntRobotAnimator = new Animator("GruntRobot");

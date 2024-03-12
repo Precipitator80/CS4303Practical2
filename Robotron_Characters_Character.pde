@@ -6,6 +6,7 @@ abstract class Character extends GameObject {
     boolean moveRight;
     float movementSpeed;
     
+    int maxHP;
     int hp;
     boolean locked; // Whether the character can move or not.
     boolean frozen; // Whether the character can do any action or not.
@@ -21,6 +22,7 @@ abstract class Character extends GameObject {
     
     public Character(int x, int y, Animator animator, int hp, float movementSpeed) {
         super(x,y);
+        this.maxHP = hp;
         this.hp = hp;
         this.movementSpeed = movementSpeed;
         velocity = new PVector();
@@ -51,7 +53,7 @@ abstract class Character extends GameObject {
     
     void respawn(int x, int y) {
         position.set(x,y);
-        hp = 100;
+        hp = maxHP;
         locked = false;
         frozen = false;
     }
@@ -69,6 +71,46 @@ abstract class Character extends GameObject {
     }
     
     void render() {
+        // Render the health if required.
+        if (hp < maxHP) {
+            int healthLeft = (10 * hp) / maxHP;
+            tint(255);
+            PImage healthImage;
+            switch(healthLeft) {
+                case 9:
+                    healthImage = Graphics.health90;
+                    break;
+                case 8:
+                    healthImage = Graphics.health80;
+                    break;
+                case 7:
+                    healthImage = Graphics.health70;
+                    break;
+                case 6:
+                    healthImage = Graphics.health60;
+                    break;
+                case 5:
+                    healthImage = Graphics.health50;
+                    break;
+                case 4:
+                    healthImage = Graphics.health40;
+                    break;
+                case 3:
+                    healthImage = Graphics.health30;
+                    break;
+                case 2:
+                    healthImage = Graphics.health20;
+                    break;
+                default:
+                healthImage = Graphics.health10;
+            }
+            if (healthImage != null) {
+                float healthBarSize = 1.35f * size;
+                image(healthImage, position.x, position.y, healthBarSize, healthBarSize);
+            }
+        }
+        
+        // Tint the sprite.
         if (damaged && frozen) {
             tint(100, 153, 204);
             checkDamagedTimer();
