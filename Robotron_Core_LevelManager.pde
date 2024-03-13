@@ -209,7 +209,8 @@ class LevelManager {
         fillArea(CellType.WALL, 0, 0, 0, ySize - 1);
         fillArea(CellType.WALL, xSize - 1, xSize - 1, 0, ySize - 1);
         
-        // Spawn actual cells.
+        // Spawn actual cells. Keep track of pits to spawn turrets later.
+        List<Cell> pits = new ArrayList<>();
         for (int y = 0; y < ySize; y++) {
             for (int x = 0; x < xSize; x++) {
                 if (workingGrid[y][x] != null) {
@@ -219,6 +220,7 @@ class LevelManager {
                             break;
                         case PIT:
                             grid[y][x] = new Pit(x, y, gridToScreenX(x), gridToScreenY(y), cellSize);
+                            pits.add(grid[y][x]);
                             break;
                         case ELECTRODE:
                             grid[y][x] = new Electrode(x, y, gridToScreenX(x), gridToScreenY(y), cellSize);
@@ -282,6 +284,19 @@ class LevelManager {
             chunks[(int)remainingChunk.y][(int)remainingChunk.x] = new MixedChunk(chunkToGridX((int)remainingChunk.x),chunkToGridY((int)remainingChunk.y));
         }
         
+        // Spawn turrets in pits.        
+        if (pits.size() > 0) {
+            int numberOfTurrets = (int) random(wave / 3);
+            for (int i = 0; i < numberOfTurrets && i < pits.size() / 5; i++) {
+                int randomPit = (int) random(pits.size());
+                Cell pit = pits.get(randomPit);
+                int enemyX = gridToScreenX(pit.gridX);
+                int enemyY = gridToScreenY(pit.gridY);
+                new TurretRobot(enemyX, enemyY);
+            }
+        }
+        
+        // Spawn other chunks.
         for (int y = 0; y < numberOfChunksY; y++) {
             for (int x = 0; x < numberOfChunksX; x++) {
                 chunks[y][x].spawn();
