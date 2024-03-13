@@ -125,6 +125,9 @@ class LevelManager {
         while(iterator.hasNext()) {
             GameObject gameObject = iterator.next();
             if (gameObject instanceof Laser || gameObject instanceof NPC || gameObject instanceof Item) {
+                if (gameObject instanceof FamilyMember && wave > 0) {
+                    addPoints(((FamilyMember)gameObject).points);
+                }
                 gameObject.destroy();
             }
         }
