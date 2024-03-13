@@ -49,6 +49,7 @@ class Player extends Character {
             }
             if (weapon != null) {
                 weapons.add(weapon);
+                Collections.sort(weapons);
                 weaponMap.put(weapon.code, weapon);
                 currentWeapon = weapon;
             }
@@ -77,6 +78,47 @@ class Player extends Character {
     void render() {
         if (alive()) {
             super.render();
+            weaponsDisplay();
+        }
+    }
+    
+    void weaponsDisplay() {
+        for (int i = 0; i < weapons.size(); i++) {
+            // Get the weapon.
+            Weapon weapon = weapons.get(i);
+            
+            // Set base coordinates for the icon.
+            float iconSize = 1.5f * size;
+            float x = iconSize * (i + 1) * 1.5f;
+            float y = height - iconSize;
+            
+            // Draw a frame.
+            float fillOpacity;
+            if (weapon.maxShots == 0) {
+                fillOpacity = 255;
+            }
+            else{
+                fillOpacity = 255 * ((float) weapon.currentShots / weapon.maxShots);
+            }
+            strokeWeight(0);
+            stroke(playerColour,fillOpacity);
+            fill(playerColour,fillOpacity);
+            circle(x,y,iconSize);
+            
+            // Highlight the current weapon.
+            if (weapon == currentWeapon) {
+                tint(255);
+            }
+            else{
+                tint(100);
+            }
+            image(weapon.image, x, y, iconSize, iconSize);
+            
+            // Show the key to switch to the weapon.
+            float textX = x + iconSize / 2;
+            float textY = y + iconSize / 2;
+            fill(0);
+            text((char) weapon.code, textX, textY);
         }
     }
     
