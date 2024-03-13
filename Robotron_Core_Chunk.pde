@@ -56,38 +56,44 @@ class EnemyChunk extends Chunk {
         int item5Y = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
         new SpeedBoostItem(item5X,item5Y);
         
-        // Spawn in enemies.        
-        for (int i = 0; i < levelManager.numberOfEnemies / 2; i++) {
+        // Spawn in enemies.
+        int numberOfGrunts = 5 + (int) random(levelManager.wave);        
+        for (int i = 0; i < numberOfGrunts; i++) {
             int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
             int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
             new GruntRobot(enemyX, enemyY);
         }
         
-        for (int i = 0; i < levelManager.numberOfEnemies / 10; i++) {
+        int numberOfLasers = (int) random(levelManager.wave / 3);
+        for (int i = 0; i < numberOfLasers; i++) {
             int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
             int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
             new LaserRobot(enemyX, enemyY);
         }
         
-        for (int i = 0; i < levelManager.numberOfEnemies / 10; i++) {
+        int numberOfFlyings = (int) random(levelManager.wave / 3);
+        for (int i = 0; i < numberOfFlyings; i++) {
             int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
             int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
             new FlyingRobot(enemyX, enemyY);
         }
         
-        for (int i = 0; i < levelManager.numberOfEnemies / 10; i++) {
+        int numberOfTurrets = (int) random(levelManager.wave / 3);
+        for (int i = 0; i < numberOfTurrets / 10; i++) {
             int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
             int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
             new TurretRobot(enemyX, enemyY);
         }
         
-        for (int i = 0; i < levelManager.numberOfEnemies / 10; i++) {
+        int numberOfBrains = (int) random(levelManager.wave / 5);
+        for (int i = 0; i < numberOfBrains; i++) {
             int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
             int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
             new BrainRobot(enemyX, enemyY);
         }
         
-        for (int i = 0; i < levelManager.numberOfEnemies / 10; i++) {
+        int numberOfWorms = (int) random(levelManager.wave / 4);
+        for (int i = 0; i < numberOfWorms; i++) {
             int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
             int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
             new WormRobot(enemyX, enemyY);
