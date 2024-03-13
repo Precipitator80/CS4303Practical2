@@ -28,6 +28,7 @@ public class Graphics {
     PImage health20;
     PImage health10;
     
+    // Animators
     Animator playerAnimator;
     Animator gruntRobotAnimator;
     Animator laserRobotAnimator;
@@ -37,8 +38,9 @@ public class Graphics {
     Animator transformedHumanAnimator;
     Animator familyMember1Animator;
     
+    // Other
+    PImage crosshair;
     PFont robotronFont;
-    
     
     public Graphics() {
         load();
@@ -46,21 +48,25 @@ public class Graphics {
     
     void load() {
         try{
+            // Tiles and still enemies.
             wall = loadImage("wall.png");
             floor = loadImage("floor.png");
             turretRobot = loadImage("turretRobot.png");
             
+            // Weapons
             pistol = loadImage("pistol.png");
             rifle = loadImage("rifle.png");
             pulseCannon = loadImage("pulseCannon.png");
             railgun = loadImage("railgun.png");
             empCannon = loadImage("empCannon.png");
             
+            // Miscellaneous Items
             statusRing = loadImage("statusRing.png");
             freeze = loadImage("freeze.png");
             speedBoost = loadImage("speedBoost.png");
             damageBoost = loadImage("damageBoost.png");
             
+            // Health
             health90 = loadImage("HealthBar/health90.png");
             health80 = loadImage("HealthBar/health80.png");
             health70 = loadImage("HealthBar/health70.png");
@@ -71,6 +77,7 @@ public class Graphics {
             health20 = loadImage("HealthBar/health20.png");
             health10 = loadImage("HealthBar/health10.png");
             
+            // Animators
             playerAnimator = new Animator("Player");
             gruntRobotAnimator = new Animator("GruntRobot");
             laserRobotAnimator = new Animator("LaserRobot");
@@ -80,6 +87,8 @@ public class Graphics {
             transformedHumanAnimator = new Animator("TransformedHuman");
             familyMember1Animator = new Animator("FamilyMember1");
             
+            // Other
+            crosshair = loadImage("crosshair.png");
             robotronFont = createFont("robotron-2084.otf", 128);
             textFont(robotronFont);
         }

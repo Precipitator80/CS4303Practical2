@@ -79,6 +79,12 @@ class Player extends Character {
         if (alive()) {
             super.render();
             weaponsDisplay();
+            
+            // Draw the crosshair.
+            noCursor();
+            tint(255);
+            float crosshairSize = height / 25;
+            image(Graphics.crosshair, mouseX, mouseY, crosshairSize, crosshairSize);
         }
     }
     
