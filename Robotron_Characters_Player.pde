@@ -1,6 +1,9 @@
+import java.util.Map;
+
 class Player extends Character {
     color playerColour = color(0,0,255);
     Weapon currentWeapon;
+    private Map<Integer, Weapon> weaponMap;
     List<Weapon> weapons;
     
     public Player(int x, int y) {
@@ -18,10 +21,12 @@ class Player extends Character {
     void reset() {
         // Initialise the weapons array.
         weapons = new ArrayList<Weapon>();
+        weaponMap = new HashMap<Integer, Weapon>();
         
         // Give the player their starting weapon.
         currentWeapon = new Pistol(position, playerColour);
         weapons.add(currentWeapon);
+        weaponMap.put(currentWeapon.code, currentWeapon);
     }
     
     void giveWeapon(Class<? extends Weapon> weaponType) {
@@ -44,6 +49,7 @@ class Player extends Character {
             }
             if (weapon != null) {
                 weapons.add(weapon);
+                weaponMap.put(weapon.code, weapon);
                 currentWeapon = weapon;
             }
         }
@@ -59,6 +65,13 @@ class Player extends Character {
             }
         }
         return null;
+    }
+    
+    void checkWeaponSwitch() {
+        int charValue = (int) key;
+        if (weaponMap.containsKey(charValue)) {
+            currentWeapon = weaponMap.get(charValue);
+        }
     }
     
     void render() {
