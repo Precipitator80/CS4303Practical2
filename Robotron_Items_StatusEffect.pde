@@ -34,8 +34,14 @@ public class SpeedBoost extends StatusEffect {
 }
 
 public class Freeze extends StatusEffect {
-    public Freeze(Character character, double duration) {
+    boolean renderEffect;
+    public Freeze(Character character, double duration, boolean renderEffect) {
         super(character, duration, color(0,162,232));
+        this.renderEffect = renderEffect;
+    }
+    
+    public Freeze(Character character, double duration) {
+        this(character, duration, true);
     }
     
     void apply() {
@@ -44,6 +50,12 @@ public class Freeze extends StatusEffect {
     
     void unapply() {
         character.frozen = false;
+    }
+    
+    void render() {
+        if (renderEffect) {
+            super.render();
+        }
     }
 }
 

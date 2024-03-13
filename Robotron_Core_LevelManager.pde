@@ -288,6 +288,15 @@ class LevelManager {
             }
         }
         
+        // Freeze all NPCs at the start of the round.
+        iterator = gameObjects().iterator();
+        while(iterator.hasNext()) {
+            GameObject gameObject = iterator.next();
+            if (gameObject instanceof NPC) {
+                new Freeze((Character)gameObject,1000.0,false);
+            }
+        }
+        
         wave++;
         state = LevelState.LEVEL;
         spawnedLevel = true;

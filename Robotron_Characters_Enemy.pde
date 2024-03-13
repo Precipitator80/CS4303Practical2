@@ -122,7 +122,7 @@ abstract class ShootingEnemy extends Enemy {
     }
     
     void shoot() {
-        if (currentTarget != null && !frozen) {
+        if (alive() && currentTarget != null && !frozen) {
             float offsetRange = new PVector(currentTarget.position.x - position.x, currentTarget.position.y - position.y).mag() / 10;
             PVector target = new PVector(random(currentTarget.position.x - offsetRange, currentTarget.position.x + offsetRange), random(currentTarget.position.y - offsetRange, currentTarget.position.y + offsetRange));
             
@@ -165,7 +165,7 @@ abstract class Enemy extends NPC {
     }
     
     void meleeCheck() {
-        if (!frozen && currentTarget != null && currentTarget.position.copy().sub(position).mag() < size) {
+        if (alive() && !frozen && currentTarget != null && currentTarget.position.copy().sub(position).mag() < size) {
             double current = millis();
             if (current - lastMeleeTime > meleePeriod) {
                 currentTarget.damage(meleeDamage);
