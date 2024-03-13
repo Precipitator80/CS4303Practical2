@@ -111,7 +111,7 @@ class FamilyMember extends NPC {
         super.update();
         
         LevelManager levelManager = ((Robotron)currentScene).levelManager;
-        if (levelManager.player.position.copy().sub(position).mag() < size) {
+        if (levelManager.player.alive() && levelManager.player.position.copy().sub(position).mag() < size) {
             levelManager.addPoints(points);
             destroy();
         }
