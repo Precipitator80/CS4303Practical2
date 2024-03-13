@@ -18,6 +18,15 @@ public PImage weaponImage(Class weaponType) {
     else if (weaponType.equals(Rifle.class)) {
         return Graphics.rifle;
     }
+    else if (weaponType.equals(PulseCannon.class)) {
+        return Graphics.pulseCannon;
+    }
+    else if (weaponType.equals(Railgun.class)) {
+        return Graphics.railgun;
+    }
+    else if (weaponType.equals(EMPCannon.class)) {
+        return Graphics.empCannon;
+    }
     else{
         return Graphics.pistol; // Change to a generic item image?
     }

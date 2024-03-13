@@ -7,6 +7,9 @@ public class Graphics {
     // Weapons
     PImage pistol;
     PImage rifle;
+    PImage pulseCannon;
+    PImage railgun;
+    PImage empCannon;
     
     // Miscellaneous Items
     PImage statusRing;
@@ -49,6 +52,9 @@ public class Graphics {
             
             pistol = loadImage("pistol.png");
             rifle = loadImage("rifle.png");
+            pulseCannon = loadImage("pulseCannon.png");
+            railgun = loadImage("railgun.png");
+            empCannon = loadImage("empCannon.png");
             
             statusRing = loadImage("statusRing.png");
             freeze = loadImage("freeze.png");

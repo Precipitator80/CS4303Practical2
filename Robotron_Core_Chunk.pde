@@ -15,6 +15,11 @@ class PlayerChunk extends Chunk {
         else{
             levelManager.player.respawn(playerX, playerY);
         }
+        
+        // Spawn a power-up.
+        int itemX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
+        int itemY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
+        levelManager.spawnRandomPowerUp(itemX, itemY);
     }
 }
 
@@ -29,6 +34,12 @@ class MixedChunk extends Chunk {
         int familyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
         int familyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
         new FamilyMember(familyX, familyY);
+        
+        if (levelManager.fiftyFifty()) {
+            int itemX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
+            int itemY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
+            levelManager.spawnRandomItem(itemX, itemY);
+        }
     }
 }
 
@@ -40,21 +51,9 @@ class EnemyChunk extends Chunk {
     public void spawn() {
         LevelManager levelManager = ((Robotron)currentScene).levelManager;
         
-        int item1X = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
-        int item1Y = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
-        new WeaponItem(item1X,item1Y,Rifle.class);
-        int item2X = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
-        int item2Y = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
-        new WeaponItem(item2X,item2Y,Pistol.class);
-        int item3X = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
-        int item3Y = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
-        new FreezeItem(item3X,item3Y);
-        int item4X = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
-        int item4Y = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
-        new DamageBoostItem(item4X,item4Y);
-        int item5X = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
-        int item5Y = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
-        new SpeedBoostItem(item5X,item5Y);
+        int itemX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
+        int itemY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
+        levelManager.spawnRandomWeaponItem(itemX, itemY);
         
         // Spawn in enemies.
         int numberOfGrunts = 5 + (int) random(levelManager.wave);        

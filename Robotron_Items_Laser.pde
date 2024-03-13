@@ -1,57 +1,149 @@
-class Laser extends GameObject {
+class RailgunLaser extends LaserBase {
+    int targetX;
+    int targetY;
+    
+    public RailgunLaser(int x, int y, int targetX, int targetY, int damage, boolean friendly, color laserColour) {
+        super(x,y,damage,100,1000.0,friendly,laserColour);
+        this.targetX = targetX;
+        this.targetY = targetY;
+        raycastHitDetection();
+    }
+    
+    void raycastHitDetection() {
+        LevelManager levelManager = ((Robotron)currentScene).levelManager;
+        PVector origin = position;
+        PVector differenceVector = new PVector(targetX, targetY).sub(origin);
+        float step = levelManager.cellSize / 2f;
+        PVector stepDifferenceVector = differenceVector.copy().normalize().mult(step);
+        int numberOfIterations = (int)(differenceVector.mag() / step);
+        
+        for (int i = 0; i < numberOfIterations; i++) {
+            PVector positionToCheck = origin.copy().add(differenceVector);
+            hitDetection((int)positionToCheck.x,(int)positionToCheck.y);
+            differenceVector.sub(stepDifferenceVector);
+        }
+    }
+    
+    void render() {
+        strokeWeight(height / 100f);
+        stroke(laserColour, 255 - (255 * (float)((millis() - timeFired) / lifetime)));
+        line((int)position.x,(int)position.y, targetX, targetY);
+    }
+}
+
+class EMPCannonLaser extends Laser{
+    public EMPCannonLaser(int x, int y, PVector velocity, int damage, boolean friendly, color laserColour) {
+        super(x,y,velocity,damage,friendly,laserColour);
+    }
+    
+    void spawnBursts() {
+        for (int burst = 0; burst < 5; burst++) {
+            PVector alteredShotVelocity = rotateVectorRandomly(velocity, 360);
+            new Laser((int)position.x,(int)position.y,alteredShotVelocity,damage / 5,50.0,friendly,laserColour);
+        }
+    }
+    
+    void destroy() {
+        // Spawn bursts around the impact point.
+        spawnBursts();
+        super.destroy();
+    }
+}
+
+class Laser extends LaserBase {
     PVector velocity;
     PVector renderOffset;
-    final int damage;
-    final boolean friendly;
-    final color laserColour;
     
-    public Laser(int x, int y, PVector velocity, int damage, boolean friendly, color laserColour) {
-        super(x,y);
+    public Laser(int x, int y, PVector velocity, int damage, double lifetime, boolean friendly, color laserColour) {
+        super(x,y,damage,0,lifetime,friendly,laserColour);
         this.velocity = velocity;
         this.renderOffset = velocity.copy().normalize().mult(0.01f * height);
-        this.damage = damage;
-        this.friendly = friendly;
-        this.laserColour = laserColour;
+    }
+    
+    public Laser(int x, int y, PVector velocity, int damage, boolean friendly, color laserColour) {
+        this(x,y,velocity,damage,10000.0,friendly,laserColour);
     }
     
     void update() {
+        super.update();
         position.add(velocity);
-        
-        LevelManager levelManager = ((Robotron)currentScene).levelManager;
-        if (levelManager.collisionCheck((int)position.x,(int)position.y) || Utility.outOfBounds(this, renderOffset.mag() * 2)) {
-            int gridX = levelManager.screenToGridX((int) position.x);
-            int gridY = levelManager.screenToGridY((int) position.y);
-            if (levelManager.grid[gridY][gridX] instanceof Electrode) {
-               ((Electrode)levelManager.grid[gridY][gridX]).convert();
-            }
-            destroy();
-        }
-        else if (friendly) {
-            Iterator<Enemy> iterator = ((Robotron)currentScene).levelManager.ENEMIES.iterator();
-            while(iterator.hasNext()) {
-                Enemy enemy = iterator.next();
-                if (touchingTarget(enemy)) {
-                    enemy.damage(damage);
-                    this.destroy();
-                }
-            }
-        }
-        else {
-            if (touchingTarget(levelManager.player)) {
-                levelManager.player.damage(damage);
-                this.destroy();
-            }
-        }
-    }
-    
-    boolean touchingTarget(Character target) {
-        float radius = target.size / 2;
-        return abs(target.position.x - position.x) < radius && abs(target.position.y - position.y) < radius;
+        hitDetection();
     }
     
     void render() {
         strokeWeight(height / 150f);
         stroke(laserColour);
         line(position.x - renderOffset.x, position.y - renderOffset.y, position.x + renderOffset.x, position.y + renderOffset.y);
+    }
+}
+
+abstract class LaserBase extends GameObject {
+    final int damage;
+    int pierce;
+    final boolean friendly;
+    final color laserColour;
+    
+    double timeFired;
+    double lifetime = 1000.0;
+    
+    public LaserBase(int x, int y, int damage, int pierce, double lifetime, boolean friendly, color laserColour) {
+        super(x,y);
+        this.damage = damage;
+        this.pierce = pierce;
+        this.lifetime = lifetime;
+        this.friendly = friendly;
+        this.laserColour = laserColour;
+        timeFired = millis();
+    }
+    
+    void hitDetection() {
+        hitDetection((int)position.x,(int)position.y);
+    }
+    
+    void hitDetection(int x, int y) {        
+        LevelManager levelManager = ((Robotron)currentScene).levelManager;
+        if (levelManager.collisionCheck(x,y)) { // || Utility.outOfBounds(this, renderOffset.mag() * 2)
+            int gridX = levelManager.screenToGridX((int) position.x);
+            int gridY = levelManager.screenToGridY((int) position.y);
+            if (levelManager.grid[gridY][gridX] instanceof Electrode) {
+               ((Electrode)levelManager.grid[gridY][gridX]).convert();
+            }
+            decrementPierce();
+        }
+        else if (friendly) {
+            Iterator<Enemy> iterator = ((Robotron)currentScene).levelManager.ENEMIES.iterator();
+            while(iterator.hasNext()) {
+                Enemy enemy = iterator.next();
+                checkTarget(x,y,enemy);
+            }
+        }
+        else {
+            checkTarget(x,y,levelManager.player);
+        }
+    }
+    
+    void checkTarget(int x, int y, Character target) {
+        if (touchingTarget(x,y,target)) {
+            target.damage(damage);
+            decrementPierce();
+        }
+    }
+    
+    boolean touchingTarget(int x, int y, Character target) {
+        float radius = target.size / 2;
+        return abs(target.position.x - x) < radius && abs(target.position.y - y) < radius;
+    }
+    
+    void decrementPierce() {
+        pierce--;
+        if (pierce < 0) {
+            destroy();
+        }
+    }
+    
+    void update() {
+        if (millis() - timeFired > lifetime) {
+            destroy();
+        }
     }
 }

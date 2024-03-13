@@ -28,9 +28,61 @@ class Rifle extends Weapon {
     protected void fire(int targetX, int targetY) {
         PVector shotVelocity = new PVector(targetX, targetY).sub(position.x, position.y);
         shotVelocity.normalize();
-        shotVelocity.mult(0.02f * height);
+        shotVelocity.mult(0.025f * height);
         
         new Laser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, true, shotColour);
+    }
+}
+
+class PulseCannon extends Weapon {
+    public PulseCannon(PVector ownerPosition, color shotColour) {
+        super(ownerPosition, shotColour, 8, 75.0, 1000.0, false, 10);
+    }
+    
+    protected void fire(int targetX, int targetY) {
+        // LevelManager levelManager = ((Robotron)currentScene).levelManager;
+        PVector shotVelocity = new PVector(targetX, targetY).sub(position.x, position.y);
+        shotVelocity.normalize();
+        for (int pellet = 0; pellet < 12; pellet++) {
+            // Slightly edit the angle for each shot.
+            PVector alteredShotVelocity = rotateVectorRandomly(shotVelocity, 10);
+            
+            // Set the speed of the shot and shoot it.
+            alteredShotVelocity.mult(0.015f * height);
+            new Laser((int)position.x,(int)position.y, alteredShotVelocity, damage * damageMultiplier, true, shotColour);
+        }
+    }
+}
+
+PVector rotateVectorRandomly(PVector vector, int maxAngle) {
+    float angleDegrees = random( -maxAngle, maxAngle);
+    double angleRadians = Math.toRadians(angleDegrees);
+    double newX = vector.x * Math.cos(angleRadians) - vector.y * Math.sin(angleRadians);
+    double newY = vector.x * Math.sin(angleRadians) + vector.y * Math.cos(angleRadians);
+    return new PVector((float)newX,(float)newY);
+}
+
+class Railgun extends Weapon {
+    public Railgun(PVector ownerPosition, color shotColour) {
+        super(ownerPosition, shotColour, 3, 250.0, 5000.0, false, 100);
+    }
+    
+    protected void fire(int targetX, int targetY) {        
+        new RailgunLaser((int)position.x,(int)position.y, targetX, targetY, damage * damageMultiplier, true, shotColour);
+    }
+}
+
+class EMPCannon extends Weapon {
+    public EMPCannon(PVector ownerPosition, color shotColour) {
+        super(ownerPosition, shotColour, 6, 150.0, 2500.0, false, 200);
+    }
+    
+    protected void fire(int targetX, int targetY) {
+        PVector shotVelocity = new PVector(targetX, targetY).sub(position.x, position.y);
+        shotVelocity.normalize();
+        shotVelocity.mult(0.025f * height);
+        
+        new EMPCannonLaser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, true, shotColour);
     }
 }
 

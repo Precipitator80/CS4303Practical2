@@ -33,6 +33,15 @@ class Player extends Character {
             else if (weaponType.equals(Rifle.class)) {
                 weapon = new Rifle(position, playerColour);
             }
+            else if (weaponType.equals(PulseCannon.class)) {
+                weapon = new PulseCannon(position, playerColour);
+            }
+            else if (weaponType.equals(Railgun.class)) {
+                weapon = new Railgun(position, playerColour);
+            }
+            else if (weaponType.equals(EMPCannon.class)) {
+                weapon = new EMPCannon(position, playerColour);
+            }
             if (weapon != null) {
                 weapons.add(weapon);
                 currentWeapon = weapon;

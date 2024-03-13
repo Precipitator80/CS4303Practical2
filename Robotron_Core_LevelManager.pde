@@ -50,6 +50,50 @@ class LevelManager {
         this.screenYOffset = (height - cellSize * ySize) / 2;
     }
     
+    Item spawnRandomItem(int x, int y) {
+        if (fiftyFifty()) {// Spawn a weapon.
+            return spawnRandomWeaponItem(x,y);
+        }
+        else{ // Spawn a power-up.
+            return spawnRandomPowerUp(x,y);
+        }
+    }
+    
+    WeaponItem spawnRandomWeaponItem(int x, int y) {
+        int random  = (int) random(4);
+        WeaponItem item;
+        switch(random) {
+            case 0:
+                item = new WeaponItem(x,y,PulseCannon.class);
+                break;
+            case 1:
+                item = new WeaponItem(x,y,Railgun.class);
+                break;
+            case 2:
+                item = new WeaponItem(x,y,EMPCannon.class);
+                break;
+            default:
+            item = new WeaponItem(x,y,Rifle.class);
+        }
+        return item;
+    }
+    
+    Item spawnRandomPowerUp(int x, int y) {
+        int random = (int) random(3);
+        Item item;
+        switch(random) {
+            case 0:
+                item = new SpeedBoostItem(x,y);
+                break;
+            case 1:
+                item = new DamageBoostItem(x,y);
+                break;
+            default:
+            item = new FreezeItem(x,y);
+        }
+        return item;
+    }
+    
     boolean fiftyFifty() {
         return(int)random(2) == 1;
     }
