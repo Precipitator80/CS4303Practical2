@@ -76,11 +76,11 @@ class LevelManager {
         spawnedLevel = false;
         workingGrid = new CellType[ySize][xSize];
         
-        // Delete all lasers.
+        // Delete all lasers, NPCs and items.
         Iterator<GameObject> iterator = gameObjects().iterator();
         while(iterator.hasNext()) {
             GameObject gameObject = iterator.next();
-            if (gameObject instanceof Laser || gameObject instanceof NPC) {
+            if (gameObject instanceof Laser || gameObject instanceof NPC || gameObject instanceof Item) {
                 gameObject.destroy();
             }
         }
