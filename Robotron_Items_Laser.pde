@@ -3,8 +3,8 @@ class RailgunLaser extends LaserBase {
     int targetY;
     PVector lengthVector;
     
-    public RailgunLaser(int x, int y, int targetX, int targetY, int damage, boolean friendly) {
-        super(x,y,damage,100,1000.0,friendly,Graphics.playerLaser);
+    public RailgunLaser(int x, int y, int targetX, int targetY, int damage, float breadthMultiplier, boolean friendly) {
+        super(x,y,damage,breadthMultiplier,100,1000.0,friendly,Graphics.playerLaser);
         this.targetX = targetX;
         this.targetY = targetY;
         raycastHitDetection();
@@ -54,15 +54,15 @@ class RailgunLaser extends LaserBase {
     }
 }
 
-class EMPCannonLaser extends Laser{
-    public EMPCannonLaser(int x, int y, PVector velocity, int damage, boolean friendly) {
-        super(x,y,velocity,damage,friendly);
+class EMPCannonLaser extends Laser {
+    public EMPCannonLaser(int x, int y, PVector velocity, int damage, float breadthMultiplier, boolean friendly) {
+        super(x,y,velocity,damage,breadthMultiplier,friendly);
     }
     
     void spawnBursts() {
         for (int burst = 0; burst < 15; burst++) {
             PVector alteredShotVelocity = rotateVectorRandomly(velocity, 360);
-            new Laser((int)position.x,(int)position.y,alteredShotVelocity,damage / 5,50.0,friendly);
+            new Laser((int)position.x,(int)position.y,alteredShotVelocity,damage / 5,0.75f,50.0,friendly);
         }
     }
     
@@ -76,13 +76,13 @@ class EMPCannonLaser extends Laser{
 class Laser extends LaserBase {
     PVector velocity;
     
-    public Laser(int x, int y, PVector velocity, int damage, double lifetime, boolean friendly) {
-        super(x,y,damage,0,lifetime,friendly,friendly ? Graphics.playerLaser : Graphics.enemyLaser);
+    public Laser(int x, int y, PVector velocity, int damage, float breadthMultiplier, double lifetime, boolean friendly) {
+        super(x,y,damage,breadthMultiplier,0,lifetime,friendly,friendly ? Graphics.playerLaser : Graphics.enemyLaser);
         this.velocity = velocity;
     }
     
-    public Laser(int x, int y, PVector velocity, int damage, boolean friendly) {
-        this(x,y,velocity,damage,10000.0,friendly);
+    public Laser(int x, int y, PVector velocity, int damage, float breadthMultiplier, boolean friendly) {
+        this(x,y,velocity,damage,breadthMultiplier,10000.0,friendly);
     }
     
     void update() {
@@ -113,14 +113,14 @@ abstract class LaserBase extends GameObject {
     double lifetime = 1000.0;
     
     PImage image;
-    public LaserBase(int x, int y, int damage, int pierce, double lifetime, boolean friendly, PImage image) {
+    public LaserBase(int x, int y, int damage, float breadthMultiplier, int pierce, double lifetime, boolean friendly, PImage image) {
         super(x,y);
         this.damage = damage;
         this.pierce = pierce;
         this.lifetime = lifetime;
         this.friendly = friendly;
         this.image = image;
-        breadth = 0.01f * height;
+        breadth = 0.01f * height * breadthMultiplier;
         length = 2.5f * breadth;
         timeFired = millis();
     }
@@ -159,8 +159,9 @@ abstract class LaserBase extends GameObject {
     }
     
     boolean touchingTarget(int x, int y, Character target) {
-        float radius = target.size / 2;
-        return abs(target.position.x - x) < radius && abs(target.position.y - y) < radius;
+        //float radius = target.size / 2;
+        //return abs(target.position.x - x) < radius + breadth / 2 && abs(target.position.y - y) < radius + breadth / 2;
+        return new PVector(x,y).sub(target.position).mag() < target.size / 2 + breadth / 2;
     }
     
     void decrementPierce() {

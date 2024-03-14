@@ -18,7 +18,7 @@ class Pistol extends Weapon {
         shotVelocity.normalize();
         shotVelocity.mult(0.015f * height);
         
-        new Laser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, true);
+        new Laser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, 1f, true);
     }
 }
 
@@ -32,7 +32,7 @@ class Rifle extends Weapon {
         shotVelocity.normalize();
         shotVelocity.mult(0.025f * height);
         
-        new Laser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, true);
+        new Laser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, 1.5f, true);
     }
 }
 
@@ -51,7 +51,7 @@ class PulseCannon extends Weapon {
             
             // Set the speed of the shot and shoot it.
             alteredShotVelocity.mult(0.015f * height);
-            new Laser((int)position.x,(int)position.y, alteredShotVelocity, damage * damageMultiplier, true);
+            new Laser((int)position.x,(int)position.y, alteredShotVelocity, damage * damageMultiplier, 0.85f, true);
         }
     }
 }
@@ -70,7 +70,7 @@ class Railgun extends Weapon {
     }
     
     protected void fire(int targetX, int targetY) {        
-        new RailgunLaser((int)position.x,(int)position.y, targetX, targetY, damage * damageMultiplier, true);
+        new RailgunLaser((int)position.x,(int)position.y, targetX, targetY, damage * damageMultiplier, 3f, true);
     }
 }
 
@@ -84,7 +84,7 @@ class EMPCannon extends Weapon {
         shotVelocity.normalize();
         shotVelocity.mult(0.025f * height);
         
-        new EMPCannonLaser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, true);
+        new EMPCannonLaser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, 2f, true);
     }
 }
 
@@ -125,7 +125,7 @@ abstract class Weapon extends GameObject implements Comparable<Weapon> {
         double elapsedSinceFired = current - lastFired;
         if (elapsedSinceFired > fireDelay && (currentShots > 0 || maxShots == 0)) {
             fire(targetX, targetY);
-            if (maxShots > 0) {
+            if (maxShots > 0 && !((Robotron)currentScene).OptionsMenu.infiniteAmmo.value) {
                 currentShots--;
             }
             lastFired = current;

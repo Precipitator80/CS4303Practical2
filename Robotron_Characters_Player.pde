@@ -41,10 +41,15 @@ class Player extends Character {
         weaponMap = new HashMap<Integer, Weapon>();
         
         // Give the player their starting weapon.
-        currentWeapon = new Pistol(position);
-        weapons.add(currentWeapon);
-        weaponMap.put(currentWeapon.code, currentWeapon);
+        giveWeapon(Pistol.class);
         livesUsed = 0;
+        
+        if (((Robotron)currentScene).OptionsMenu.allWeaponsAtStart.value) {
+            giveWeapon(Rifle.class);
+            giveWeapon(PulseCannon.class);
+            giveWeapon(Railgun.class);
+            giveWeapon(EMPCannon.class);
+        }
     }
     
     void giveWeapon(Class<? extends Weapon> weaponType) {

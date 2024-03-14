@@ -79,15 +79,27 @@ abstract class Menu extends UIItem {
 }
 
 class OptionsMenu extends Menu {
-    //public BoolButton hybridControlScheme;
+    public BoolButton allWeaponsAtStart;
+    public BoolButton infiniteAmmo;
+    public FloatButton creditsMultiplier;
+    public FloatButton enemySpawnCountMultiplier;
+    public FloatButton powerUpTimeMultiplier;
+    public FloatButton playerWeaponDamageMultiplier;
+    public FloatButton playerSpeedMultiplier;
+    public FloatButton enemyMeleeDamageMultiplier;
+    public FloatButton enemyLaserDamageMultiplier;
+    public FloatButton enemySpeedMultiplier;
     
     public OptionsMenu() {
         super("Options");
     }
     
     void initialise() {
-        //hybridControlScheme = new BoolButton((int)position.x,(int)position.y, "Hybrid Bomb Explosion Order", true);
-        //menuItems.add(hybridControlScheme);
+        allWeaponsAtStart = new BoolButton((int)position.x,(int)position.y, "All Weapons At Start", false);
+        menuItems.add(allWeaponsAtStart);
+        
+        infiniteAmmo = new BoolButton((int)position.x,(int)position.y, "Infinite Ammo", false);
+        menuItems.add(infiniteAmmo);
     }
     
     void hide() {

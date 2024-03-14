@@ -129,7 +129,7 @@ abstract class ShootingEnemy extends Enemy {
             shotVelocity.normalize();
             shotVelocity.mult(0.015f * height);
             
-            new Laser((int)position.x,(int)position.y, shotVelocity, damage, false);
+            new Laser((int)position.x,(int)position.y, shotVelocity, damage, 1f, false);
             lastShotTime = millis();
         }
     }
