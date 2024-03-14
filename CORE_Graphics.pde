@@ -2,6 +2,7 @@ public class Graphics {
     // Tiles and still enemies.
     PImage wall;
     PImage floor;
+    PImage electrode;
     PImage turretRobot;
     
     // Weapons
@@ -55,6 +56,7 @@ public class Graphics {
             // Tiles and still enemies.
             wall = loadImage("wall.png");
             floor = loadImage("floor.png");
+            electrode = loadImage("electrode.png");
             turretRobot = loadImage("turretRobot.png");
             
             // Weapons

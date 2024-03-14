@@ -54,6 +54,12 @@ class Empty extends Cell {
 class Electrode extends Cell {
     public Electrode(int gridX, int gridY, int screenX, int screenY, int width) {
         super(gridX, gridY, screenX, screenY, width, true, true, true);
+        
+        // Update path finder if required.
+        LevelManager levelManager = ((Robotron)currentScene).levelManager;
+        if (levelManager.pathFinder != null) {
+            levelManager.pathFinder.graph[gridY][gridX] = null;
+        }
     }
     
     void collide(Character character) {
@@ -66,12 +72,9 @@ class Electrode extends Cell {
     }
     
     void render() {
-        // Red square for now.
-        rectMode(CENTER);
-        strokeWeight(0);
-        stroke(255,0,0);
-        fill(255,0,0);
-        rect(screenX, screenY, width, width);
+        imageMode(CENTER);
+        tint(255);
+        image(Graphics.electrode, screenX, screenY, width, width);
     }
 }
 
