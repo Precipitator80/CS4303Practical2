@@ -6,6 +6,8 @@ class Player extends Character {
     private Map<Integer, Weapon> weaponMap;
     List<Weapon> weapons;
     
+    int livesLeft;
+    
     boolean moveUp;
     boolean moveLeft;
     boolean moveDown;
@@ -84,6 +86,15 @@ class Player extends Character {
         int charValue = (int) key;
         if (weaponMap.containsKey(charValue)) {
             currentWeapon = weaponMap.get(charValue);
+        }
+    }
+    
+    void despawn() {
+        if (livesLeft > 0) {
+            respawn();
+        }
+        else{
+            super.despawn();
         }
     }
     
