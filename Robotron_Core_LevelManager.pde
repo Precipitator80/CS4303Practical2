@@ -25,7 +25,6 @@ class LevelManager {
     
     // Wave parameters.
     LevelState state = LevelState.WELCOME;
-    int numberOfEnemies = 10;
     int wave = 0;
     private int score = 0;
     
@@ -329,7 +328,7 @@ class LevelManager {
         wave = 0;
         score = 0;
         player.reset();
-        //ShopMenu.resetListings();
+       ((Robotron)currentScene).ShopMenu.resetListings();
     }
     
     void update() {
@@ -340,6 +339,7 @@ class LevelManager {
                     state = LevelState.GAME_OVER;
                 }
                 if (ENEMIES.isEmpty()) {
+                   ((Robotron)currentScene).ShopMenu.entryButton.show();
                     state = LevelState.POST_LEVEL;
                 }
                 break;

@@ -1,15 +1,24 @@
 public class Robotron extends Scene {
+    OptionsMenu OptionsMenu;
     LevelManager levelManager;
+    ShopMenu ShopMenu;
     
     AStarTester aStarTester;
     
     public Robotron() {
         super(color(255), color(128));
         
+        // Initialise the options menu.
+        OptionsMenu = new OptionsMenu();
+        OptionsMenu.entryButton.show();
+        
         // 16 by 9 times 2
         levelManager = new LevelManager(32, 19);
         levelManager.spawnLevel();
         levelManager.state = LevelState.WELCOME;
+        
+        // Initialise the shop.
+        ShopMenu = new ShopMenu();
     }
     
     void update() {
@@ -39,16 +48,18 @@ public class Robotron extends Scene {
         fill(255);
         textSize(height / 25);
         textAlign(CENTER);
-        switch(levelManager.state) {
-            case WELCOME : 
-                text("Welcome to Robotron: 4303!\nPress enter or space to start the game.", width / 2, height / 2);
-                break;
-            case POST_LEVEL : 
-                text("Wave " + levelManager.wave + " completed!\nPress enter or space to continue.", width / 2, height / 2);
-                break;
-            case GAME_OVER:
-                text("Game over!\nPress enter or space to restart.", width / 2, height / 2);
-                break;
+        if (!OptionsMenu.enabled && !ShopMenu.enabled) {
+            switch(levelManager.state) {
+                case WELCOME : 
+                    text("Welcome to Robotron: 4303!\nPress enter or space to start the game.", width / 2, height / 2);
+                    break;
+                case POST_LEVEL : 
+                    text("Wave " + levelManager.wave + " completed!\nPress enter or space to continue.", width / 2, height / 2);
+                    break;
+                case GAME_OVER:
+                    text("Game over!\nPress enter or space to restart.", width / 2, height / 2);
+                    break;
+            }
         }
         
         // Show the score.
@@ -78,17 +89,17 @@ public class Robotron extends Scene {
         switch(key) {
             case ' ':
                 case ENTER:
-                //if (!OptionsMenu.enabled() && !ShopMenu.enabled()) {
-                switch(levelManager.state) {
-                    case GAME_OVER:
-                    case WELCOME:
-                    levelManager.resetGame();
-                    case POST_LEVEL:
-                    //OptionsMenu.entryButton.hide();
-                    //ShopMenu.entryButton.hide();
-                    levelManager.spawnLevel();
-                    break;
-            //}
+                if (!OptionsMenu.enabled && !ShopMenu.enabled) {
+                    switch(levelManager.state) {
+                        case GAME_OVER:
+                        case WELCOME:
+                        levelManager.resetGame();
+                        case POST_LEVEL:
+                        OptionsMenu.entryButton.hide();
+                        ShopMenu.entryButton.hide();
+                        levelManager.spawnLevel();
+                        break;
+                }
             }
             break;
             case 'm':

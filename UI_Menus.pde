@@ -36,6 +36,10 @@ abstract class Menu extends UIItem {
         for (int i = 0; i < menuItems.size();i++) {
             menuItems.get(i).place((int)position.x,(int)position.y + textYOffset + (i + 1) * (itemHeight + itemHeight / (menuItems.size() + 1)), itemWidth, itemHeight, textSize);
         }
+        
+        // Hide everything to start.
+        hide();
+        entryButton.hide();
     }
     
     abstract void initialise();
