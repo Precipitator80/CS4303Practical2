@@ -1,9 +1,5 @@
 abstract class Character extends GameObject {
     PVector velocity;
-    boolean moveUp;
-    boolean moveLeft;
-    boolean moveDown;
-    boolean moveRight;
     float movementSpeed;
     
     int maxHP;

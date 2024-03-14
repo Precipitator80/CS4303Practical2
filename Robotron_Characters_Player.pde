@@ -6,9 +6,21 @@ class Player extends Character {
     private Map<Integer, Weapon> weaponMap;
     List<Weapon> weapons;
     
+    boolean moveUp;
+    boolean moveLeft;
+    boolean moveDown;
+    boolean moveRight;
+    
+    PVector shootingDirection;
+    boolean shootUp;
+    boolean shootLeft;
+    boolean shootDown;
+    boolean shootRight;
+    
     public Player(int x, int y) {
         super(x,y,Graphics.playerAnimator,100,0.008f);
         reset();
+        shootingDirection = new PVector();
     }
     
     void respawn(int x, int y) {
@@ -75,6 +87,15 @@ class Player extends Character {
         }
     }
     
+    void update() {
+        super.update();
+        if (alive()) {
+            if (shootingDirection.mag() > 0) {
+                currentWeapon.tryToFire((int)(position.x + shootingDirection.x),(int)(position.y + shootingDirection.y));
+            }
+        }
+    }
+    
     void render() {
         if (alive()) {
             super.render();
@@ -128,7 +149,10 @@ class Player extends Character {
         }
     }
     
-    void checkMovementKeys(boolean pressed) {
+    void checkKeys(boolean pressed) {
+        if (pressed) { 
+            checkWeaponSwitch();
+        }
         switch(key) {
             case 'w':
                 moveUp = pressed;
@@ -143,7 +167,39 @@ class Player extends Character {
                 moveRight = pressed;
                 break;
         }
+        switch(keyCode) {
+            case UP:
+                shootUp = pressed;
+                break;
+            case LEFT:
+                shootLeft = pressed;
+                break;
+            case DOWN:
+                shootDown = pressed;
+                break;
+            case RIGHT:
+                shootRight = pressed;
+                break;                
+        }
+        updateKeyboardFiring();
         updateVelocity();
+    }
+    
+    void updateKeyboardFiring() {
+        shootingDirection.set(0, 0);
+        if (shootUp) {
+            shootingDirection.add(0, -1);
+        }
+        if (shootLeft) {
+            shootingDirection.add( -1, 0);
+        }
+        if (shootDown) {
+            shootingDirection.add(0, 1);
+        }
+        if (shootRight) {
+            shootingDirection.add(1, 0);
+        }
+        shootingDirection.mult(width + height);
     }
     
     void updateVelocity() {

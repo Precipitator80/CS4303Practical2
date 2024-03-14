@@ -72,8 +72,7 @@ public class Robotron extends Scene {
     }
     
     void keyPressed() {
-        levelManager.player.checkMovementKeys(true);
-        levelManager.player.checkWeaponSwitch();
+        levelManager.player.checkKeys(true);
         
         switch(key) {
             case ' ':
@@ -95,7 +94,7 @@ public class Robotron extends Scene {
     }
     
     void keyReleased() {
-        levelManager.player.checkMovementKeys(false);
+        levelManager.player.checkKeys(false);
         if (DEBUG_MODE) {
             aStarTester.keyReleased();
         }
