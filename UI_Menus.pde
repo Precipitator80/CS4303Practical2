@@ -7,6 +7,7 @@ abstract class Menu extends UIItem {
     Button entryButton;
     Button exitButton;
     color fillColour;
+    float strokeWeight;
     
     public Menu(String name) {
         this(name,(4 * width) / 5,height / 10);
@@ -21,6 +22,7 @@ abstract class Menu extends UIItem {
         entryButton = new EntryButton(entryButtonX, entryButtonY, this);
         exitButton = new ExitButton((int)position.x,(int)position.y, this);
         this.fillColour = fillColour;
+        this.strokeWeight = height / 150f;
         
         // Initialise menu items.
         menuItems = new ArrayList<UIItem>();
@@ -49,6 +51,7 @@ abstract class Menu extends UIItem {
     }
     
     void render() {
+        strokeWeight(strokeWeight);
         stroke(strokeColour);
         fill(fillColour);
         rectMode(CENTER);

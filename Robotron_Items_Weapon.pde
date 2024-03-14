@@ -24,7 +24,7 @@ class Pistol extends Weapon {
 
 class Rifle extends Weapon {
     public Rifle(PVector ownerPosition, color shotColour) {
-        super('2', Graphics.rifle, ownerPosition, shotColour, 50, 75.0, 300.0, 35);
+        super('2', Graphics.rifle, ownerPosition, shotColour, 30, 75.0, 250.0, 50);
     }
     
     protected void fire(int targetX, int targetY) {

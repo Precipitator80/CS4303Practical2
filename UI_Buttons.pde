@@ -31,6 +31,7 @@ abstract class Button extends UIItem  {
     public boolean mouseOver;
     SoundFile clickSound;
     color strokeColour;
+    float strokeWeight;
     color fillColour;
     
     public Button(int x, int y, String text, SoundFile clickSound) {
@@ -42,6 +43,7 @@ abstract class Button extends UIItem  {
         this.clickSound = clickSound;
         this.fillColour = fillColour;
         this.strokeColour = strokeColour;
+        this.strokeWeight = height / 150f;
         buttons().add(this);
     }
     
@@ -52,6 +54,7 @@ abstract class Button extends UIItem  {
     
     void onClick() {
         clickSound.play(1, 0.2f);
+        mouseOver = false; // Refresh the state of the button.
     }
     
     void update() {
@@ -64,6 +67,7 @@ abstract class Button extends UIItem  {
     }
     
     void render() {
+        strokeWeight(strokeWeight);
         stroke(strokeColour);
         fill(fillColour);
         rectMode(CENTER);
