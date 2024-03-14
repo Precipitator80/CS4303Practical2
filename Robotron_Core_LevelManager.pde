@@ -322,6 +322,7 @@ class LevelManager {
     
     public void addPoints(int points) {
         score += points * pointsMultiplier;
+        player.livesGained = score / 25000 + player.startingLives;
     }
     
     void resetGame() {

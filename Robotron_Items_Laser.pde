@@ -37,7 +37,7 @@ class EMPCannonLaser extends Laser{
     }
     
     void spawnBursts() {
-        for (int burst = 0; burst < 5; burst++) {
+        for (int burst = 0; burst < 15; burst++) {
             PVector alteredShotVelocity = rotateVectorRandomly(velocity, 360);
             new Laser((int)position.x,(int)position.y,alteredShotVelocity,damage / 5,50.0,friendly,laserColour);
         }

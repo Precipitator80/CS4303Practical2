@@ -15,8 +15,9 @@ public class Robotron extends Scene {
     void update() {
         super.update();
         levelManager.update();
-        if (levelManager.player.alive() && !levelManager.player.frozen && BUTTON_MANAGER.mouseDown && levelManager.player.currentWeapon.automatic) {
-            levelManager.player.currentWeapon.tryToFire(mouseX, mouseY);
+        Player player = levelManager.player;
+        if (player.alive() && !player.frozen && BUTTON_MANAGER.mouseDown && mouseButton == LEFT) {
+            player.currentWeapon.tryToFire(mouseX, mouseY);
         }
     }
     
@@ -53,13 +54,13 @@ public class Robotron extends Scene {
         // Show the score.
         if (levelManager.state != LevelState.WELCOME) {
             textAlign(LEFT);
-            text("Score: " + levelManager.score + "\nWave: " + levelManager.wave, width / 100, height / 25);
+            text("Score: " + levelManager.score + "\nWave: " + levelManager.wave + "\nLives: " + levelManager.player.livesLeft(), width / 100, height / 25);
         }
     }
     
     void mousePressed() {
         super.mousePressed();
-        if (levelManager.player.alive() && !levelManager.player.frozen) {
+        if (levelManager.player.alive() && !levelManager.player.frozen && mouseButton == RIGHT) {
             levelManager.player.currentWeapon.tryToFire(mouseX, mouseY);
         }
     }
@@ -90,6 +91,9 @@ public class Robotron extends Scene {
             //}
             }
             break;
+            case 'm':
+                levelManager.spawnLevel();
+                break;
         }
     }
     

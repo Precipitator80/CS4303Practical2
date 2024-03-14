@@ -6,7 +6,9 @@ class Player extends Character {
     private Map<Integer, Weapon> weaponMap;
     List<Weapon> weapons;
     
-    int livesLeft;
+    int startingLives = 2;
+    int livesGained;
+    int livesUsed;
     
     boolean moveUp;
     boolean moveLeft;
@@ -41,6 +43,7 @@ class Player extends Character {
         currentWeapon = new Pistol(position, playerColour);
         weapons.add(currentWeapon);
         weaponMap.put(currentWeapon.code, currentWeapon);
+        livesUsed = 0;
     }
     
     void giveWeapon(Class<? extends Weapon> weaponType) {
@@ -90,12 +93,20 @@ class Player extends Character {
     }
     
     void despawn() {
-        if (livesLeft > 0) {
-            respawn();
+        if (livesLeft() > 0) {
+            int x = (int)position.x;
+            int y = (int)position.y;
+            respawn(x,y);
+            new FreezeItem(x,y).giveItem(this);
+            livesUsed++;
         }
         else{
             super.despawn();
         }
+    }
+    
+    int livesLeft() {
+        return livesGained - livesUsed;
     }
     
     void update() {
@@ -164,36 +175,52 @@ class Player extends Character {
         if (pressed) { 
             checkWeaponSwitch();
         }
+        
+        boolean updatedMovement = false;
         switch(key) {
             case 'w':
                 moveUp = pressed;
+                updatedMovement = true;
                 break;
             case 'a':
                 moveLeft = pressed;
+                updatedMovement = true;
                 break;
             case 's':
                 moveDown = pressed;
+                updatedMovement = true;
                 break;
             case 'd':
                 moveRight = pressed;
+                updatedMovement = true;
                 break;
         }
+        if (updatedMovement) {
+            updateVelocity();
+        }
+        
+        boolean updatedShooting = false;
         switch(keyCode) {
             case UP:
                 shootUp = pressed;
+                updatedShooting = true;
                 break;
             case LEFT:
                 shootLeft = pressed;
+                updatedShooting = true;
                 break;
             case DOWN:
                 shootDown = pressed;
+                updatedShooting = true;
                 break;
             case RIGHT:
                 shootRight = pressed;
+                updatedShooting = true;
                 break;                
         }
-        updateKeyboardFiring();
-        updateVelocity();
+        if (updatedShooting) {
+            updateKeyboardFiring();
+        }
     }
     
     void updateKeyboardFiring() {

@@ -10,7 +10,7 @@ enum WeaponType {
 
 class Pistol extends Weapon {
     public Pistol(PVector ownerPosition, color shotColour) {
-        super('1', Graphics.pistol, ownerPosition, shotColour, 0, 60.0, 0.0, true, 25);
+        super('1', Graphics.pistol, ownerPosition, shotColour, 0, 60.0, 0.0, 25);
     }
     
     protected void fire(int targetX, int targetY) {
@@ -24,7 +24,7 @@ class Pistol extends Weapon {
 
 class Rifle extends Weapon {
     public Rifle(PVector ownerPosition, color shotColour) {
-        super('2', Graphics.rifle, ownerPosition, shotColour, 30, 75.0, 300.0, true, 35);
+        super('2', Graphics.rifle, ownerPosition, shotColour, 50, 75.0, 300.0, 35);
     }
     
     protected void fire(int targetX, int targetY) {
@@ -38,7 +38,7 @@ class Rifle extends Weapon {
 
 class PulseCannon extends Weapon {
     public PulseCannon(PVector ownerPosition, color shotColour) {
-        super('3', Graphics.pulseCannon, ownerPosition, shotColour, 8, 75.0, 1000.0, false, 10);
+        super('3', Graphics.pulseCannon, ownerPosition, shotColour, 8, 150.0, 1000.0, 10);
     }
     
     protected void fire(int targetX, int targetY) {
@@ -66,7 +66,7 @@ PVector rotateVectorRandomly(PVector vector, int maxAngle) {
 
 class Railgun extends Weapon {
     public Railgun(PVector ownerPosition, color shotColour) {
-        super('4', Graphics.railgun, ownerPosition, shotColour, 3, 250.0, 5000.0, false, 100);
+        super('4', Graphics.railgun, ownerPosition, shotColour, 3, 500.0, 5000.0, 100);
     }
     
     protected void fire(int targetX, int targetY) {        
@@ -76,7 +76,7 @@ class Railgun extends Weapon {
 
 class EMPCannon extends Weapon {
     public EMPCannon(PVector ownerPosition, color shotColour) {
-        super('5', Graphics.empCannon, ownerPosition, shotColour, 6, 150.0, 2500.0, false, 200);
+        super('5', Graphics.empCannon, ownerPosition, shotColour, 6, 250.0, 2500.0, 200);
     }
     
     protected void fire(int targetX, int targetY) {
@@ -103,11 +103,10 @@ abstract class Weapon extends GameObject implements Comparable<Weapon> {
     final double rechargeDelay;
     double lastRecharged;
     
-    final boolean automatic;
     final int damage;
     int damageMultiplier = 1;
     
-    public Weapon(char code, PImage image, PVector ownerPosition, color shotColour, int maxShots, double fireDelay, double rechargeDelay, boolean automatic, int damage) {
+    public Weapon(char code, PImage image, PVector ownerPosition, color shotColour, int maxShots, double fireDelay, double rechargeDelay, int damage) {
         super(0,0);
         this.code = (int) code;
         this.image = image;
@@ -117,7 +116,6 @@ abstract class Weapon extends GameObject implements Comparable<Weapon> {
         this.currentShots = maxShots;
         this.fireDelay = fireDelay;
         this.rechargeDelay = rechargeDelay;
-        this.automatic = automatic;
         this.damage = damage;
     }
     
