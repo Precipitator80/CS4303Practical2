@@ -113,7 +113,6 @@ abstract class ShootingEnemy extends Enemy {
     double lastShotTime;
     double shotPeriod;
     int damage;
-    color laserColour = color(255,36,36);
     
     public ShootingEnemy(int x, int y, Animator animator, int hp, float movementSpeed, int points, boolean stationary, boolean attacksFamily, double shotPeriod, int damage, double meleePeriod, int meleeDamage) {
         super(x,y,animator,hp,movementSpeed,points,stationary,attacksFamily,meleePeriod,meleeDamage);
@@ -130,7 +129,7 @@ abstract class ShootingEnemy extends Enemy {
             shotVelocity.normalize();
             shotVelocity.mult(0.015f * height);
             
-            new Laser((int)position.x,(int)position.y, shotVelocity, damage, false, laserColour);
+            new Laser((int)position.x,(int)position.y, shotVelocity, damage, false);
             lastShotTime = millis();
         }
     }

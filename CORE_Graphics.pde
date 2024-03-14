@@ -5,6 +5,8 @@ public class Graphics {
     PImage turretRobot;
     
     // Weapons
+    PImage playerLaser;
+    PImage enemyLaser;
     PImage pistol;
     PImage rifle;
     PImage pulseCannon;
@@ -56,6 +58,8 @@ public class Graphics {
             turretRobot = loadImage("turretRobot.png");
             
             // Weapons
+            playerLaser = loadImage("playerLaser.png");
+            enemyLaser = loadImage("enemyLaser.png");
             pistol = loadImage("pistol.png");
             rifle = loadImage("rifle.png");
             pulseCannon = loadImage("pulseCannon.png");

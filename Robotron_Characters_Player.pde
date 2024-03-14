@@ -1,7 +1,7 @@
 import java.util.Map;
 
 class Player extends Character {
-    color playerColour = color(0,0,255);
+    color playerColour = color(0,0,160);
     Weapon currentWeapon;
     private Map<Integer, Weapon> weaponMap;
     List<Weapon> weapons;
@@ -40,7 +40,7 @@ class Player extends Character {
         weaponMap = new HashMap<Integer, Weapon>();
         
         // Give the player their starting weapon.
-        currentWeapon = new Pistol(position, playerColour);
+        currentWeapon = new Pistol(position);
         weapons.add(currentWeapon);
         weaponMap.put(currentWeapon.code, currentWeapon);
         livesUsed = 0;
@@ -50,19 +50,19 @@ class Player extends Character {
         Weapon weapon = getWeapon(weaponType);
         if (weapon == null) {
             if (weaponType.equals(Pistol.class)) {
-                weapon = new Pistol(position, playerColour);
+                weapon = new Pistol(position);
             }
             else if (weaponType.equals(Rifle.class)) {
-                weapon = new Rifle(position, playerColour);
+                weapon = new Rifle(position);
             }
             else if (weaponType.equals(PulseCannon.class)) {
-                weapon = new PulseCannon(position, playerColour);
+                weapon = new PulseCannon(position);
             }
             else if (weaponType.equals(Railgun.class)) {
-                weapon = new Railgun(position, playerColour);
+                weapon = new Railgun(position);
             }
             else if (weaponType.equals(EMPCannon.class)) {
-                weapon = new EMPCannon(position, playerColour);
+                weapon = new EMPCannon(position);
             }
             if (weapon != null) {
                 weapons.add(weapon);

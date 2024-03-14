@@ -1,11 +1,14 @@
 class RailgunLaser extends LaserBase {
     int targetX;
     int targetY;
+    PVector lengthVector;
     
-    public RailgunLaser(int x, int y, int targetX, int targetY, int damage, boolean friendly, color laserColour) {
-        super(x,y,damage,100,1000.0,friendly,laserColour);
+    public RailgunLaser(int x, int y, int targetX, int targetY, int damage, boolean friendly) {
+        super(x,y,damage,100,1000.0,friendly,Graphics.playerLaser);
         this.targetX = targetX;
         this.targetY = targetY;
+        lengthVector = new PVector(targetX, targetY).sub(position);
+        this.length = lengthVector.mag();
         raycastHitDetection();
     }
     
@@ -24,22 +27,26 @@ class RailgunLaser extends LaserBase {
         }
     }
     
-    void render() {
-        strokeWeight(height / 100f);
-        stroke(laserColour, 255 - (255 * (float)((millis() - timeFired) / lifetime)));
-        line((int)position.x,(int)position.y, targetX, targetY);
+    void render() {        
+        pushMatrix();
+        translate(position.x, position.y);
+        rotate(atan2(lengthVector.y, lengthVector.x));
+        imageMode(CENTER);
+        tint(255, 255 - (255 * (float)((millis() - timeFired) / lifetime)));
+        image(image, length / 2, 0, length, breadth);
+        popMatrix();
     }
 }
 
 class EMPCannonLaser extends Laser{
-    public EMPCannonLaser(int x, int y, PVector velocity, int damage, boolean friendly, color laserColour) {
-        super(x,y,velocity,damage,friendly,laserColour);
+    public EMPCannonLaser(int x, int y, PVector velocity, int damage, boolean friendly) {
+        super(x,y,velocity,damage,friendly);
     }
     
     void spawnBursts() {
         for (int burst = 0; burst < 15; burst++) {
             PVector alteredShotVelocity = rotateVectorRandomly(velocity, 360);
-            new Laser((int)position.x,(int)position.y,alteredShotVelocity,damage / 5,50.0,friendly,laserColour);
+            new Laser((int)position.x,(int)position.y,alteredShotVelocity,damage / 5,50.0,friendly);
         }
     }
     
@@ -52,16 +59,14 @@ class EMPCannonLaser extends Laser{
 
 class Laser extends LaserBase {
     PVector velocity;
-    PVector renderOffset;
     
-    public Laser(int x, int y, PVector velocity, int damage, double lifetime, boolean friendly, color laserColour) {
-        super(x,y,damage,0,lifetime,friendly,laserColour);
+    public Laser(int x, int y, PVector velocity, int damage, double lifetime, boolean friendly) {
+        super(x,y,damage,0,lifetime,friendly,friendly ? Graphics.playerLaser : Graphics.enemyLaser);
         this.velocity = velocity;
-        this.renderOffset = velocity.copy().normalize().mult(0.01f * height);
     }
     
-    public Laser(int x, int y, PVector velocity, int damage, boolean friendly, color laserColour) {
-        this(x,y,velocity,damage,10000.0,friendly,laserColour);
+    public Laser(int x, int y, PVector velocity, int damage, boolean friendly) {
+        this(x,y,velocity,damage,10000.0,friendly);
     }
     
     void update() {
@@ -71,9 +76,13 @@ class Laser extends LaserBase {
     }
     
     void render() {
-        strokeWeight(height / 150f);
-        stroke(laserColour);
-        line(position.x - renderOffset.x, position.y - renderOffset.y, position.x + renderOffset.x, position.y + renderOffset.y);
+        pushMatrix();
+        translate(position.x, position.y);
+        rotate(atan2(velocity.y, velocity.x));
+        imageMode(CENTER);
+        tint(255);
+        image(image, 0, 0, length, breadth);
+        popMatrix();
     }
 }
 
@@ -81,18 +90,22 @@ abstract class LaserBase extends GameObject {
     final int damage;
     int pierce;
     final boolean friendly;
-    final color laserColour;
+    float length;
+    float breadth;
     
     double timeFired;
     double lifetime = 1000.0;
     
-    public LaserBase(int x, int y, int damage, int pierce, double lifetime, boolean friendly, color laserColour) {
+    PImage image;
+    public LaserBase(int x, int y, int damage, int pierce, double lifetime, boolean friendly, PImage image) {
         super(x,y);
         this.damage = damage;
         this.pierce = pierce;
         this.lifetime = lifetime;
         this.friendly = friendly;
-        this.laserColour = laserColour;
+        this.image = image;
+        breadth = 0.01f * height;
+        length = 2.5f * breadth;
         timeFired = millis();
     }
     
@@ -102,7 +115,7 @@ abstract class LaserBase extends GameObject {
     
     void hitDetection(int x, int y) {        
         LevelManager levelManager = ((Robotron)currentScene).levelManager;
-        if (levelManager.collisionCheck(x,y)) { // || Utility.outOfBounds(this, renderOffset.mag() * 2)
+        if (levelManager.collisionCheck(x,y)) {
             int gridX = levelManager.screenToGridX((int) position.x);
             int gridY = levelManager.screenToGridY((int) position.y);
             if (levelManager.grid[gridY][gridX] instanceof Electrode) {

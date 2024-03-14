@@ -9,8 +9,8 @@ enum WeaponType {
 }
 
 class Pistol extends Weapon {
-    public Pistol(PVector ownerPosition, color shotColour) {
-        super('1', Graphics.pistol, ownerPosition, shotColour, 0, 60.0, 0.0, 25);
+    public Pistol(PVector ownerPosition) {
+        super('1', Graphics.pistol, ownerPosition, 0, 60.0, 0.0, 25);
     }
     
     protected void fire(int targetX, int targetY) {
@@ -18,13 +18,13 @@ class Pistol extends Weapon {
         shotVelocity.normalize();
         shotVelocity.mult(0.015f * height);
         
-        new Laser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, true, shotColour);
+        new Laser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, true);
     }
 }
 
 class Rifle extends Weapon {
-    public Rifle(PVector ownerPosition, color shotColour) {
-        super('2', Graphics.rifle, ownerPosition, shotColour, 30, 75.0, 250.0, 50);
+    public Rifle(PVector ownerPosition) {
+        super('2', Graphics.rifle, ownerPosition, 30, 75.0, 250.0, 50);
     }
     
     protected void fire(int targetX, int targetY) {
@@ -32,13 +32,13 @@ class Rifle extends Weapon {
         shotVelocity.normalize();
         shotVelocity.mult(0.025f * height);
         
-        new Laser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, true, shotColour);
+        new Laser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, true);
     }
 }
 
 class PulseCannon extends Weapon {
-    public PulseCannon(PVector ownerPosition, color shotColour) {
-        super('3', Graphics.pulseCannon, ownerPosition, shotColour, 8, 150.0, 1000.0, 10);
+    public PulseCannon(PVector ownerPosition) {
+        super('3', Graphics.pulseCannon, ownerPosition, 8, 150.0, 1000.0, 10);
     }
     
     protected void fire(int targetX, int targetY) {
@@ -51,7 +51,7 @@ class PulseCannon extends Weapon {
             
             // Set the speed of the shot and shoot it.
             alteredShotVelocity.mult(0.015f * height);
-            new Laser((int)position.x,(int)position.y, alteredShotVelocity, damage * damageMultiplier, true, shotColour);
+            new Laser((int)position.x,(int)position.y, alteredShotVelocity, damage * damageMultiplier, true);
         }
     }
 }
@@ -65,18 +65,18 @@ PVector rotateVectorRandomly(PVector vector, int maxAngle) {
 }
 
 class Railgun extends Weapon {
-    public Railgun(PVector ownerPosition, color shotColour) {
-        super('4', Graphics.railgun, ownerPosition, shotColour, 3, 500.0, 5000.0, 100);
+    public Railgun(PVector ownerPosition) {
+        super('4', Graphics.railgun, ownerPosition, 3, 500.0, 5000.0, 100);
     }
     
     protected void fire(int targetX, int targetY) {        
-        new RailgunLaser((int)position.x,(int)position.y, targetX, targetY, damage * damageMultiplier, true, shotColour);
+        new RailgunLaser((int)position.x,(int)position.y, targetX, targetY, damage * damageMultiplier, true);
     }
 }
 
 class EMPCannon extends Weapon {
-    public EMPCannon(PVector ownerPosition, color shotColour) {
-        super('5', Graphics.empCannon, ownerPosition, shotColour, 6, 250.0, 2500.0, 200);
+    public EMPCannon(PVector ownerPosition) {
+        super('5', Graphics.empCannon, ownerPosition, 6, 250.0, 2500.0, 200);
     }
     
     protected void fire(int targetX, int targetY) {
@@ -84,15 +84,13 @@ class EMPCannon extends Weapon {
         shotVelocity.normalize();
         shotVelocity.mult(0.025f * height);
         
-        new EMPCannonLaser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, true, shotColour);
+        new EMPCannonLaser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, true);
     }
 }
 
 abstract class Weapon extends GameObject implements Comparable<Weapon> {
     final int code;
     final PImage image;
-    
-    final color shotColour;
     
     final int maxShots;
     int currentShots;
@@ -106,12 +104,11 @@ abstract class Weapon extends GameObject implements Comparable<Weapon> {
     final int damage;
     int damageMultiplier = 1;
     
-    public Weapon(char code, PImage image, PVector ownerPosition, color shotColour, int maxShots, double fireDelay, double rechargeDelay, int damage) {
+    public Weapon(char code, PImage image, PVector ownerPosition, int maxShots, double fireDelay, double rechargeDelay, int damage) {
         super(0,0);
         this.code = (int) code;
         this.image = image;
         position = ownerPosition;
-        this.shotColour = shotColour;
         this.maxShots = maxShots;
         this.currentShots = maxShots;
         this.fireDelay = fireDelay;
