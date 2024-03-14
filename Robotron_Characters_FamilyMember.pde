@@ -6,6 +6,21 @@ class FamilyMember extends NPC {
         super(x,y,Graphics.familyMember1Animator,100,0.005f,5,false,false);
        ((Robotron)currentScene).levelManager.FAMILY_MEMBERS.add(this);
         threats = new ArrayList<Character>();
+        
+        int randomFamilyMember = (int) random(3);
+        switch(randomFamilyMember) {
+            case 1:
+                animator = Graphics.familyMember2Animator;
+                points *= 2;
+                break;
+            case 2:
+                animator = Graphics.familyMember3Animator;
+                points *= 3;
+                break;
+        }
+        if (animator != null) {
+            currentStill = animator.downStill;
+        }
     }
     
     void alert(Character threat) {

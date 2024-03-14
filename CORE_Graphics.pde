@@ -37,6 +37,8 @@ public class Graphics {
     Animator wormRobotAnimator;
     Animator transformedHumanAnimator;
     Animator familyMember1Animator;
+    Animator familyMember2Animator;
+    Animator familyMember3Animator;
     
     // Other
     PImage crosshair;
@@ -86,6 +88,8 @@ public class Graphics {
             wormRobotAnimator = new Animator("WormRobot");
             transformedHumanAnimator = new Animator("TransformedHuman");
             familyMember1Animator = new Animator("FamilyMember1");
+            familyMember2Animator = new Animator("FamilyMember2");
+            familyMember3Animator = new Animator("FamilyMember3");
             
             // Other
             crosshair = loadImage("crosshair.png");
