@@ -59,12 +59,23 @@ public class Freeze extends StatusEffect {
     }
 }
 
+public class Highlight extends StatusEffect {
+    public Highlight(Character character, double duration) {
+        super(character, duration, color(0,0,160));
+        size *= 3;
+    }
+    
+    void apply() {}   
+    void unapply() {}
+}
+
 public abstract class StatusEffect extends GameObject {
     Character character;
     double timeApplied;
     double duration;
     boolean applied;
     color tint;
+    float size;
     
     public StatusEffect(Character character, double duration, color tint) {
         super(0,0);
@@ -89,6 +100,7 @@ public abstract class StatusEffect extends GameObject {
         applied = true;
         this.duration = duration;
         this.tint = tint;
+        this.size = character.size * 1.25f;
     }
     
     void update() {
@@ -107,7 +119,6 @@ public abstract class StatusEffect extends GameObject {
     
     void render() {
         tint(tint, 150);
-        float size = character.size * 1.25f;
         image(Graphics.statusRing, position.x, position.y, size, size);
     }
     
