@@ -60,6 +60,7 @@ void draw() {
         lag -= ms_per_update;
     }
     currentScene.render();
+    Audio.update();
 }
 
 void mousePressed() {

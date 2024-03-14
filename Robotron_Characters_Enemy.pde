@@ -130,6 +130,7 @@ abstract class ShootingEnemy extends Enemy {
             shotVelocity.mult(0.015f * height);
             
             new Laser((int)position.x,(int)position.y, shotVelocity, damage, 1f, false);
+            Audio.playWithProtection(Audio.laserEnemy, 1f, Audio.audioPan(position.x), 0.3f);
             lastShotTime = millis();
         }
     }
@@ -181,5 +182,6 @@ abstract class Enemy extends NPC {
     void despawn() {
        ((Robotron)currentScene).levelManager.addPoints(points);
         super.despawn();
+        Audio.playWithProtection(Audio.pulseCannon, 1f, Audio.audioPan(position.x), 0.3f);
     }
 }

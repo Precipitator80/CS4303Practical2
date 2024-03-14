@@ -123,7 +123,7 @@ class LevelManager {
         Iterator<GameObject> iterator = gameObjects().iterator();
         while(iterator.hasNext()) {
             GameObject gameObject = iterator.next();
-            if (gameObject instanceof Laser || gameObject instanceof NPC || gameObject instanceof Item) {
+            if (gameObject instanceof Laser || gameObject instanceof NPC || gameObject instanceof Item || gameObject instanceof StatusEffect) {
                 if (gameObject instanceof FamilyMember && wave > 0) {
                     addPoints(((FamilyMember)gameObject).points);
                 }

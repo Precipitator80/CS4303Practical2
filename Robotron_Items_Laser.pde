@@ -64,6 +64,7 @@ class EMPCannonLaser extends Laser {
             PVector alteredShotVelocity = rotateVectorRandomly(velocity, 360);
             new Laser((int)position.x,(int)position.y,alteredShotVelocity,damage / 5,0.75f,50.0,friendly);
         }
+        Audio.playWithProtection(Audio.pulseCannon, 1f, Audio.audioPan(position.x), 0.3f);
     }
     
     void destroy() {

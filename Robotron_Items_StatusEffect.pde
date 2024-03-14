@@ -101,6 +101,8 @@ public abstract class StatusEffect extends GameObject {
         this.duration = duration;
         this.tint = tint;
         this.size = character.size * 1.25f;
+        
+        Audio.playWithProtection(Audio.powerUp, 1f, Audio.audioPan(position.x), 0.3f);
     }
     
     void update() {

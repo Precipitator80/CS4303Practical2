@@ -19,6 +19,7 @@ class Pistol extends Weapon {
         shotVelocity.mult(0.015f * height);
         
         new Laser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, 1f, true);
+        Audio.playWithProtection(Audio.pistol, 1f, Audio.audioPan(position.x), 0.3f);
     }
 }
 
@@ -33,6 +34,7 @@ class Rifle extends Weapon {
         shotVelocity.mult(0.025f * height);
         
         new Laser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, 1.5f, true);
+        Audio.playWithProtection(Audio.rifle, 1f, Audio.audioPan(position.x), 0.3f);
     }
 }
 
@@ -53,6 +55,7 @@ class PulseCannon extends Weapon {
             alteredShotVelocity.mult(0.015f * height);
             new Laser((int)position.x,(int)position.y, alteredShotVelocity, damage * damageMultiplier, 0.85f, true);
         }
+        Audio.playWithProtection(Audio.pulseCannon, 1f, Audio.audioPan(position.x), 0.3f);
     }
 }
 
@@ -71,6 +74,7 @@ class Railgun extends Weapon {
     
     protected void fire(int targetX, int targetY) {        
         new RailgunLaser((int)position.x,(int)position.y, targetX, targetY, damage * damageMultiplier, 3f, true);
+        Audio.playWithProtection(Audio.railgun, 1f, Audio.audioPan(position.x), 0.3f);
     }
 }
 
@@ -85,6 +89,7 @@ class EMPCannon extends Weapon {
         shotVelocity.mult(0.025f * height);
         
         new EMPCannonLaser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, 2f, true);
+        Audio.playWithProtection(Audio.empCannon, 1f, Audio.audioPan(position.x), 0.3f);
     }
 }
 
@@ -123,10 +128,15 @@ abstract class Weapon extends GameObject implements Comparable<Weapon> {
     void tryToFire(int targetX, int targetY) {
         double current = millis();
         double elapsedSinceFired = current - lastFired;
-        if (elapsedSinceFired > fireDelay && (currentShots > 0 || maxShots == 0)) {
-            fire(targetX, targetY);
-            if (maxShots > 0 && !((Robotron)currentScene).OptionsMenu.infiniteAmmo.value) {
-                currentShots--;
+        if (elapsedSinceFired > fireDelay) {
+            if ((currentShots > 0 || maxShots == 0)) {
+                fire(targetX, targetY);
+                if (maxShots > 0 && !((Robotron)currentScene).OptionsMenu.infiniteAmmo.value) {
+                    currentShots--;
+                }
+            }
+            else{
+                Audio.playWithProtection(Audio.noAmmo, 1f, Audio.audioPan(position.x), 0.3f);
             }
             lastFired = current;
         }
