@@ -7,23 +7,39 @@ class RailgunLaser extends LaserBase {
         super(x,y,damage,100,1000.0,friendly,Graphics.playerLaser);
         this.targetX = targetX;
         this.targetY = targetY;
-        lengthVector = new PVector(targetX, targetY).sub(position);
-        this.length = lengthVector.mag();
         raycastHitDetection();
+        lengthVector = new PVector(this.targetX, this.targetY).sub(position);
+        this.length = lengthVector.mag();
     }
     
     void raycastHitDetection() {
         LevelManager levelManager = ((Robotron)currentScene).levelManager;
         PVector origin = position;
-        PVector differenceVector = new PVector(targetX, targetY).sub(origin);
         float step = levelManager.cellSize / 2f;
-        PVector stepDifferenceVector = differenceVector.copy().normalize().mult(step);
-        int numberOfIterations = (int)(differenceVector.mag() / step);
-        
+        PVector fullDifferenceVector = new PVector(targetX, targetY).sub(origin).mult(width + height);
+        PVector stepDifferenceVector = fullDifferenceVector.copy().normalize().mult(step);
+        PVector testVector = stepDifferenceVector.copy();
+        int numberOfIterations = (int)(fullDifferenceVector.mag() / step);
         for (int i = 0; i < numberOfIterations; i++) {
-            PVector positionToCheck = origin.copy().add(differenceVector);
-            hitDetection((int)positionToCheck.x,(int)positionToCheck.y);
-            differenceVector.sub(stepDifferenceVector);
+            PVector positionToCheck = origin.copy().add(testVector);
+            int x = (int)positionToCheck.x;
+            int y = (int)positionToCheck.y;            
+            
+            if (levelManager.collisionCheck(x,y)) {
+                int gridX = levelManager.screenToGridX(x);
+                int gridY = levelManager.screenToGridY(y);
+                if (levelManager.grid[gridY][gridX] instanceof Electrode) {
+                   ((Electrode)levelManager.grid[gridY][gridX]).convert();
+                }
+                else { // This is a wall so should be the end of the laser.
+                    targetX = x;
+                    targetY = y;
+                    break;
+                }
+            }
+            
+            hitDetection(x,y);
+            testVector.add(stepDifferenceVector);
         }
     }
     
