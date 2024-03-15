@@ -246,7 +246,7 @@ class ShopListing extends UIItem {
     }
     
     void buy() {
-        if (ShopMenu.moneySpent + currentPrice < ShopMenu.totalMoneyEarned()) {
+        if (ShopMenu.moneySpent + currentPrice <= ShopMenu.totalMoneyEarned()) {
             ShopMenu.moneySpent += currentPrice;
             timesBought++;
             updateCurrentPrice();
