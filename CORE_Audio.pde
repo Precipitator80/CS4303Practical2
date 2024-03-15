@@ -48,6 +48,19 @@ public class Audio {
         }
     }
     
+    void playWithProtection(SoundFile sound, float rate, float volume) {
+        if (!played.containsKey(sound)) {
+            played.put(sound, false);
+        }
+        
+        Boolean playedSound = played.get(sound);
+        if (!playedSound) {
+            sound.stop();
+            sound.play(rate, volume);
+            playedSound = true;
+        }
+    }
+    
     void update() {
         for (Boolean playedSound : played.values()) {
             playedSound = false;

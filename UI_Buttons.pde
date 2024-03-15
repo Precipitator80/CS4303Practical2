@@ -53,7 +53,7 @@ abstract class Button extends UIItem  {
     }
     
     void onClick() {
-        clickSound.play(1, 0.2f);
+        Audio.playWithProtection(clickSound,1,0.2f);
         mouseOver = false; // Refresh the state of the button.
     }
     

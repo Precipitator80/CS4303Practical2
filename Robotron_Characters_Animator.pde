@@ -31,20 +31,26 @@ class Animator {
         }
         
         upFrames = loadFrames(characterName, "up");
-        upStill = loadImage(characterName + "/upStill.png");
-        if (upStill == null) {
+        if (doesFileExist(characterName + "/upStill.png")) {
+            upStill = loadImage(characterName + "/upStill.png");
+        }
+        else{
             upStill = downStill;
         }
         
         rightFrames = loadFrames(characterName, "right");
-        rightStill = loadImage(characterName + "/rightStill.png");
-        if (rightStill == null) {
+        if (doesFileExist(characterName + "/rightStill.png")) {
+            rightStill = loadImage(characterName + "/rightStill.png");
+        }
+        else{
             rightStill = downStill;
         }
         
         leftFrames = loadFrames(characterName, "left");
-        leftStill = loadImage(characterName + "/leftStill.png");
-        if (leftStill == null) {
+        if (doesFileExist(characterName + "/leftStill.png")) {
+            leftStill = loadImage(characterName + "/leftStill.png");
+        }
+        else{
             leftStill = downStill;
         }        
     }
@@ -58,7 +64,7 @@ class Animator {
         while(doesFileExist(filePath)) {
             frames.add(loadImage(filePath));
             frameNumber++;
-            print("Loaded: " + filePath + "\n");
+            //print("Loaded: " + filePath + "\n");
             filePath = characterName + "/" + frameName + frameNumber + ".png";
         }
         if (frames.isEmpty()) {
