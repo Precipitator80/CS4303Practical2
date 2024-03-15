@@ -58,6 +58,7 @@ public class Robotron extends Scene {
                     break;
                 case GAME_OVER:
                     text("Game over!\nPress enter or space to restart.", width / 2, height / 2);
+                    OptionsMenu.entryButton.show();
                     break;
             }
         }

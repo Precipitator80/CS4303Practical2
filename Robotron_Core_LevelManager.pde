@@ -320,12 +320,14 @@ class LevelManager {
         while(iterator.hasNext()) {
             GameObject gameObject = iterator.next();
             if (gameObject instanceof NPC) {
+                color tint;
                 if (gameObject instanceof FamilyMember) {
-                    new Freeze((Character)gameObject,1000.0, color(41,185,72));
+                    tint = color(41,185,72);
                 }
                 else{
-                    new Freeze((Character)gameObject,1000.0, color(255,48,24));
+                    tint = color(255,48,24);
                 }
+                new Freeze((Character)gameObject,1250.0,tint);
             }
         }
         
