@@ -37,16 +37,16 @@ class FamilyMember extends NPC {
     
     void updatePath() {
         super.updatePath();
-        if (!threats.isEmpty()) {
+        if (!threats.isEmpty() && !canSeeTarget(((Robotron)currentScene).levelManager.player)) {
             pathSearchPeriod = 75; // Keep searching in small steps how to avoid the threats.
         }
     }
     
     PVector findNonCharacterTarget() {
         PVector normalSearch = super.findNonCharacterTarget();
-        if (!threats.isEmpty()) {
+        LevelManager levelManager = ((Robotron)currentScene).levelManager;
+        if (!threats.isEmpty() && !canSeeTarget(levelManager.player)) {
             //print("Trying to find path away from threats!\n");
-            LevelManager levelManager = ((Robotron)currentScene).levelManager;
             
             // First check whether the normal search worked to evade threats.
             boolean evadesThreats = true;

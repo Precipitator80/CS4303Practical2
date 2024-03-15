@@ -130,6 +130,7 @@ class LevelManager {
                     }
                 }
                 gameObject.destroy();
+                iterator.remove();
             }
         }
     }
