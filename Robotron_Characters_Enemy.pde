@@ -153,7 +153,7 @@ abstract class Enemy extends NPC {
     int meleeDamage;
     
     public Enemy(int x, int y, Animator animator, int hp, float movementSpeed, int points, boolean stationary, boolean attacksFamily, double meleePeriod, int meleeDamage) {
-        super(x,y,animator,hp,movementSpeed * ((Robotron)currentScene).OptionsMenu.enemySpeedMultiplier.value,points,stationary,attacksFamily);
+        super(x,y,animator,hp,random(0.9f * movementSpeed * ((Robotron)currentScene).OptionsMenu.enemySpeedMultiplier.value, 1.1f * movementSpeed * ((Robotron)currentScene).OptionsMenu.enemySpeedMultiplier.value),points,stationary,attacksFamily);
         this.meleePeriod = meleePeriod;
         this.meleeDamage = (int)(meleeDamage * ((Robotron)currentScene).OptionsMenu.enemyMeleeDamageMultiplier.value);
        ((Robotron)currentScene).levelManager.ENEMIES.add(this);
