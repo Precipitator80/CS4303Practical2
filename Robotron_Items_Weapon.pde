@@ -18,7 +18,7 @@ class Pistol extends Weapon {
         shotVelocity.normalize();
         shotVelocity.mult(0.015f * height);
         
-        new Laser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, 1f, true);
+        new Laser((int)position.x,(int)position.y, shotVelocity,(int)(damage * damageBoostMultiplier * ((Robotron)currentScene).OptionsMenu.playerWeaponDamageMultiplier.value), 1f, true);
         Audio.playWithProtection(Audio.pistol, 1f, Audio.audioPan(position.x), 0.3f);
     }
 }
@@ -33,7 +33,7 @@ class Rifle extends Weapon {
         shotVelocity.normalize();
         shotVelocity.mult(0.025f * height);
         
-        new Laser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, 1.5f, true);
+        new Laser((int)position.x,(int)position.y, shotVelocity,(int)(damage * damageBoostMultiplier * ((Robotron)currentScene).OptionsMenu.playerWeaponDamageMultiplier.value), 1.5f, true);
         Audio.playWithProtection(Audio.rifle, 1f, Audio.audioPan(position.x), 0.3f);
     }
 }
@@ -53,7 +53,7 @@ class PulseCannon extends Weapon {
             
             // Set the speed of the shot and shoot it.
             alteredShotVelocity.mult(0.015f * height);
-            new Laser((int)position.x,(int)position.y, alteredShotVelocity, damage * damageMultiplier, 0.85f, true);
+            new Laser((int)position.x,(int)position.y, alteredShotVelocity,(int)(damage * damageBoostMultiplier * ((Robotron)currentScene).OptionsMenu.playerWeaponDamageMultiplier.value), 0.85f, true);
         }
         Audio.playWithProtection(Audio.pulseCannon, 1f, Audio.audioPan(position.x), 0.3f);
     }
@@ -73,7 +73,7 @@ class Railgun extends Weapon {
     }
     
     protected void fire(int targetX, int targetY) {        
-        new RailgunLaser((int)position.x,(int)position.y, targetX, targetY, damage * damageMultiplier, 3f, true);
+        new RailgunLaser((int)position.x,(int)position.y, targetX, targetY,(int)(damage * damageBoostMultiplier * ((Robotron)currentScene).OptionsMenu.playerWeaponDamageMultiplier.value), 3f, true);
         Audio.playWithProtection(Audio.railgun, 1f, Audio.audioPan(position.x), 0.3f);
     }
 }
@@ -88,7 +88,7 @@ class EMPCannon extends Weapon {
         shotVelocity.normalize();
         shotVelocity.mult(0.025f * height);
         
-        new EMPCannonLaser((int)position.x,(int)position.y, shotVelocity, damage * damageMultiplier, 2f, true);
+        new EMPCannonLaser((int)position.x,(int)position.y, shotVelocity,(int)(damage * damageBoostMultiplier * ((Robotron)currentScene).OptionsMenu.playerWeaponDamageMultiplier.value), 2f, true);
         Audio.playWithProtection(Audio.empCannon, 1f, Audio.audioPan(position.x), 0.3f);
     }
 }
@@ -107,7 +107,7 @@ abstract class Weapon extends GameObject implements Comparable<Weapon> {
     double lastRecharged;
     
     final int damage;
-    int damageMultiplier = 1;
+    int damageBoostMultiplier = 1;
     
     public Weapon(char code, PImage image, PVector ownerPosition, int maxShots, double fireDelay, double rechargeDelay, int damage) {
         super(0,0);

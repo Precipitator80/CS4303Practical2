@@ -5,13 +5,13 @@ public class DamageBoost extends StatusEffect {
     
     void apply() {
         for (Weapon weapon : ((Player)character).weapons) {
-            weapon.damageMultiplier = 2;
+            weapon.damageBoostMultiplier = 2;
         }
     }
     
     void unapply() {
         for (Weapon weapon : ((Player)character).weapons) {
-            weapon.damageMultiplier = 1;
+            weapon.damageBoostMultiplier = 1;
         }
     }
 }
@@ -98,7 +98,7 @@ public abstract class StatusEffect extends GameObject {
         character.statusEffects.add(this);
         timeApplied = millis();
         applied = true;
-        this.duration = duration;
+        this.duration = duration * ((Robotron)currentScene).OptionsMenu.powerUpTimeMultiplier.value;
         this.tint = tint;
         this.size = character.size * 1.25f;
         

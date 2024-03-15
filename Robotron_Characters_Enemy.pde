@@ -117,7 +117,7 @@ abstract class ShootingEnemy extends Enemy {
     public ShootingEnemy(int x, int y, Animator animator, int hp, float movementSpeed, int points, boolean stationary, boolean attacksFamily, double shotPeriod, int damage, double meleePeriod, int meleeDamage) {
         super(x,y,animator,hp,movementSpeed,points,stationary,attacksFamily,meleePeriod,meleeDamage);
         this.shotPeriod = shotPeriod;
-        this.damage = damage;
+        this.damage = (int)(damage * ((Robotron)currentScene).OptionsMenu.enemyLaserDamageMultiplier.value);
     }
     
     void shoot() {
@@ -153,9 +153,9 @@ abstract class Enemy extends NPC {
     int meleeDamage;
     
     public Enemy(int x, int y, Animator animator, int hp, float movementSpeed, int points, boolean stationary, boolean attacksFamily, double meleePeriod, int meleeDamage) {
-        super(x,y,animator,hp,movementSpeed,points,stationary,attacksFamily);
+        super(x,y,animator,hp,movementSpeed * ((Robotron)currentScene).OptionsMenu.enemySpeedMultiplier.value,points,stationary,attacksFamily);
         this.meleePeriod = meleePeriod;
-        this.meleeDamage = meleeDamage;
+        this.meleeDamage = (int)(meleeDamage * ((Robotron)currentScene).OptionsMenu.enemyMeleeDamageMultiplier.value);
        ((Robotron)currentScene).levelManager.ENEMIES.add(this);
     }
     

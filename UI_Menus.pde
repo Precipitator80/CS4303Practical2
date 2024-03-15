@@ -60,6 +60,7 @@ abstract class Menu extends UIItem {
     }
     
     void show() {
+       ((Robotron)currentScene).levelManager.clearLevel();
         super.show();
         exitButton.show();
         entryButton.hide();
@@ -82,10 +83,10 @@ class OptionsMenu extends Menu {
     public BoolButton allWeaponsAtStart;
     public BoolButton infiniteAmmo;
     public FloatButton creditsMultiplier;
-    public FloatButton enemySpawnCountMultiplier;
-    public FloatButton powerUpTimeMultiplier;
     public FloatButton playerWeaponDamageMultiplier;
     public FloatButton playerSpeedMultiplier;
+    public FloatButton powerUpTimeMultiplier;
+    public FloatButton enemySpawnCountMultiplier;
     public FloatButton enemyMeleeDamageMultiplier;
     public FloatButton enemyLaserDamageMultiplier;
     public FloatButton enemySpeedMultiplier;
@@ -100,6 +101,30 @@ class OptionsMenu extends Menu {
         
         infiniteAmmo = new BoolButton((int)position.x,(int)position.y, "Infinite Ammo", false);
         menuItems.add(infiniteAmmo);
+        
+        creditsMultiplier = new FloatButton((int)position.x,(int)position.y, "Credits Multiplier", 1f, 0f, 10f, 0.5f);
+        menuItems.add(creditsMultiplier);
+        
+        playerWeaponDamageMultiplier = new FloatButton((int)position.x,(int)position.y, "Player Weapon Damage Multiplier", 1f, 0.25f, 10f, 0.25f);
+        menuItems.add(playerWeaponDamageMultiplier);
+        
+        powerUpTimeMultiplier = new FloatButton((int)position.x,(int)position.y, "Power-Up Time Multiplier", 1f, 0.25f, 10f, 0.25f);
+        menuItems.add(powerUpTimeMultiplier);
+        
+        playerSpeedMultiplier = new FloatButton((int)position.x,(int)position.y, "Player Movement Speed Multiplier", 1f, 0.25f, 10f, 0.25f);
+        menuItems.add(playerSpeedMultiplier);
+        
+        enemySpawnCountMultiplier = new FloatButton((int)position.x,(int)position.y, "Enemy Spawn Count Multiplier", 1f, 0.25f, 10f, 0.25f);
+        menuItems.add(enemySpawnCountMultiplier);
+        
+        enemyMeleeDamageMultiplier = new FloatButton((int)position.x,(int)position.y, "Enemy Melee Damage Multiplier", 1f, 0f, 10f, 0.25f);
+        menuItems.add(enemyMeleeDamageMultiplier);
+        
+        enemyLaserDamageMultiplier = new FloatButton((int)position.x,(int)position.y, "Enemy Laser Damage Multiplier", 1f, 0f, 10f, 0.25f);
+        menuItems.add(enemyLaserDamageMultiplier);
+        
+        enemySpeedMultiplier = new FloatButton((int)position.x,(int)position.y, "Enemy Movement Speed Multiplier", 1f, 0f, 10f, 0.25f);
+        menuItems.add(enemySpeedMultiplier);
     }
     
     void hide() {
@@ -132,7 +157,7 @@ class ShopMenu extends Menu {
     }
     
     int totalMoneyEarned() {
-        return 0; //return(int)(OptionsMenu.creditsMultiplier.value * levelManager.score / 10);
+        return(int)(((Robotron)currentScene).OptionsMenu.creditsMultiplier.value * ((Robotron)currentScene).levelManager.score / 100);
     }
     
     int moneyAvailable() {

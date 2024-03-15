@@ -115,10 +115,7 @@ class LevelManager {
         }
     }
     
-    void spawnLevel() {
-        spawnedLevel = false;
-        workingGrid = new CellType[ySize][xSize];
-        
+    void clearLevel() {
         // Delete all lasers, NPCs and items.
         Iterator<GameObject> iterator = gameObjects().iterator();
         while(iterator.hasNext()) {
@@ -130,6 +127,13 @@ class LevelManager {
                 gameObject.destroy();
             }
         }
+    }
+    
+    void spawnLevel() {
+        spawnedLevel = false;
+        workingGrid = new CellType[ySize][xSize];
+        
+        clearLevel();
         
         // Horizontal split 1
         if (fiftyFifty()) {
@@ -288,7 +292,7 @@ class LevelManager {
         
         // Spawn turrets in pits.        
         if (pits.size() > 0) {
-            int numberOfTurrets = (int) random(wave / 3);
+            int numberOfTurrets = (int)(random(wave / 3) * ((Robotron)currentScene).OptionsMenu.enemySpawnCountMultiplier.value);
             for (int i = 0; i < numberOfTurrets && i < pits.size() / 5; i++) {
                 int randomPit = (int) random(pits.size());
                 Cell pit = pits.get(randomPit);
@@ -306,7 +310,7 @@ class LevelManager {
         }
         
         // Freeze all NPCs at the start of the round.
-        iterator = gameObjects().iterator();
+        Iterator<GameObject> iterator = gameObjects().iterator();
         while(iterator.hasNext()) {
             GameObject gameObject = iterator.next();
             if (gameObject instanceof NPC) {

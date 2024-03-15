@@ -215,7 +215,8 @@ class BoolButton extends Button {
     }
     
     char valueChar() {
-        return value ? '✓' : 'x';
+        //return value ? '✓' : 'x';
+        return value ? 'o' : 'x'; // If no tick in font.
     }
     
     void onClick() {

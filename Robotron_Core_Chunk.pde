@@ -51,7 +51,7 @@ class MixedChunk extends Chunk {
             int randomEnemy = (int) random(10);
             switch(randomEnemy) {
                 case 0:
-                    int numberOfLasers = (int) random(levelManager.wave / 6);
+                    int numberOfLasers = (int)(random(levelManager.wave / 6) * ((Robotron)currentScene).OptionsMenu.enemySpawnCountMultiplier.value);
                     for (int i = 0; i < numberOfLasers; i++) {
                         int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
                         int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
@@ -60,7 +60,7 @@ class MixedChunk extends Chunk {
                     }
                     break;
                 case 1:
-                    int numberOfFlyings = (int) random(levelManager.wave / 6);
+                    int numberOfFlyings = (int)(random(levelManager.wave / 6) * ((Robotron)currentScene).OptionsMenu.enemySpawnCountMultiplier.value);
                     for (int i = 0; i < numberOfFlyings; i++) {
                         int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
                         int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
@@ -69,7 +69,7 @@ class MixedChunk extends Chunk {
                     }
                     break;
                 case 2:
-                    int numberOfTurrets = (int) random(levelManager.wave / 10);
+                    int numberOfTurrets = (int)(random(levelManager.wave / 10) * ((Robotron)currentScene).OptionsMenu.enemySpawnCountMultiplier.value);
                     for (int i = 0; i < numberOfTurrets; i++) {
                         int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
                         int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
@@ -78,7 +78,7 @@ class MixedChunk extends Chunk {
                     }
                     break;
                 case 3:
-                    int numberOfBrains = (int) random(levelManager.wave / 10);
+                    int numberOfBrains = (int)(random(levelManager.wave / 10) * ((Robotron)currentScene).OptionsMenu.enemySpawnCountMultiplier.value);
                     for (int i = 0; i < numberOfBrains; i++) {
                         int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
                         int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
@@ -87,7 +87,7 @@ class MixedChunk extends Chunk {
                     }
                     break;
                 case 4:
-                    int numberOfWorms = (int) random(levelManager.wave / 8);
+                    int numberOfWorms = (int)(random(levelManager.wave / 8) * ((Robotron)currentScene).OptionsMenu.enemySpawnCountMultiplier.value);
                     for (int i = 0; i < numberOfWorms; i++) {
                         int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
                         int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
@@ -96,7 +96,7 @@ class MixedChunk extends Chunk {
                     }
                     break;
                 default:
-                int numberOfGrunts = (int)(2.5f + random(levelManager.wave / 2));
+                int numberOfGrunts = (int)((2.5f + random(levelManager.wave / 2)) * ((Robotron)currentScene).OptionsMenu.enemySpawnCountMultiplier.value);
                 for (int i = 0; i < numberOfGrunts; i++) {
                     int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
                     int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
@@ -147,42 +147,42 @@ class EnemyChunk extends Chunk {
         levelManager.spawnRandomWeaponItem(itemX, itemY);
         
         // Spawn in enemies.
-        int numberOfGrunts = 5 + (int) random(levelManager.wave);        
+        int numberOfGrunts = (int)((5 + random(levelManager.wave)) * ((Robotron)currentScene).OptionsMenu.enemySpawnCountMultiplier.value);        
         for (int i = 0; i < numberOfGrunts; i++) {
             int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
             int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
             new GruntRobot(enemyX, enemyY);
         }
         
-        int numberOfLasers = (int) random(levelManager.wave / 3);
+        int numberOfLasers = (int)(random(levelManager.wave / 3) * ((Robotron)currentScene).OptionsMenu.enemySpawnCountMultiplier.value);
         for (int i = 0; i < numberOfLasers; i++) {
             int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
             int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
             new LaserRobot(enemyX, enemyY);
         }
         
-        int numberOfFlyings = (int) random(levelManager.wave / 3);
+        int numberOfFlyings = (int)(random(levelManager.wave / 3) * ((Robotron)currentScene).OptionsMenu.enemySpawnCountMultiplier.value);
         for (int i = 0; i < numberOfFlyings; i++) {
             int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
             int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
             new FlyingRobot(enemyX, enemyY);
         }
         
-        int numberOfTurrets = (int) random(levelManager.wave / 10);
+        int numberOfTurrets = (int)(random(levelManager.wave / 10) * ((Robotron)currentScene).OptionsMenu.enemySpawnCountMultiplier.value);
         for (int i = 0; i < numberOfTurrets; i++) {
             int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
             int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
             new TurretRobot(enemyX, enemyY);
         }
         
-        int numberOfBrains = (int) random(levelManager.wave / 5);
+        int numberOfBrains = (int)(random(levelManager.wave / 5) * ((Robotron)currentScene).OptionsMenu.enemySpawnCountMultiplier.value);
         for (int i = 0; i < numberOfBrains; i++) {
             int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
             int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));
             new BrainRobot(enemyX, enemyY);
         }
         
-        int numberOfWorms = (int) random(levelManager.wave / 4);
+        int numberOfWorms = (int)(random(levelManager.wave / 4) * ((Robotron)currentScene).OptionsMenu.enemySpawnCountMultiplier.value);
         for (int i = 0; i < numberOfWorms; i++) {
             int enemyX = levelManager.gridToScreenX(gridStartX + (int)random(levelManager.chunkXSize));
             int enemyY = levelManager.gridToScreenY(gridStartY + (int)random(levelManager.chunkYSize));

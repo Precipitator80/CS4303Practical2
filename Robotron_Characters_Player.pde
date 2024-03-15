@@ -129,11 +129,16 @@ class Player extends Character {
             super.render();
             weaponsDisplay();
             
-            // Draw the crosshair.
-            noCursor();
-            tint(255);
-            float crosshairSize = height / 25;
-            image(Graphics.crosshair, mouseX, mouseY, crosshairSize, crosshairSize);
+            if (!((Robotron)currentScene).OptionsMenu.enabled && !((Robotron)currentScene).ShopMenu.enabled) {
+                // Draw the crosshair.
+                noCursor();
+                tint(255);
+                float crosshairSize = height / 25;
+                image(Graphics.crosshair, mouseX, mouseY, crosshairSize, crosshairSize);
+            }
+            else{
+                cursor();
+            }
         }
     }
     
@@ -261,7 +266,7 @@ class Player extends Character {
             velocity.add(1, 0);
         }
         velocity.normalize();
-        velocity.mult(movementSpeed * height);
+        velocity.mult(movementSpeed * height * ((Robotron)currentScene).OptionsMenu.playerSpeedMultiplier.value);
     }
     
     void moveCharacter() {
