@@ -60,9 +60,9 @@ class EMPCannonLaser extends Laser {
     }
     
     void spawnBursts() {
-        for (int burst = 0; burst < 15; burst++) {
+        for (int burst = 0; burst < 8 + ((Robotron)currentScene).ShopMenu.empCannonExplosionBurstIncrease.timesBought; burst++) {
             PVector alteredShotVelocity = rotateVectorRandomly(velocity, 360);
-            new Laser((int)position.x,(int)position.y,alteredShotVelocity,damage / 5,0.75f,50.0,friendly);
+            new Laser((int)position.x,(int)position.y,alteredShotVelocity,damage / 5,0.75f,75.0,friendly);
         }
         Audio.playWithProtection(Audio.pulseCannon, 1f, Audio.audioPan(position.x), 0.3f);
     }

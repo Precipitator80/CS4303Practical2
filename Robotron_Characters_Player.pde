@@ -32,7 +32,7 @@ class Player extends Character {
         for (Weapon weapon : weapons) {
             weapon.refill();
         }
-        new Highlight(this,1000.0);
+        new Highlight(this,1000.0,playerColour);
     }
     
     void reset() {

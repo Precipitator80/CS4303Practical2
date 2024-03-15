@@ -136,15 +136,62 @@ class OptionsMenu extends Menu {
 
 class ShopMenu extends Menu {    
     int moneySpent;
-    //ShopListing extraAmmo;
+    
+    ShopListing pistolDamageIncrease;
+    
+    ShopListing rifleDamageIncrease;
+    ShopListing rifleRechargeRateIncrease;
+    ShopListing rifleFireRateIncrease;
+    
+    ShopListing pulseCannonDamageIncrease;
+    ShopListing pulseCannonRechargeRateIncrease;
+    ShopListing pulseCannonBurstCountIncrease;
+    
+    ShopListing railgunDamageIncrease;
+    ShopListing railgunRechargeRateIncrease;
+    ShopListing railgunBeamWidthIncrease;
+    
+    ShopListing empCannonDamageIncrease;
+    ShopListing empCannonRechargeRateIncrease;
+    ShopListing empCannonExplosionBurstIncrease;
     
     public ShopMenu() {
         super("Shop");
     }
     
     void initialise() {
-        //extraAmmo = new ShopListing((int) this.position.x,(int) this.position.y, "Extra Ammo", 100);
-        //menuItems.add(extraAmmo);
+        pistolDamageIncrease = new ShopListing((int) this.position.x,(int) this.position.y, "Pistol Damage Increase", 75, this);
+        menuItems.add(pistolDamageIncrease);
+        
+        rifleDamageIncrease = new ShopListing((int) this.position.x,(int) this.position.y, "Rifle Damage Increase", 75, this);
+        menuItems.add(rifleDamageIncrease);
+        rifleRechargeRateIncrease = new ShopListing((int) this.position.x,(int) this.position.y, "Rifle Recharge Rate Increase", 25, this);
+        menuItems.add(rifleRechargeRateIncrease);
+        rifleFireRateIncrease = new ShopListing((int) this.position.x,(int) this.position.y, "Rifle Fire Rate Increase", 25, this);
+        menuItems.add(rifleFireRateIncrease);
+        
+        pulseCannonDamageIncrease = new ShopListing((int) this.position.x,(int) this.position.y, "Pulse Cannon Damage Increase", 75, this);
+        menuItems.add(pulseCannonDamageIncrease);
+        pulseCannonRechargeRateIncrease = new ShopListing((int) this.position.x,(int) this.position.y, "Pulse Cannon Recharge Rate Increase", 25, this);
+        menuItems.add(pulseCannonRechargeRateIncrease);
+        pulseCannonBurstCountIncrease = new ShopListing((int) this.position.x,(int) this.position.y, "Pulse Cannon Burst Count Increase", 50, this);
+        menuItems.add(pulseCannonBurstCountIncrease);
+        
+        
+        railgunDamageIncrease = new ShopListing((int) this.position.x,(int) this.position.y, "Railgun Damage Increase", 75, this);
+        menuItems.add(railgunDamageIncrease);
+        railgunRechargeRateIncrease = new ShopListing((int) this.position.x,(int) this.position.y, "Railgun Recharge Rate Increase", 25, this);
+        menuItems.add(railgunRechargeRateIncrease);
+        railgunBeamWidthIncrease = new ShopListing((int) this.position.x,(int) this.position.y, "Railgun Beam Width Increase", 100, this);
+        menuItems.add(railgunBeamWidthIncrease);
+        
+        empCannonDamageIncrease = new ShopListing((int) this.position.x,(int) this.position.y, "EMP Cannon Damage Increase", 75, this);
+        menuItems.add(empCannonDamageIncrease);
+        empCannonRechargeRateIncrease = new ShopListing((int) this.position.x,(int) this.position.y, "EMP Cannon Recharge Rate Increase", 25, this);
+        menuItems.add(empCannonRechargeRateIncrease);
+        empCannonExplosionBurstIncrease = new ShopListing((int) this.position.x,(int) this.position.y, "EMP Cannon Explosion Burst Increase", 50, this);
+        menuItems.add(empCannonExplosionBurstIncrease);
+        
     }
     
     void resetListings() {
@@ -298,7 +345,7 @@ abstract class UIItem extends GameObject {
     }
     
     int defaultTextSize() {
-        return(3 * h) / 5;
+        return h / 3;
     }
     
     void render() {

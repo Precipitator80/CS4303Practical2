@@ -1,5 +1,4 @@
 class FamilyMember extends NPC {
-    color familyColour = color(0,255,0);
     List<Character> threats;
     
     public FamilyMember(int x, int y) {

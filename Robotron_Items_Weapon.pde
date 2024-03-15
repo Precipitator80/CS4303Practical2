@@ -18,8 +18,16 @@ class Pistol extends Weapon {
         shotVelocity.normalize();
         shotVelocity.mult(0.015f * height);
         
-        new Laser((int)position.x,(int)position.y, shotVelocity,(int)(damage * damageBoostMultiplier * ((Robotron)currentScene).OptionsMenu.playerWeaponDamageMultiplier.value), 1f, true);
+        new Laser((int)position.x,(int)position.y, shotVelocity,(int)(damage * damageBoostMultiplier * shopDamageMultiplier()  * ((Robotron)currentScene).OptionsMenu.playerWeaponDamageMultiplier.value), 1f, true);
         Audio.playWithProtection(Audio.pistol, 1f, Audio.audioPan(position.x), 0.3f);
+    }
+    
+    protected float shopDamageMultiplier() {
+        return 1f + 0.1f * ((Robotron)currentScene).ShopMenu.pistolDamageIncrease.timesBought;
+    }
+    
+    protected float shopRechargeDelayMultiplier() {
+        return 1f;
     }
 }
 
@@ -33,8 +41,20 @@ class Rifle extends Weapon {
         shotVelocity.normalize();
         shotVelocity.mult(0.025f * height);
         
-        new Laser((int)position.x,(int)position.y, shotVelocity,(int)(damage * damageBoostMultiplier * ((Robotron)currentScene).OptionsMenu.playerWeaponDamageMultiplier.value), 1.5f, true);
+        new Laser((int)position.x,(int)position.y, shotVelocity,(int)(damage * damageBoostMultiplier * shopDamageMultiplier() * ((Robotron)currentScene).OptionsMenu.playerWeaponDamageMultiplier.value), 1.5f, true);
         Audio.playWithProtection(Audio.rifle, 1f, Audio.audioPan(position.x), 0.3f);
+    } 
+    
+    protected float shopDamageMultiplier() {
+        return 1f + 0.2f * ((Robotron)currentScene).ShopMenu.rifleDamageIncrease.timesBought;
+    }
+    
+    protected float shopRechargeDelayMultiplier() {
+        return constrain(1f - 0.1f * ((Robotron)currentScene).ShopMenu.rifleRechargeRateIncrease.timesBought, 0f, 1f);
+    }
+    
+    protected float shopFireDelayMultiplier() {
+        return constrain(1f - 0.1f * ((Robotron)currentScene).ShopMenu.rifleFireRateIncrease.timesBought, 0.05f, 1f);
     }
 }
 
@@ -47,24 +67,24 @@ class PulseCannon extends Weapon {
         // LevelManager levelManager = ((Robotron)currentScene).levelManager;
         PVector shotVelocity = new PVector(targetX, targetY).sub(position.x, position.y);
         shotVelocity.normalize();
-        for (int pellet = 0; pellet < 12; pellet++) {
+        for (int pellet = 0; pellet < 10 + ((Robotron)currentScene).ShopMenu.pulseCannonBurstCountIncrease.timesBought; pellet++) {
             // Slightly edit the angle for each shot.
             PVector alteredShotVelocity = rotateVectorRandomly(shotVelocity, 10);
             
             // Set the speed of the shot and shoot it.
             alteredShotVelocity.mult(0.015f * height);
-            new Laser((int)position.x,(int)position.y, alteredShotVelocity,(int)(damage * damageBoostMultiplier * ((Robotron)currentScene).OptionsMenu.playerWeaponDamageMultiplier.value), 0.85f, true);
+            new Laser((int)position.x,(int)position.y, alteredShotVelocity,(int)(damage * damageBoostMultiplier * shopDamageMultiplier() * ((Robotron)currentScene).OptionsMenu.playerWeaponDamageMultiplier.value), 0.85f, true);
         }
         Audio.playWithProtection(Audio.pulseCannon, 1f, Audio.audioPan(position.x), 0.3f);
+    }   
+    
+    protected float shopDamageMultiplier() {
+        return 1f + 0.2f * ((Robotron)currentScene).ShopMenu.pulseCannonDamageIncrease.timesBought;
     }
-}
-
-PVector rotateVectorRandomly(PVector vector, int maxAngle) {
-    float angleDegrees = random( -maxAngle, maxAngle);
-    double angleRadians = Math.toRadians(angleDegrees);
-    double newX = vector.x * Math.cos(angleRadians) - vector.y * Math.sin(angleRadians);
-    double newY = vector.x * Math.sin(angleRadians) + vector.y * Math.cos(angleRadians);
-    return new PVector((float)newX,(float)newY);
+    
+    protected float shopRechargeDelayMultiplier() {
+        return constrain(1f - 0.1f * ((Robotron)currentScene).ShopMenu.pulseCannonRechargeRateIncrease.timesBought, 0f, 1f);
+    }
 }
 
 class Railgun extends Weapon {
@@ -73,8 +93,16 @@ class Railgun extends Weapon {
     }
     
     protected void fire(int targetX, int targetY) {        
-        new RailgunLaser((int)position.x,(int)position.y, targetX, targetY,(int)(damage * damageBoostMultiplier * ((Robotron)currentScene).OptionsMenu.playerWeaponDamageMultiplier.value), 3f, true);
+        new RailgunLaser((int)position.x,(int)position.y, targetX, targetY,(int)(damage * damageBoostMultiplier * shopDamageMultiplier() * ((Robotron)currentScene).OptionsMenu.playerWeaponDamageMultiplier.value), 3f + 0.75f * ((Robotron)currentScene).ShopMenu.railgunBeamWidthIncrease.timesBought, true);
         Audio.playWithProtection(Audio.railgun, 1f, Audio.audioPan(position.x), 0.3f);
+    }
+    
+    protected float shopDamageMultiplier() {
+        return 1f + 0.2f * ((Robotron)currentScene).ShopMenu.railgunDamageIncrease.timesBought;
+    }
+    
+    protected float shopRechargeDelayMultiplier() {
+        return constrain(1f - 0.1f * ((Robotron)currentScene).ShopMenu.railgunRechargeRateIncrease.timesBought, 0f, 1f);
     }
 }
 
@@ -88,9 +116,25 @@ class EMPCannon extends Weapon {
         shotVelocity.normalize();
         shotVelocity.mult(0.025f * height);
         
-        new EMPCannonLaser((int)position.x,(int)position.y, shotVelocity,(int)(damage * damageBoostMultiplier * ((Robotron)currentScene).OptionsMenu.playerWeaponDamageMultiplier.value), 2f, true);
+        new EMPCannonLaser((int)position.x,(int)position.y, shotVelocity,(int)(damage * damageBoostMultiplier * shopDamageMultiplier() * ((Robotron)currentScene).OptionsMenu.playerWeaponDamageMultiplier.value), 2f, true);
         Audio.playWithProtection(Audio.empCannon, 1f, Audio.audioPan(position.x), 0.3f);
     }
+    
+    protected float shopDamageMultiplier() {
+        return 1f + 0.2f * ((Robotron)currentScene).ShopMenu.empCannonDamageIncrease.timesBought;
+    }
+    
+    protected float shopRechargeDelayMultiplier() {
+        return constrain(1f - 0.1f * ((Robotron)currentScene).ShopMenu.empCannonRechargeRateIncrease.timesBought, 0f, 1f);
+    }
+}
+
+PVector rotateVectorRandomly(PVector vector, int maxAngle) {
+    float angleDegrees = random( -maxAngle, maxAngle);
+    double angleRadians = Math.toRadians(angleDegrees);
+    double newX = vector.x * Math.cos(angleRadians) - vector.y * Math.sin(angleRadians);
+    double newY = vector.x * Math.sin(angleRadians) + vector.y * Math.cos(angleRadians);
+    return new PVector((float)newX,(float)newY);
 }
 
 abstract class Weapon extends GameObject implements Comparable<Weapon> {
@@ -126,19 +170,21 @@ abstract class Weapon extends GameObject implements Comparable<Weapon> {
     }
     
     void tryToFire(int targetX, int targetY) {
-        double current = millis();
-        double elapsedSinceFired = current - lastFired;
-        if (elapsedSinceFired > fireDelay) {
-            if ((currentShots > 0 || maxShots == 0)) {
-                fire(targetX, targetY);
-                if (maxShots > 0 && !((Robotron)currentScene).OptionsMenu.infiniteAmmo.value) {
-                    currentShots--;
+        if (!((Robotron)currentScene).OptionsMenu.enabled && !((Robotron)currentScene).ShopMenu.enabled) {
+            double current = millis();
+            double elapsedSinceFired = current - lastFired;
+            if (elapsedSinceFired > fireDelay * shopFireDelayMultiplier()) {
+                if ((currentShots > 0 || maxShots == 0)) {
+                    fire(targetX, targetY);
+                    if (maxShots > 0 && !((Robotron)currentScene).OptionsMenu.infiniteAmmo.value) {
+                        currentShots--;
+                    }
                 }
-            }
-            else{
-                Audio.playWithProtection(Audio.noAmmo, 1f, Audio.audioPan(position.x), 0.3f);
-            }
-            lastFired = current;
+                else{
+                    Audio.playWithProtection(Audio.noAmmo, 1f, Audio.audioPan(position.x), 0.3f);
+                }
+                lastFired = current;
+            }   
         }
     }
     
@@ -150,7 +196,7 @@ abstract class Weapon extends GameObject implements Comparable<Weapon> {
             }
             else{
                 double elapsedSinceRecharge = current - lastRecharged;
-                if (elapsedSinceRecharge > rechargeDelay) {
+                if (elapsedSinceRecharge > rechargeDelay * shopRechargeDelayMultiplier()) {
                     currentShots++;
                     lastRecharged = current;
                 }
@@ -163,6 +209,12 @@ abstract class Weapon extends GameObject implements Comparable<Weapon> {
     }
     
     protected abstract void fire(int targetX, int targetY);
+    
+    protected abstract float shopDamageMultiplier();
+    protected abstract float shopRechargeDelayMultiplier();
+    protected float shopFireDelayMultiplier() {
+        return 1f;
+    }
     
     @Override
     public int compareTo(Weapon other) {

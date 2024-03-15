@@ -34,14 +34,12 @@ public class SpeedBoost extends StatusEffect {
 }
 
 public class Freeze extends StatusEffect {
-    boolean renderEffect;
-    public Freeze(Character character, double duration, boolean renderEffect) {
-        super(character, duration, color(0,162,232));
-        this.renderEffect = renderEffect;
+    public Freeze(Character character, double duration, color tint) {
+        super(character, duration, tint);
     }
     
     public Freeze(Character character, double duration) {
-        this(character, duration, true);
+        this(character, duration, color(0,162,232));
     }
     
     void apply() {
@@ -51,17 +49,11 @@ public class Freeze extends StatusEffect {
     void unapply() {
         character.frozen = false;
     }
-    
-    void render() {
-        if (renderEffect) {
-            super.render();
-        }
-    }
 }
 
 public class Highlight extends StatusEffect {
-    public Highlight(Character character, double duration) {
-        super(character, duration, color(0,0,160));
+    public Highlight(Character character, double duration, color tint) {
+        super(character, duration, tint);
         size *= 3;
     }
     
