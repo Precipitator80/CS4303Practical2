@@ -127,7 +127,9 @@ class Player extends Character {
     
     void render() {
         if (alive()) {
-            super.render();
+            if (!((Robotron)currentScene).OptionsMenu.enabled) {
+                super.render();
+            }
             weaponsDisplay();
         }
         
