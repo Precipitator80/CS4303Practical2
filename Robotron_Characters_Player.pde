@@ -43,6 +43,7 @@ class Player extends Character {
         // Give the player their starting weapon.
         giveWeapon(Pistol.class);
         livesUsed = 0;
+        livesGained = startingLives;
         
         if (((Robotron)currentScene).OptionsMenu.allWeaponsAtStart.value) {
             giveWeapon(Rifle.class);
